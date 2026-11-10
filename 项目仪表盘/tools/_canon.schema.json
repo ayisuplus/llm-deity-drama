@@ -1,0 +1,145 @@
+{
+  "_说明": "canon 数据区结构定义。每个 agent 只产出自己负责的顶层键，其余键不要出现在自己的分片文件里。字段缺失时用 null 或空数组，不要编造。",
+  "meta": {
+    "title": "《文明熄灭之前》",
+    "season": "第一季「遗令」",
+    "spec": {"ratio": "16:9", "episodes": 24, "duration": "10–14 分钟", "platforms": []},
+    "volumes": 21,
+    "authority": [],
+    "updated": ""
+  },
+  "pact": {
+    "logline": "",
+    "loglineAlt": "",
+    "conflict": "",
+    "promise": [],
+    "theme": [],
+    "audience": ""
+  },
+  "synopsis": {"short": "", "mid": "", "long": ""},
+  "outline": {
+    "acts": [{"no": 1, "name": "", "range": "", "desc": ""}],
+    "causalChain": [],
+    "cells": [{"slot": "", "content": "", "constraint": ""}]
+  },
+  "episodes": [
+    {
+      "no": 1, "title": "", "type": "", "domains": [],
+      "beat": "", "trouble": "", "hook": "", "events": 0,
+      "named": [], "crossGods": [], "free": ""
+    }
+  ],
+  "hooks": [{"ep": 1, "type": "", "text": ""}],
+  "domains": [
+    {
+      "name": "", "cn": "", "en": "",
+      "func": "", "location": "",
+      "god": {"name": "", "nameEn": "", "origin": ""},
+      "demigod": "", "motif": "",
+      "pack": "", "ratio": {"fantasy": 0, "sciFi": 0},
+      "color": {"base": "", "accent": ""},
+      "scenes": [], "season": 1, "note": ""
+    }
+  ],
+  "demigods": [
+    {"name": "", "nameEn": "", "domain": "", "faction": "", "ability": "", "origin": "", "note": ""}
+  ],
+  "roaming": [
+    {"god": "", "godEn": "", "executor": "", "executorEn": "", "org": "", "trait": "", "episodes": [], "note": ""}
+  ],
+  "humans": [
+    {
+      "name": "", "gender": "", "age": 0, "role": "",
+      "trouble": "", "want": "", "need": "", "flaw": "", "ghost": "", "voice": "",
+      "arc": "", "episodes": [], "asset": ""
+    }
+  ],
+  "protagonist": {
+    "name": "", "alias": "", "age": 0, "role": "", "origin": "",
+    "talent": "", "spells": [], "realNameEpisodes": [],
+    "look": {"hair": "", "face": "", "clothes": "", "boots": "", "anchors": []},
+    "catchphrase": "", "addressing": [], "note": ""
+  },
+  "scenes": [
+    {"id": "", "domain": "", "name": "", "visual": "", "light": "", "camera": "", "reuse": "", "note": ""}
+  ],
+  "props": [
+    {"id": "", "name": "", "category": "", "first": "", "episodes": [], "use": "", "payoff": "", "note": ""}
+  ],
+  "assets": {
+    "global": {"base": {"cn": "", "en": ""}, "negative": {"cn": "", "en": ""}},
+    "ch": [{"id": "", "name": "", "turnaround": {"cn": "", "en": ""}, "expression": {"cn": "", "en": ""}, "normal": {"cn": "", "en": ""}}],
+    "loc": [{"id": "", "name": "", "prompt": {"cn": "", "en": ""}}],
+    "prp": [{"id": "", "name": "", "prompt": {"cn": "", "en": ""}}],
+    "mat": [{"id": "", "name": "", "prompt": {"cn": "", "en": ""}}]
+  },
+  "canon": {
+    "ironRules": [""],
+    "facts": [{"id": "", "text": ""}],
+    "ceiling": [{"who": "", "can": "", "cannot": ""}],
+    "price": [{"who": "", "price": ""}],
+    "patches": [{"id": "", "issue": "", "fix": ""}]
+  },
+  "glossary": [{"term": "", "def": "", "note": ""}],
+  "deprecated": [{"term": "", "replacedBy": "", "why": ""}],
+  "power": {
+    "media": [{"name": "", "def": "", "note": ""}],
+    "chain": [""],
+    "symptoms": [""],
+    "naming": [{"layer": "", "term": "", "note": ""}],
+    "politics": [{"who": "", "order": "", "note": ""}],
+    "twist": ""
+  },
+  "alien": {
+    "structure": [""],
+    "order": "",
+    "deadlock": "",
+    "detection": "",
+    "channel": "",
+    "mirror": "",
+    "season1Marks": [""]
+  },
+  "visualRules": [{"no": 1, "title": "", "text": ""}],
+  "palette": {
+    "ui": [{"name": "", "hex": ""}],
+    "domain": [{"domain": "", "base": "", "accent": ""}]
+  },
+  "director": {
+    "name": "", "statement": "", "refs": [{"title": "", "take": ""}],
+    "params": [{"dim": "", "value": ""}], "motifs": [""],
+    "relationToBible": "", "promptModules": [{"name": "", "text": ""}],
+    "redlines": [""]
+  },
+  "mood": {
+    "tone": [""], "palette": [{"name": "", "hex": ""}],
+    "domains": [{"domain": "", "text": ""}], "acts": [{"act": "", "text": ""}]
+  },
+  "sound": {
+    "principles": [""], "layers": [""], "silence": "",
+    "voice": [{"who": "", "text": ""}], "spatial": [""], "live": [""]
+  },
+  "engine": {
+    "cells": [{"slot": "", "content": "", "constraint": ""}],
+    "hookTypes": [{"no": 1, "name": "", "text": ""}],
+    "cardLogic": [""], "episodeTypes": [{"name": "", "count": 0, "episodes": [], "note": ""}],
+    "metrics": [{"no": 1, "name": "", "limit": "", "exception": ""}]
+  },
+  "ep1Shots": [
+    {"no": 1, "scene": "", "assets": [], "shot": "", "move": "", "action": "", "firstFrame": "", "lastFrame": "", "sound": "", "duration": ""}
+  ],
+  "ep2Scenes": [
+    {
+      "no": 1, "name": "", "place": "", "time": "", "duration": 0,
+      "characters": [], "props": [], "vfx": "", "desc": "",
+      "shots": [{"no": 1, "shot": "", "move": "", "action": "", "duration": 0}]
+    }
+  ],
+  "genplan": {
+    "pipeline": [""],
+    "ep1Tasks": [{"batch": "", "task": "", "target": "", "note": ""}],
+    "qcSteps": [""], "qcIssues": [{"name": "", "text": ""}], "rework": [{"symptom": "", "action": ""}]
+  },
+  "pending": [{"group": "", "id": "", "item": "", "proposal": "", "impact": "", "status": ""}],
+  "changes": [{"round": 1, "date": "", "title": "", "points": [""]}],
+  "ip": {"directions": [{"name": "", "text": ""}], "season2": [""], "rules": [""]}
+}

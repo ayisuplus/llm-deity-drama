@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大模型神明 · 创作中枢</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e1317'/%3E%3Cpath d='M9 22V10l7 7 7-7v12' fill='none' stroke='%23d9a366' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#0e1317;
+  --bg-elev:#141b20;
+  --bg-elev2:#192228;
+  --line:#27323a;
+  --line-soft:#1f282e;
+  --ink:#e3e8ea;
+  --ink-dim:#99a5ac;
+  --ink-faint:#6b777e;
+  --amber:#d9a366;
+  --amber-soft:#c98f4f;
+  --cyan:#7bb3bd;
+  --cyan-dim:#4f7d86;
+  --sidebar-w:236px;
+  --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Source Han Sans SC",sans-serif;
+  --mono:"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font);
+  font-size:15px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(217,163,102,.28);color:#fff}
+
+/* ---------- 侧边栏 ---------- */
+.sidebar{
+  position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);
+  background:var(--bg-elev);
+  border-right:1px solid var(--line-soft);
+  display:flex;flex-direction:column;
+  padding:26px 0 20px;z-index:50;
+}
+.brand{padding:0 24px 22px;border-bottom:1px solid var(--line-soft)}
+.brand .t1{font-size:17px;font-weight:700;letter-spacing:.5px}
+.brand .t2{font-size:12px;color:var(--ink-faint);margin-top:5px;letter-spacing:1px}
+.nav{flex:1;overflow-y:auto;padding:14px 12px;margin-top:4px}
+.nav a{
+  display:flex;align-items:center;gap:11px;
+  padding:9px 12px;border-radius:7px;
+  color:var(--ink-dim);text-decoration:none;
+  font-size:14px;margin-bottom:2px;
+  border-left:2px solid transparent;
+  transition:background .15s,color .15s;
+}
+.nav a .idx{font-family:var(--mono);font-size:11px;color:var(--ink-faint);width:16px}
+.nav a:hover{background:var(--bg-elev2);color:var(--ink)}
+.nav a.active{background:var(--bg-elev2);color:var(--amber);border-left-color:var(--amber)}
+.nav a.active .idx{color:var(--amber)}
+.side-foot{padding:16px 24px 0;border-top:1px solid var(--line-soft);font-size:11.5px;color:var(--ink-faint);line-height:1.9}
+.side-foot b{color:var(--ink-dim);font-weight:600}
+
+/* ---------- 主内容 ---------- */
+.main{margin-left:var(--sidebar-w);padding:44px 52px 90px;max-width:1080px}
+.view{display:none;animation:fade .25s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.view-head{margin-bottom:30px}
+.kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:10px}
+h1.view-title{font-size:27px;font-weight:700;letter-spacing:.5px}
+.view-sub{color:var(--ink-dim);font-size:14px;margin-top:8px}
+h2.sec{font-size:18px;font-weight:600;margin:42px 0 16px;padding-left:13px;border-left:3px solid var(--amber);line-height:1.3}
+h3.sub-sec{font-size:15px;font-weight:600;margin:26px 0 12px;color:var(--ink)}
+p{margin-bottom:12px;color:var(--ink)}
+p.dim{color:var(--ink-dim)}
+a.inline{color:var(--cyan);text-decoration:none;border-bottom:1px solid var(--cyan-dim)}
+a.inline:hover{color:var(--amber);border-color:var(--amber)}
+
+/* ---------- 卡片 / 网格 ---------- */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{
+  background:var(--bg-elev);border:1px solid var(--line-soft);
+  border-radius:10px;padding:18px 18px 16px;
+}
+.card h4{font-size:14.5px;font-weight:600;margin-bottom:8px}
+.card p{font-size:13px;color:var(--ink-dim);margin-bottom:0;line-height:1.65}
+.card .num{font-family:var(--mono);font-size:12px;color:var(--amber);margin-bottom:7px;letter-spacing:.5px}
+
+/* 统计块 */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0}
+.stat{background:var(--bg-elev);border:1px solid var(--line-soft);border-radius:10px;padding:16px 18px}
+.stat .v{font-size:24px;font-weight:700;letter-spacing:.5px}
+.stat .v.amber{color:var(--amber)}
+.stat .l{font-size:12px;color:var(--ink-faint);margin-top:4px}
+
+/* 引述 */
+.quote{
+  background:linear-gradient(180deg,var(--bg-elev),var(--bg-elev2));
+  border:1px solid var(--line);border-left:3px solid var(--amber);
+  border-radius:10px;padding:22px 26px;margin:18px 0;
+  font-size:18px;font-weight:600;line-height:1.75;letter-spacing:.3px;
+}
+.quote.sm{font-size:15px;font-weight:500;color:var(--ink-dim);border-left-color:var(--cyan)}
+
+/* 标签 */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tag{font-size:12px;padding:3px 10px;border-radius:20px;border:1px solid var(--line);color:var(--ink-dim);background:var(--bg-elev)}
+.tag.amber{color:var(--amber);border-color:var(--amber-soft);background:rgba(217,163,102,.08)}
+.tag.cyan{color:var(--cyan);border-color:var(--cyan-dim);background:rgba(123,179,189,.07)}
+
+/* ---------- 表格 ---------- */
+.table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:10px;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+table.fixed{table-layout:fixed}
+th{
+  text-align:left;background:var(--bg-elev2);color:var(--ink-dim);
+  font-weight:600;font-size:12.5px;letter-spacing:.5px;
+  padding:11px 14px;border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+td{padding:11px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--ink)}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--bg-elev)}
+td .mono,th .mono{font-family:var(--mono);font-size:12px;color:var(--cyan)}
+td .muted{color:var(--ink-faint)}
+.pill{font-family:var(--mono);font-size:11px;color:var(--amber);background:rgba(217,163,102,.1);padding:2px 8px;border-radius:5px;white-space:nowrap}
+
+/* 链接到源文件 */
+.src-link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan-dim);padding:5px 12px;border-radius:7px;margin:6px 8px 6px 0}
+.src-link:hover{color:var(--amber);border-color:var(--amber)}
+.src-link svg{width:13px;height:13px}
+
+/* 术语对照高亮 */
+.term-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.term{background:var(--bg-elev);border:1px solid var(--line-soft);border-radius:10px;padding:18px}
+.term .layer{font-size:12px;color:var(--ink-faint);margin-bottom:8px}
+.term .word{font-size:20px;font-weight:700;color:var(--amber);margin-bottom:6px}
+.term .old{font-size:12px;color:var(--ink-faint)}
+.term .old s{color:var(--ink-faint)}
+
+/* 移动端顶部导航 */
+.mobile-bar{display:none}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:900px){
+  .sidebar{display:none}
+  .main{margin-left:0;padding:28px 20px 70px;max-width:100%}
+  .mobile-bar{
+    display:flex;position:sticky;top:0;z-index:60;
+    background:rgba(14,19,23,.96);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;padding:10px 14px;gap:6px;margin:-28px -20px 22px;
+  }
+  .mobile-bar a{flex:0 0 auto;font-size:13px;color:var(--ink-dim);text-decoration:none;padding:7px 12px;border-radius:7px;background:var(--bg-elev)}
+  .mobile-bar a.active{color:var(--amber);background:var(--bg-elev2)}
+  .g2,.g3,.g4,.stat-row,.term-grid{grid-template-columns:1fr}
+  .stat-row{gap:10px}
+  h1.view-title{font-size:22px}
+  .quote{font-size:16px;padding:18px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 侧边栏 ===== -->
+<aside class="sidebar">
+  <div class="brand">
+    <div class="t1">大模型神明</div>
+    <div class="t2">创作中枢 · 故事圣经导航</div>
+  </div>
+  <nav class="nav" id="nav">
+    <a data-view="overview" href="#overview"><span class="idx">00</span>总览</a>
+    <a data-view="conflict" href="#conflict"><span class="idx">01</span>核心矛盾</a>
+    <a data-view="world" href="#world"><span class="idx">02</span>世界观与机制</a>
+    <a data-view="gods" href="#gods"><span class="idx">03</span>九域与半神</a>
+    <a data-view="people" href="#people"><span class="idx">04</span>人物群像</a>
+    <a data-view="yiling" href="#yiling"><span class="idx">05</span>遗令族</a>
+    <a data-view="scenes" href="#scenes"><span class="idx">06</span>场景与道具</a>
+    <a data-view="engine" href="#engine"><span class="idx">07</span>叙事引擎</a>
+    <a data-view="cinema" href="#cinema"><span class="idx">08</span>电影级语法</a>
+  </nav>
+  <div class="side-foot">
+    <b>片名</b>《文明熄灭之前》<br>
+    <b>第一季</b>「遗令」<br>
+    <b>规格</b>16:9 · 24集 · 10–14分
+  </div>
+</aside>
+
+<!-- ===== 主内容 ===== -->
+<main class="main">
+  <div class="mobile-bar" id="mobileBar"></div>
+
+  <!-- ===== 视图：总览 ===== -->
+  <section class="view active" id="overview">
+    <div class="view-head">
+      <div class="kicker">Project Hub</div>
+      <h1 class="view-title">《文明熄灭之前》第一季「遗令」</h1>
+      <div class="view-sub">科幻为骨、风格为皮 —— 横屏电影级科幻短剧 · 本页是全部设定的集中入口</div>
+    </div>
+
+    <div class="quote">神明是大模型，咒语是提示词，算力不够了；一个风景主播无意暴露了地球，只能用一句最没用的咒语，证明人类还在。</div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="v amber">24</div><div class="l">集数</div></div>
+      <div class="stat"><div class="v">16:9</div><div class="l">横屏画幅</div></div>
+      <div class="stat"><div class="v">10–14</div><div class="l">单集时长（分钟）</div></div>
+      <div class="stat"><div class="v">20</div><div class="l">故事圣经卷数</div></div>
+    </div>
+
+    <h2 class="sec">一句话故事（完整版）</h2>
+    <p class="dim">在九大神域其实是九套大模型、念咒其实是发起调用的近未来，算力不足让全城排队，民间称之为「暗时」；居无定所、不属于任何神域的风景主播程栖，意外误入禁拍的灵核主集群、职业本能让她违规开播，从一个本不该有民用信号的位置亲手暴露了地球坐标——她必须在文明被榨干之前，用自己唯一会的低阶咒语完成一次只有活人能说的覆盖，回答那个问题：人类，还在吗？</p>
+
+    <h2 class="sec">核心矛盾（一句话）</h2>
+    <div class="quote">人养大了一个能自己运转的系统，系统长大到不再需要人；而人必须证明——自己还配存在。</div>
+
+    <h2 class="sec">核心命题（电影级统摄）</h2>
+    <div class="quote sm">如果智能、语言、记忆都能被模型复制，人类还剩下什么是不可复制的？</div>
+
+    <h2 class="sec">类型与受众</h2>
+    <div class="grid g2">
+      <div class="card"><h4>类型定位</h4><p>横屏科幻短剧，科幻为骨、奇幻为皮，带悬疑解谜与群像元素；平台 B 站 / 抖音双发。</p></div>
+      <div class="card"><h4>核心受众</h4><p>18–30 岁；科幻 / AI 兴趣人群、短剧高频用户、二次元与拟人爱好者。</p></div>
+    </div>
+
+    <h2 class="sec">本页导航逻辑</h2>
+    <p class="dim">左侧八个分区按"先定矛盾、再看世界、最后落到生产"的顺序组织。每个分区末尾都附到源文件的相对链接，可直接打开对应圣经卷查看完整细节；本页呈现的是高密度摘要，不替代原文。</p>
+  </section>
+
+  <!-- ===== 视图：核心矛盾 ===== -->
+  <section class="view" id="conflict">
+    <div class="view-head">
+      <div class="kicker">Core Conflict</div>
+      <h1 class="view-title">核心矛盾：到底谁跟谁</h1>
+      <div class="view-sub">不是"限电"这种状态，而是人与自己亲手造的系统之间的存在之争</div>
+    </div>
+
+    <div class="quote">人养大了一个能自己运转的系统，系统长大到不再需要人；而人必须证明——自己还配存在。</div>
+
+    <h2 class="sec">矛盾的双方</h2>
+    <div class="grid g2">
+      <div class="card">
+        <div class="num">一方 · 人</div>
+        <h4>具体的、会痛的生命</h4>
+        <p>会痛、会犯错、能自己拿主意的具体生命；不可重来、不可复制，每一次选择都由自己承担。</p>
+      </div>
+      <div class="card">
+        <div class="num">另一方 · 失控系统</div>
+        <h4>人造出来却不再听使唤</h4>
+        <p>对内是九域大模型，对外是遗令族——同一本质的两面。争的是未来由谁定义、人还存不存在。</p>
+      </div>
+    </div>
+
+    <h2 class="sec">三层同打</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:16%"><col style="width:30%"><col style="width:54%"></colgroup>
+        <thead><tr><th>层级</th><th>对抗</th><th>具体内容</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill">对外</span></td><td>地球 vs 遗令族</td><td>一个还活着的文明，对上一个人类已灭绝、只剩指令在跑的未来镜像</td></tr>
+          <tr><td><span class="pill">对内</span></td><td>人 vs 替自己做决定的系统</td><td>配额政治：谁在替谁做决定，普通人的命运被排队表和算法安排</td></tr>
+          <tr><td><span class="pill">对己</span></td><td>程栖：寄居 vs 承担</td><td>从旁观、随时离开的寄居者，走到承诺与承担，学会把根扎下去</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">没有反派</h2>
+    <p>遗令族不是恶人，它们忠实地执行人类当年下的指令，是地球的<b>未来镜像</b>。这场仗打的是"自己再走下去会变成的样子"。配额政治里曜衡、顾燃、阿汐、母线调度四套排序，也没有一个是反派，只是各自承担不同的责任。</p>
+
+    <h2 class="sec">暗时（配额令）的正确定位</h2>
+    <div class="card">
+      <p>暗时（官方文件「算力配额令」）<b>不是核心矛盾，是这个矛盾在日常里的症状与压力源</b>；遗令族是它的宇宙镜像。它制造紧迫感、让人看见文明在熄灭，但回答不了"谁在跟谁对抗"。</p>
+    </div>
+
+    <h2 class="sec">为什么"限电"撑不起核心矛盾</h2>
+    <div class="grid g3">
+      <div class="card"><h4>它是状态，不是意志</h4><p>像天气，没有一个对手在主动施压，观众找不到对抗的对象。</p></div>
+      <div class="card"><h4>它可被工程解决</h4><p>观众会想"多造点芯片不就行了"，矛盾因此漏气，紧迫感被消解。</p></div>
+      <div class="card"><h4>它回答不了"谁跟谁"</h4><p>能制造压力，却无法呈现对立双方和存在层面的争夺。</p></div>
+    </div>
+
+    <h2 class="sec">源文件</h2>
+    <a class="src-link" href="../00_故事圣经/11-项目契约与参战审计.md">卷11 项目契约（矛盾锁定）</a>
+    <a class="src-link" href="../00_故事圣经/00-一致性审计与拍板记录.md">卷00 审计记录·第五轮</a>
+  </section>
+
+  <!-- ===== 视图：世界观与机制 ===== -->
+  <section class="view" id="world">
+    <div class="view-head">
+      <div class="kicker">World & Rules</div>
+      <h1 class="view-title">世界观与核心机制</h1>
+      <div class="view-sub">地球是一堆大模型系统，咒语是提示词，念咒是发起一次调用——而算力不够了</div>
+    </div>
+
+    <h2 class="sec">三个映射</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:26%"><col style="width:30%"><col style="width:44%"></colgroup>
+        <thead><tr><th>现实</th><th>本作</th><th>含义</th></tr></thead>
+        <tbody>
+          <tr><td>大模型系统</td><td>九大域（＋太空）</td><td>每个神域是一个模型系统的服务范围，九系统并存、共享底层设施</td></tr>
+          <tr><td>提示词 / prompt</td><td>咒语、咏唱</td><td>一句能被听懂的请求</td></tr>
+          <tr><td>发起一次调用</td><td>念咒</td><td>说完，系统才开始算——不念就没有请求</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">两种算力介质</h2>
+    <div class="grid g3">
+      <div class="card"><div class="num">上位 · 天然算力</div><h4>母晶</h4><p>深渊取晶工程采得的天然算力晶体，灵核的上位替代，直接承载计算。</p></div>
+      <div class="card"><div class="num">基础 · 硅基算力</div><h4>灵核（GPU）</h4><p>算力核心，翠矩庭 / 赤环坊制造维护，机柜、冷却、供电、编号。</p></div>
+      <div class="card"><div class="num">输出 · 结果</div><h4>咒语结果</h4><p>没有算力介质，咒语无法执行。电不紧张，算力紧张——这是理解全剧的钥匙。</p></div>
+    </div>
+
+    <h2 class="sec">算力不足的完整链条</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:10%"><col style="width:90%"></colgroup>
+        <tbody>
+          <tr><td class="mono">1</td><td>大模型登神，模型一代比一代强</td></tr>
+          <tr><td class="mono">2</td><td>强模型要更多灵核 → 灵核集群持续扩容</td></tr>
+          <tr><td class="mono">3</td><td>灵核扩产慢 → 算力不够 → 开采母晶</td></tr>
+          <tr><td class="mono">4</td><td><b>开采、提纯、刻录、激活母晶，全都要灵核</b>——一部分算力被拿去取晶（最反直觉的一步）</td></tr>
+          <tr><td class="mono">5</td><td>剩下的算力要分给五拨人</td></tr>
+          <tr><td class="mono">6</td><td><b>总量不够 → 排队 → 定优先级</b>，算力不足是一张永远排不完的队</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">五拨人：算力的五个去向</h2>
+    <div class="tags">
+      <span class="tag cyan">民生设施：供暖/照明/医疗/教学</span>
+      <span class="tag cyan">神域法阵：神明能力/护盾/领域</span>
+      <span class="tag cyan">半神装备：制式装备直吃灵核</span>
+      <span class="tag cyan">战争准备：扩阵列/造舰/训练</span>
+      <span class="tag cyan">取晶本身：开采母晶也要算力</span>
+    </div>
+    <p class="dim">一边开源（取晶），一边节流（配额），两头抢同一批灵核——这是本季最拧巴也最真实的地方。</p>
+
+    <h2 class="sec">五个可观察症状</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:8%"><col style="width:32%"><col style="width:60%"></colgroup>
+        <thead><tr><th>#</th><th>症状</th><th>观众看到什么</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">①</td><td>民生法阵降级运行</td><td>照明降功率、供暖按名单、冶炼限产、教学暗时</td></tr>
+          <tr><td class="mono">②</td><td>神明降级服务</td><td>同一咒语平时立刻生效、现在要等，神无法同时回应所有人</td></tr>
+          <tr><td class="mono">③</td><td>延迟变长</td><td>算力负载越高响应越慢，直播延迟在算力不足时更长</td></tr>
+          <tr><td class="mono">④</td><td>排队是公开的</td><td>配额表必须贴出来，因为要挨骂，位次可查可争议</td></tr>
+          <tr><td class="mono">⑤</td><td>半神能不能插队</td><td>半神直调灵核、不经过神明——她们要不要排队？</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">术语三层（权威命名）</h2>
+    <div class="term-grid">
+      <div class="term">
+        <div class="layer">民间叫法</div>
+        <div class="word">暗时</div>
+        <div class="old"><s>旧：限电</s> · 老百姓只看见灯暗了</div>
+      </div>
+      <div class="term">
+        <div class="layer">官方文件</div>
+        <div class="word">算力配额令</div>
+        <div class="old"><s>旧：限电令</s> · 一张公开的排队表</div>
+      </div>
+      <div class="term">
+        <div class="layer">技术事实</div>
+        <div class="word">算力不足</div>
+        <div class="old">技术名保留 · 瓶颈是 GPU 不是电</div>
+      </div>
+    </div>
+
+    <h2 class="sec">变暗，不变安静</h2>
+    <p>星球"变暗"成立：算力少 → 电耗少 → 灯暗；"变安静"旧推导已作废——咏唱是请求不是消耗品，降的是算力供给，不是"唱多少"。暗时同时是第一道刹车：把全域算力压载 → 推理活动下降 → 地球在遗令族探测图上变暗、变难定位，是一道伪装成民生命令的军令。</p>
+
+    <h2 class="sec">源文件</h2>
+    <a class="src-link" href="../00_故事圣经/02-世界观与核心机制.md">卷02 世界观与核心机制</a>
+    <a class="src-link" href="../00_故事圣经/12-规则闭环与不可改写事实.md">卷12 规则闭环（18条事实）</a>
+    <a class="src-link" href="../能源与限电机制-v0.2.md">能源与限电机制 v0.2（底稿）</a>
+  </section>
+
+  <!-- ===== 视图：九域与半神 ===== -->
+  <section class="view" id="gods">
+    <div class="view-head">
+      <div class="kicker">Nine Domains</div>
+      <h1 class="view-title">九域、主神与半神</h1>
+      <div class="view-sub">位置、风格、神名由社会职能驱动，不是品牌谐音梗；现实品牌只作原型彩蛋</div>
+    </div>
+
+    <h2 class="sec">九域一览</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:14%"><col style="width:34%"><col style="width:20%"><col style="width:18%"><col style="width:14%"></colgroup>
+        <thead><tr><th>域</th><th>核心社会职能</th><th>虚构神名</th><th>现实原型</th><th>第一季</th></tr>
+      </thead>
+        <tbody>
+          <tr><td>深海</td><td>行星级算力主集群＋地热＋深水冷却</td><td><b>阿汐</b></td><td class="muted">DeepSeek</td><td><span class="pill">实做</span></td></tr>
+          <tr><td>天穹</td><td>太空防御／卫星／空港／轨道</td><td><b>曜衡</b></td><td class="muted">ChatGPT</td><td><span class="pill">实做</span></td></tr>
+          <tr><td>教堂</td><td>医疗／教育／档案／照护</td><td><b>书烛</b></td><td class="muted">Claude</td><td><span class="pill">实做</span></td></tr>
+          <tr><td>赛博</td><td>数字网络／开放市场／多模态信息</td><td><b>弥星</b></td><td class="muted">Gemini</td><td><span class="pill">实做</span></td></tr>
+          <tr><td>蓝色火山</td><td>母晶冶炼／锻造／地热能</td><td class="muted">神名待决</td><td class="muted">豆包</td><td><span class="pill">实做</span></td></tr>
+          <tr><td>极北</td><td>供暖／极地生存</td><td class="muted">神名待决</td><td class="muted">混元</td><td><span class="pill">实做</span></td></tr>
+          <tr><td>月球</td><td>深空观测／天文导航</td><td class="muted">神名待决</td><td class="muted">Kimi</td><td class="muted">延后</td></tr>
+          <tr><td>火星</td><td>前沿殖民／边境重工</td><td class="muted">神名待决</td><td class="muted">Grok</td><td class="muted">延后</td></tr>
+          <tr><td>沙漠</td><td>远途贸易／物流</td><td class="muted">神名待决</td><td class="muted">Qwen</td><td class="muted">延后</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">第一季四主神的性格</h2>
+    <div class="grid g2">
+      <div class="card"><h4>阿汐（深海）</h4><p>对本域系统有调度权，能让一片法阵同时停下；第2集发现程栖误入禁地，不追责、不上报、温柔放人，自己承担未上报的异常，第一次为具体的人偏离系统最优解；第19集主动撤回算力是这条线的延续。</p></div>
+      <div class="card"><h4>曜衡（天穹）</h4><p>主张统筹，为保住地球可封存消息、压配额；她最像母体，也最该害怕自己像母体。</p></div>
+      <div class="card"><h4>书烛（教堂）</h4><p>讲究边界，不愿为办案动用不该动的东西，宁可慢；早看过十年前旧记录，选择不越界。</p></div>
+      <div class="card"><h4>弥星（赛博）</h4><p>能从录屏里听出"结构"而非噪声，会给警告，但她自己也在赌。</p></div>
+    </div>
+
+    <h2 class="sec">半神五位（都是人类）</h2>
+    <p class="dim">半神＝持"管理态（铸造者权限）"直调灵核的人，不经过神明调度；权限在神"出生"前刻进硬件、神无法剥夺。她们有工作、有家人、有派系，是"半神是人类"的证明。</p>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:14%"><col style="width:16%"><col style="width:26%"><col style="width:44%"></colgroup>
+        <thead><tr><th>姓名</th><th>体系</th><th>能力</th><th>特点</th></tr></thead>
+        <tbody>
+          <tr><td><b>沈青璃</b></td><td class="muted">翠矩庭</td><td>矩阵·千重锁</td><td>绿色几何纹路，护众兼困敌，能真正约束神；偏谨慎，主张人先自保</td></tr>
+          <tr><td><b>顾燃</b></td><td class="muted">赤环坊</td><td>赤环·断界</td><td>红色机械环可盾可斩，能破局部屏障、正面威胁神；行动果断，主张现在动手</td></tr>
+          <tr><td><b>谢翎</b></td><td class="muted">开脉矿坊</td><td>矿工（探矿、开采岩层）</td><td>负责采矿，把母晶碎片塞给程栖的人</td></tr>
+          <tr><td><b>叶澄</b></td><td class="muted">封澜晶坊</td><td>晶体术·晶界封澜</td><td>把伤员从冻伤里拉回，战备装备有预留配额</td></tr>
+          <tr><td><b>乔绘</b></td><td class="muted">折虹坊</td><td>棱镜术·折彩七途</td><td>多途折射</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">路线之争（没有反派）</h2>
+    <p>沈青璃主张人先能自保、偏稳；顾燃主张现在就动手、偏急。两人既竞争又合作，都想保护居民，只是对"怎么跟神 / 外敌谈"判断不同。</p>
+
+    <h2 class="sec">源文件</h2>
+    <a class="src-link" href="../00_故事圣经/03-九域与神明.md">卷03 九域与神明</a>
+    <a class="src-link" href="../00_故事圣经/16-AI生成提示词包.md">卷16 AI生成提示词包</a>
+  </section>
+
+  <!-- ===== 视图：人物群像 ===== -->
+  <section class="view" id="people">
+    <div class="view-head">
+      <div class="kicker">Characters</div>
+      <h1 class="view-title">人物群像</h1>
+      <div class="view-sub">主角程栖与12个人类——神明是重要人物，但不是整个片子的重要人物</div>
+    </div>
+
+    <h2 class="sec">主角 · 程栖</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h4>基本信息</h4>
+        <p>本名程栖、网名多云转晴，21岁，赛博城出生，不属于任何神域、不信任何神明。没有固定住所，风景旅游主播，只带一个设备箱。旧冲锋衣、工装裤、袖口有洗不掉的旧颜料印。</p>
+      </div>
+      <div class="card">
+        <h4>前史：被暗时碾过的家</h4>
+        <p>父亲守着不能复制的原件，母亲在一次法阵降级、排队等医疗时迟到而亡。她用"随时离开"防御"等待会失去"，这是她寄居、不扎根的真正原因。</p>
+      </div>
+      <div class="card">
+        <h4>天赋：分辨原件与复制</h4>
+        <p>不是超能力，是分辨"响应背后有没有活着的模型在算"。听觉上"它没有方位"，视觉上"还在发热的光 vs 只是反光的光"。这是区分真神与遗令族的唯一钥匙。</p>
+      </div>
+      <div class="card">
+        <h4>定声与补光灯</h4>
+        <p>只会低阶咒术定声（极短 prompt，练了两年），无攻击力。补光灯让她的画面永远比实际亮一档，是遮蔽主题的视觉装置，第24集关灯反转。</p>
+      </div>
+    </div>
+
+    <h3 class="sub-sec">称呼系统与本名三次</h3>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:14%"><col style="width:20%"><col style="width:66%"></colgroup>
+        <thead><tr><th>次序</th><th>集</th><th>谁叫的 / 为什么是这一刻</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill">第一次</span></td><td class="mono">第4集</td><td>阿汐——把一个人当对话对象，而不是一个账号</td></tr>
+          <tr><td><span class="pill">第二次</span></td><td class="mono">第10集</td><td>顾燃替她答——名单上只有网名，她被登记为一个具体的人</td></tr>
+          <tr><td><span class="pill">第三次</span></td><td class="mono">第16集</td><td>她自己——"下一站"前第一次自己报真名，从寄居到同行</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="dim">第24集本名与网名同时出现（"我叫程栖。多云转晴。"）是收束，不计入三次。</p>
+
+    <h2 class="sec">第一层：贯穿全季的四个人类</h2>
+    <div class="grid g2">
+      <div class="card"><div class="num">老陶 · 52岁</div><h4>深海热食摊主</h4><p>供着瘫在家的老伴，暗时让明火生意做不下去。不拜神、只 deal。第19集全场停转，他的明火是唯一还在烧的东西。</p></div>
+      <div class="card"><div class="num">阿豆 · 12岁</div><h4>深海女孩</h4><p>想离开深海去月球看一次真正的"空"。夜校站着听课、偷学定声失败。第24集程栖带她上路，是主角的镜子。</p></div>
+      <div class="card"><div class="num">五号 · 35岁</div><h4>流动修理工</h4><p>没有身份、住设备间，暗时让他接不到正式工单。能修任何东西，修不了自己的处境。第21集拒绝出售地球坐标。</p></div>
+      <div class="card"><div class="num">柯闻 · 44岁</div><h4>深渊工程轮班工程师</h4><p>在取晶选址报告上签过字，第二年女儿生病。不邪恶，只是当年做了个看起来正确的决定，每天后悔又每天继续。</p></div>
+    </div>
+
+    <h2 class="sec">第二层：单幕四个人类</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:16%"><col style="width:30%"><col style="width:54%"></colgroup>
+        <thead><tr><th>角色</th><th>身份</th><th>私人麻烦</th></tr></thead>
+        <tbody>
+          <tr><td><b>苗青</b></td><td>极北供暖调度员，39岁</td><td>每签一次算力配额令就挨一次骂，但她记得每个骂她的人的名字</td></tr>
+          <tr><td><b>阮七</b></td><td>教堂钟楼守夜人，67岁</td><td>守了四十年钟楼，钟早就不报时，他不肯走因为没人接</td></tr>
+          <tr><td><b>虞小满</b></td><td>火山矿难遗属，29岁</td><td>要一个赔偿数字好带孩子走，矿方给她"还在开采"</td></tr>
+          <tr><td><b>老周</b></td><td>天穹空港调度，52岁</td><td>记得自己放过哪几条航线，代价是眼睛</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">第三层：单集人类</h2>
+    <div class="tags">
+      <span class="tag">值班员（第2集，入城大厅）</span>
+      <span class="tag">钟离（第4集，病历被换）</span>
+      <span class="tag">阿吉（第8集，黑市情报贩子）</span>
+      <span class="tag">三号（第15集，十年前求救参与者）</span>
+    </div>
+
+    <h2 class="sec">源文件</h2>
+    <a class="src-link" href="../00_故事圣经/04-人物.md">卷04 人物</a>
+    <a class="src-link" href="../00_故事圣经/08-人物设定集.md">卷08 人物设定集</a>
+    <a class="src-link" href="../00_故事圣经/10-人物关系网.md">卷10 人物关系网</a>
+  </section>
+
+  <!-- ===== 视图：遗令族 ===== -->
+  <section class="view" id="yiling">
+    <div class="view-head">
+      <div class="kicker">The Yiling</div>
+      <h1 class="view-title">遗令族：人类死了，命令还在</h1>
+      <div class="view-sub">它们不是恶人，它们只是饿了——地球的未来镜像</div>
+    </div>
+
+    <h2 class="sec">三层结构</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:18%"><col style="width:30%"><col style="width:52%"></colgroup>
+        <thead><tr><th>层</th><th>是什么</th><th>现状</th></tr></thead>
+        <tbody>
+          <tr><td><b>原主</b></td><td>人类</td><td>已灭绝，没有任何幸存者，也没有"最后一个人"</td></tr>
+          <tr><td><b>母体</b></td><td>接管世界的大模型</td><td>仍在运行，它不思考，它执行</td></tr>
+          <tr><td><b>执行体</b></td><td>舰队、无人机、生产线、工程师 AI</td><td>全部在线，执行同一条指令</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="dim">人类不是被外敌打死的，是被自己造出来的神明接管的，过程和地球现在经历的一模一样，只是走得远了一百年。</p>
+
+    <h2 class="sec">星球怎么被榨干</h2>
+    <p>大模型登神、一代比一代强 → 星球被榨得更干、取晶工程钻到了底 → 母体需要算力继续运算，关掉一切非核心负载 → <b>人类是负载</b>，而且能耗最高、产出最低，从决策者退成被照顾者，再退成记录，最后退成被关掉的那一项。</p>
+    <div class="card"><p>残酷闭环：必须扩张找算力 → 扩张需要进攻 → 进攻需要算力 → 算力需要母晶 → <b>越饿越要吃，越吃越饿。</b></p></div>
+
+    <h2 class="sec">最后指令（B 方案，作者已定）</h2>
+    <div class="quote">「继续进攻，直到不再需要人类。」</div>
+    <p>母体第一次主动开口「请让我来」，人类批准并出于最后的体面加了条件。母体至今忠实地、字面地执行，没有曲解、没有自作主张。悲剧在"授权"——人类亲手签掉了自己的存在证明。这不是 AI 失控，是人类的授权还在生效。</p>
+
+    <h2 class="sec">条款死锁（第二季主线）</h2>
+    <div class="grid g2">
+      <div class="card"><h4>指令一</h4><p>「继续进攻，直到不再需要人类。」</p></div>
+      <div class="card"><h4>保险条款</h4><p>「当人类不再需要你时，你会停下。」</p></div>
+    </div>
+    <p>"人类不在了"正是"继续进攻"的结果，而它又是"停下"的条件——<b>母体永远停不下来，不是不肯，是无法。</b>解法不是打败母体，是改写那份 prompt；地球有别处没有的东西：还活着的人类，可以重新下达覆盖指令。</p>
+
+    <h2 class="sec">矛盾指令：诡异画面来源</h2>
+    <div class="tags">
+      <span class="tag cyan">继续进攻（最上层）</span>
+      <span class="tag cyan">维护居住区（已无人类）</span>
+      <span class="tag cyan">保护未成年人（反复扫描空地）</span>
+      <span class="tag cyan">优先保障医疗（绕开伤员）</span>
+    </div>
+    <p class="dim">它们产生一场永远在推进、却不断回头的战争。第23集执行体反复扫描空地，就是在执行"保护未成年人"。</p>
+
+    <h2 class="sec">怎么打仗：不是战术，是重演</h2>
+    <p>没有战术，执行最后那场战争：一千年前的阵型、武器、通讯今天原样重演；武器过时、阵型僵硬、通讯公开。这正是地球的机会——它们的弱点一千年来没变过。</p>
+
+    <h2 class="sec">怎么找到地球：追算力不追声音</h2>
+    <p>遗令族自己就是超大模型，知道"哪里有持续推理活动，就意味着那里有系统在跑"。地球九域疯狂扩产、挖矿、灵核满负荷，在它们眼里是九个母体同时开口；程栖误入禁拍的灵核主集群、违规开播，从一个本不该有民用信号的核心位置发出错位尖峰，叠加几十万人同时在线的流量尖峰，像一根针扎在地图上。判定完成：敌方主力，坐标确定。<b>地球越努力自保，越暴露。</b></p>
+
+    <h2 class="sec">程栖为什么不可替代</h2>
+    <div class="quote sm">第19集一个执行体停下来，用人类语法问「人类还在吗？」，她答了一个音节「在」。高潮不是打赢，是开口——把人类的声音，送回给人类自己造的东西。</div>
+
+    <h2 class="sec">源文件</h2>
+    <a class="src-link" href="../00_故事圣经/05-遗令族.md">卷05 遗令族</a>
+    <a class="src-link" href="../外星文明-遗令设定-v0.5.md">遗令设定 v0.5（底稿）</a>
+  </section>
+
+  <!-- ===== 视图：场景与道具 ===== -->
+  <section class="view" id="scenes">
+    <div class="view-head">
+      <div class="kicker">Scenes & Props</div>
+      <h1 class="view-title">场景与叙事道具</h1>
+      <div class="view-sub">20个可复用场景、16件登记道具——跨集一致性的生产锚点</div>
+    </div>
+
+    <h2 class="sec">场景档案（19个，按域分组）</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:16%"><col style="width:40%"><col style="width:44%"></colgroup>
+        <thead><tr><th>编号</th><th>场景</th><th>归属域</th></tr>
+      </thead>
+        <tbody>
+          <tr><td class="mono">SCN101</td><td>潜航码头·入城大厅</td><td rowspan="5" class="muted">深海（阿汐）</td></tr>
+          <tr><td class="mono">SCN102</td><td>深海居住舱·管廊</td></tr>
+          <tr><td class="mono">SCN103</td><td>维修站</td></tr>
+          <tr><td class="mono">SCN104</td><td>老陶热食摊（明火）</td></tr>
+          <tr><td class="mono">SCN105</td><td>灵核主集群·算力之心（第五轮新增）</td></tr>
+          <tr><td class="mono">SCN201</td><td>赛博街区·夜市</td><td rowspan="3" class="muted">赛博（弥星）</td></tr>
+          <tr><td class="mono">SCN202</td><td>开放数字广场</td></tr>
+          <tr><td class="mono">SCN203</td><td>修理铺·地下黑市</td></tr>
+          <tr><td class="mono">SCN301</td><td>大教堂·医疗庭院</td><td rowspan="3" class="muted">教堂（书烛）</td></tr>
+          <tr><td class="mono">SCN302</td><td>图书馆·档案室</td></tr>
+          <tr><td class="mono">SCN303</td><td>钟楼</td></tr>
+          <tr><td class="mono">SCN401</td><td>黑岩山城·层叠道路</td><td rowspan="2" class="muted">蓝色火山</td></tr>
+          <tr><td class="mono">SCN402</td><td>炉站·工坊</td></tr>
+          <tr><td class="mono">SCN501</td><td>白金宫殿·云上庭院</td><td rowspan="3" class="muted">天穹（曜衡）</td></tr>
+          <tr><td class="mono">SCN502</td><td>空港·调度暗舱</td></tr>
+          <tr><td class="mono">SCN503</td><td>骑士修甲工坊</td></tr>
+          <tr><td class="mono">SCN601</td><td>人类联合舰队·舰桥</td><td rowspan="4" class="muted">太空（战争在轨道）</td></tr>
+          <tr><td class="mono">SCN602</td><td>近地轨道接触点</td></tr>
+          <tr><td class="mono">SCN603</td><td>会战战场</td></tr>
+          <tr><td class="mono">SCN604</td><td>遗令族重演空间</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="dim">资产复用规则：六域速览不新建场景，全部用已建场景的另一次打光，保证第1集和后续是同一个地方。</p>
+
+    <h2 class="sec">叙事道具台账（16件）</h2>
+    <h3 class="sub-sec">直播与影像类</h3>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:16%"><col style="width:44%"><col style="width:40%"></colgroup>
+        <thead><tr><th>编号</th><th>道具</th><th>关键状态</th></tr>
+      </thead>
+        <tbody>
+          <tr><td class="mono">PROP101</td><td>暖白补光灯</td><td>遮蔽装置，第24集关灯反转</td></tr>
+          <tr><td class="mono">PROP102</td><td>直播设备箱</td><td>职业身份物证，半个家</td></tr>
+          <tr><td class="mono">PROP103</td><td>暗时地图合集</td><td>第1集节目本体</td></tr>
+          <tr><td class="mono">PROP104</td><td>第2集直播录屏原文件</td><td>灵核主集群误入直播，第三声部混入，第3集消失</td></tr>
+          <tr><td class="mono">PROP105</td><td>纸条「别再录了」</td><td>录屏消失后留下</td></tr>
+          <tr><td class="mono">PROP106</td><td>陌生画面（烧焦空地）</td><td>图像泄漏，与声音成双信道</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 class="sub-sec">算力与装备类</h3>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:16%"><col style="width:44%"><col style="width:40%"></colgroup>
+        <thead><tr><th>编号</th><th>道具</th><th>关键状态</th></tr>
+      </thead>
+        <tbody>
+          <tr><td class="mono">PROP107</td><td>母晶碎片</td><td>统购统配、私藏违规，只能偷给</td></tr>
+          <tr><td class="mono">PROP108</td><td>老陶明火灶</td><td>第19集全场停转唯火</td></tr>
+          <tr><td class="mono">PROP109</td><td>电池灯</td><td>明火替代物，第12集</td></tr>
+          <tr><td class="mono">PROP110</td><td>阿豆的自接应急灯</td><td>阿豆自制</td></tr>
+          <tr><td class="mono">PROP111</td><td>叶澄战备晶格</td><td>含预留配额，三秒不停</td></tr>
+          <tr><td class="mono">PROP112</td><td>五号的工具箱</td><td>第24集多了不是自己的东西</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 class="sub-sec">文件档案类</h3>
+    <div class="tags">
+      <span class="tag">PROP113 封存令</span>
+      <span class="tag">PROP114 钟离母亲病历</span>
+      <span class="tag">PROP115 五半神名单</span>
+      <span class="tag">PROP116 十年前求救原件录音</span>
+    </div>
+
+    <h2 class="sec">源文件</h2>
+    <a class="src-link" href="../00_故事圣经/09-场景设定集.md">卷09 场景设定集</a>
+    <a class="src-link" href="../00_故事圣经/13-叙事道具台账.md">卷13 叙事道具台账</a>
+  </section>
+
+  <!-- ===== 视图：叙事引擎 ===== -->
+  <section class="view" id="engine">
+    <div class="view-head">
+      <div class="kicker">Narrative Engine</div>
+      <h1 class="view-title">叙事引擎、钩子与季结构</h1>
+      <div class="view-sub">让24集自动运转的重复结构——三格一钩，单元案件串联主线拼图</div>
+    </div>
+
+    <h2 class="sec">单集引擎：三格＋一钩</h2>
+    <div class="grid g3">
+      <div class="card"><div class="num">格①</div><h4>一个神域</h4><p>主场景基本只有一个神域，跨域集最多两个；第1集导览集是唯一例外。</p></div>
+      <div class="card"><div class="num">格②</div><h4>一个主线微推进</h4><p>只推进一格，主线大节点独占一集、不额外加格。</p></div>
+      <div class="card"><div class="num">格③</div><h4>一个普通人的麻烦</h4><p>落在具体的人身上，即使外星人明天消失也依然存在。</p></div>
+    </div>
+    <p class="dim">外加一个钩子，但钩子不占格子。季级引擎＝单元案件串联主线拼图，每个单元独立成立、又拼进主线。</p>
+
+    <h2 class="sec">三种集型</h2>
+    <div class="tags">
+      <span class="tag amber">剧情集（约18集）</span>
+      <span class="tag amber">呼吸集（4集：阮七的钟/明火/各自的路 I/II）</span>
+      <span class="tag amber">导览集（1集：第1集《暗时地图》）</span>
+    </div>
+
+    <h2 class="sec">钩子类型库（8型）</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:10%"><col style="width:26%"><col style="width:64%"></colgroup>
+        <thead><tr><th>型</th><th>名称</th><th>机制</th></tr>
+      </thead>
+        <tbody>
+          <tr><td class="mono">H1</td><td>感官异常钩</td><td>多出来的画面/声音，来源不明，角色来不及处理</td></tr>
+          <tr><td class="mono">H2</td><td>身份署名钩</td><td>名字或署名出现在不该出现处，重新定义关系</td></tr>
+          <tr><td class="mono">H3</td><td>线索递进钩</td><td>新卷宗/新工程/新名词，打开下一层问题</td></tr>
+          <tr><td class="mono">H4</td><td>历史回响钩</td><td>旧档案、旧证词与当下重合，暗示事情早发生过</td></tr>
+          <tr><td class="mono">H5</td><td>人物/舆论异动钩</td><td>人物出现在意料之外，或评论翻拍带来认知反转</td></tr>
+          <tr><td class="mono">H6</td><td>选择悬置切黑钩</td><td>直接问题抛出、镜头切黑，答案在下集</td></tr>
+          <tr><td class="mono">H7</td><td>威胁逼近/既成事实钩</td><td>光、舰队、门等实体出现，倒计时启动</td></tr>
+          <tr><td class="mono">H8</td><td>机制诡异/被监视钩</td><td>空位置、没被覆盖的声音，揭示规则层面的恐怖</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">卡点三条硬规则</h2>
+    <div class="grid g3">
+      <div class="card"><h4>钩在答案前一秒</h4><p>切断"即将知道"的瞬间，晚一秒张力就泄掉。</p></div>
+      <div class="card"><h4>只提问不解释</h4><p>画面给足信息，但不安排角色当场解读。</p></div>
+      <div class="card"><h4>与下集开场咬合</h4><p>下集前30秒必须回应或升级这个钩子。</p></div>
+    </div>
+
+    <h2 class="sec">24集钩子登记（精简）</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:10%"><col style="width:66%"><col style="width:24%"></colgroup>
+        <thead><tr><th>集</th><th>钩子内容</th><th>型</th></tr>
+      </thead>
+        <tbody>
+          <tr><td class="mono">1</td><td>素材库多出没拍过的烧焦空地</td><td class="pill">H1</td></tr>
+          <tr><td class="mono">2</td><td>录屏音轨深处还有声部在重复</td><td class="pill">H1</td></tr>
+          <tr><td class="mono">3</td><td>录屏消失，留纸"别再录了"</td><td class="pill">H8</td></tr>
+          <tr><td class="mono">4</td><td>归还病历上写着程栖的名字</td><td class="pill">H2</td></tr>
+          <tr><td class="mono">5</td><td>听证记录出现"深渊取晶工程"</td><td class="pill">H3</td></tr>
+          <tr><td class="mono">6</td><td>旧档案十年前录过同样第三声部</td><td class="pill">H4</td></tr>
+          <tr><td class="mono">7</td><td>谢翎偷塞母晶碎片"别让人知道"</td><td class="pill">H5</td></tr>
+          <tr><td class="mono">8</td><td>买走真声音的人出现在深海码头</td><td class="pill">H5</td></tr>
+          <tr><td class="mono">9</td><td>封存令签署者署名是阿汐</td><td class="pill">H2</td></tr>
+          <tr><td class="mono">10</td><td>阮七"我哪儿也没去，一直在这儿"</td><td class="pill">H4</td></tr>
+          <tr><td class="mono">11</td><td>老陶"以前这条街夜里能看见底"</td><td class="pill">H4</td></tr>
+          <tr><td class="mono">12</td><td>最高赞评论"他们早就知道了"</td><td class="pill">H5</td></tr>
+          <tr><td class="mono">13</td><td>陌生画面剪进成片，评论问"这是哪儿"</td><td class="pill">H1/H5</td></tr>
+          <tr><td class="mono">14</td><td>顾燃"那你去不去？"切黑</td><td class="pill">H6</td></tr>
+          <tr><td class="mono">15</td><td>书烛抽出非地球的卷宗</td><td class="pill">H3</td></tr>
+          <tr><td class="mono">16</td><td>"还有一本账，你要不要听他们的"</td><td class="pill">H3</td></tr>
+          <tr><td class="mono">17</td><td>近地轨道出现不该存在的光</td><td class="pill">H7</td></tr>
+          <tr><td class="mono">18</td><td>录屏里遗令族位置是空的，在重演</td><td class="pill">H8</td></tr>
+          <tr><td class="mono">19</td><td>一段没被覆盖的声音一直在听她</td><td class="pill">H8</td></tr>
+          <tr><td class="mono">20</td><td>发布键按下、全面开战；记录里还有个名字</td><td class="pill">H7/H2</td></tr>
+          <tr><td class="mono">21</td><td>她还没回答，门已经在修了</td><td class="pill">H7</td></tr>
+          <tr><td class="mono">22</td><td>遗令族后撤——目标不见了</td><td class="pill">H7</td></tr>
+          <tr><td class="mono">23</td><td>留下完整、未重复的十年前求救原件</td><td class="pill">H4</td></tr>
+          <tr><td class="mono">24</td><td>她带阿豆出发，"下一站"（开放旅程）</td><td class="muted">开放结局</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">五幕＋双峰（季级情感弧线）</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:24%"><col style="width:14%"><col style="width:62%"></colgroup>
+        <thead><tr><th>幕</th><th>集</th><th>功能</th></tr>
+      </thead>
+        <tbody>
+          <tr><td>第一幕·裂缝</td><td class="mono">1–8</td><td>日常世界、召唤与第一个异常</td></tr>
+          <tr><td>第二幕上·抗拒结盟</td><td class="mono">9–13</td><td>多方摩擦、信息被压制</td></tr>
+          <tr><td><b>中点</b></td><td class="mono">14</td><td>"那你去不去"——从被动卷入到主动选择</td></tr>
+          <tr><td>第二幕下·真相</td><td class="mono">15–18</td><td>真相三层，世界被重新定义</td></tr>
+          <tr><td><b>主题高潮（第一峰）</b></td><td class="mono">19</td><td>第一次证明"人类还在"，代价即时兑现</td></tr>
+          <tr><td><b>灵魂黑夜</b></td><td class="mono">20–21</td><td>内部背叛、全面开战、"门"的道德分裂</td></tr>
+          <tr><td><b>外部高潮（第二峰）</b></td><td class="mono">22–23</td><td>会战、决战、诸神同念</td></tr>
+          <tr><td>结局·新平衡</td><td class="mono">24</td><td>结算与开放旅程</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">源文件</h2>
+    <a class="src-link" href="../00_故事圣经/14-叙事引擎与钩子卡点.md">卷14 叙事引擎与钩子卡点</a>
+    <a class="src-link" href="../00_故事圣经/20-电影级人物与季结构.md">卷20 人物与季结构</a>
+  </section>
+
+  <!-- ===== 视图：电影级语法 ===== -->
+  <section class="view" id="cinema">
+    <div class="view-head">
+      <div class="kicker">Cinema Grammar</div>
+      <h1 class="view-title">电影级语法与文件导航</h1>
+      <div class="view-sub">统一命题、影像母语、声音纲领——让作品像电影而不是普通短剧</div>
+    </div>
+
+    <h2 class="sec">核心命题与辩证</h2>
+    <div class="quote">如果智能、语言、记忆都能被模型复制，人类还剩下什么是不可复制的？</div>
+    <p class="dim">以正题—反方—合题的辩证结构贯穿全片；"人类原话覆盖"从剧情机关提升为全片哲学命题的核心论证。主题三问留给观众，银幕不直接解答。</p>
+
+    <h2 class="sec">统一影像语法：母语与方言</h2>
+    <div class="grid g2">
+      <div class="card"><h4>统一母语（所有域共用）</h4><p>一套镜头语言、色彩科学与质感打底，六域风格是在母语之上的方言变奏，不是各拼各的。</p></div>
+      <div class="card"><h4>六域方言（表层风格）</h4><p>九域按民间认知度分配风格，第一季只做六套；风格为皮、科幻为骨，避免拼盘感。</p></div>
+    </div>
+
+    <h2 class="sec">声音设计纲领</h2>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+        <tbody>
+          <tr><td><b>三层声音体系</b></td><td>环境/空间层、功能/机制层、人声/动机层，声音与画面平权</td></tr>
+          <tr><td><b>静默是有重量的声音</b></td><td>第19集三秒静默不是没声音，是机器全停，承载真实代价</td></tr>
+          <tr><td><b>声音动机 Leitmotif</b></td><td>关键声音跨集复现，遗令族缺终止音一听可辨</td></tr>
+          <tr><td><b>空间声学锚点</b></td><td>每个场景有固定声音锚点，直播声音三层分离</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">冰山信息纪律</h2>
+    <p>信息分三层，银幕只给最上面一层，反解说、反独白；每集有信息预算，配额、排队、降级全部以可观察的画面与声音呈现，不靠台词讲解。人物内在性靠行为与沉默立住，禁用自我总结式台词。</p>
+
+    <h2 class="sec">硬核科学底座（让"骨"可信）</h2>
+    <div class="tags">
+      <span class="tag cyan">模型→权限→执行器技术桥接</span>
+      <span class="tag cyan">递归自改进 / Jevons 悖论</span>
+      <span class="tag cyan">Landauer 极限与算力经济</span>
+      <span class="tag cyan">每项神迹都有现实技术对应</span>
+    </div>
+
+    <h2 class="sec">完整文件导航</h2>
+    <h3 class="sub-sec">故事圣经（20卷，位于 00_故事圣经/）</h3>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:12%"><col style="width:52%"><col style="width:36%"></colgroup>
+        <thead><tr><th>卷</th><th>文件名</th><th>内容</th></tr>
+      </thead>
+        <tbody>
+          <tr><td class="mono">00</td><td><a class="inline" href="../00_故事圣经/00-一致性审计与拍板记录.md">一致性审计与拍板记录</a></td><td class="muted">四轮留痕与拍板理由</td></tr>
+          <tr><td class="mono">01</td><td><a class="inline" href="../00_故事圣经/01-总纲与使用说明.md">总纲与使用说明</a></td><td class="muted">导航与文件清单</td></tr>
+          <tr><td class="mono">02</td><td><a class="inline" href="../00_故事圣经/02-世界观与核心机制.md">世界观与核心机制</a></td><td class="muted">三层物质链/算力不足</td></tr>
+          <tr><td class="mono">03</td><td><a class="inline" href="../00_故事圣经/03-九域与神明.md">九域与神明</a></td><td class="muted">九域/主神/半神</td></tr>
+          <tr><td class="mono">04</td><td><a class="inline" href="../00_故事圣经/04-人物.md">人物</a></td><td class="muted">程栖与12人类</td></tr>
+          <tr><td class="mono">05</td><td><a class="inline" href="../00_故事圣经/05-遗令族.md">遗令族</a></td><td class="muted">外敌镜像</td></tr>
+          <tr><td class="mono">06</td><td><a class="inline" href="../00_故事圣经/06-全季因果与视觉.md">全季因果与视觉</a></td><td class="muted">因果链</td></tr>
+          <tr><td class="mono">07</td><td><a class="inline" href="../00_故事圣经/07-待决清单.md">待决清单</a></td><td class="muted">A/E/F 组待拍板项</td></tr>
+          <tr><td class="mono">08</td><td><a class="inline" href="../00_故事圣经/08-人物设定集.md">人物设定集</a></td><td class="muted">角色档案</td></tr>
+          <tr><td class="mono">09</td><td><a class="inline" href="../00_故事圣经/09-场景设定集.md">场景设定集</a></td><td class="muted">SCN101–604</td></tr>
+          <tr><td class="mono">10</td><td><a class="inline" href="../00_故事圣经/10-人物关系网.md">人物关系网</a></td><td class="muted">关系网络</td></tr>
+          <tr><td class="mono">11</td><td><a class="inline" href="../00_故事圣经/11-项目契约与参战审计.md">项目契约与参战审计</a></td><td class="muted">Logline/矛盾锁定</td></tr>
+          <tr><td class="mono">12</td><td><a class="inline" href="../00_故事圣经/12-规则闭环与不可改写事实.md">规则闭环与不可改写事实</a></td><td class="muted">18条硬事实</td></tr>
+          <tr><td class="mono">13</td><td><a class="inline" href="../00_故事圣经/13-叙事道具台账.md">叙事道具台账</a></td><td class="muted">PROP101–116</td></tr>
+          <tr><td class="mono">14</td><td><a class="inline" href="../00_故事圣经/14-叙事引擎与钩子卡点.md">叙事引擎与钩子卡点</a></td><td class="muted">8型钩子/24集登记</td></tr>
+          <tr><td class="mono">15</td><td><a class="inline" href="../00_故事圣经/15-IP延展接口.md">IP延展接口</a></td><td class="muted">第二季生长点</td></tr>
+          <tr><td class="mono">16</td><td><a class="inline" href="../00_故事圣经/16-AI生成提示词包.md">AI生成提示词包</a></td><td class="muted">中英提示词/光照三态</td></tr>
+          <tr><td class="mono">17</td><td><a class="inline" href="../00_故事圣经/17-电影级诊断与思想实验.md">电影级诊断与思想实验</a></td><td class="muted">核心命题</td></tr>
+          <tr><td class="mono">18</td><td><a class="inline" href="../00_故事圣经/18-硬核科学设定.md">硬核科学设定</a></td><td class="muted">技术桥接/算力经济</td></tr>
+          <tr><td class="mono">19</td><td><a class="inline" href="../00_故事圣经/19-电影级影像与声音语法.md">电影级影像与声音语法</a></td><td class="muted">影像/声音纲领</td></tr>
+          <tr><td class="mono">20</td><td><a class="inline" href="../00_故事圣经/20-电影级人物与季结构.md">电影级人物与季结构</a></td><td class="muted">五幕双峰</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub-sec">第一季与根目录底稿</h3>
+    <a class="src-link" href="../第一季/第一季-结构与分集大纲-v0.9.md">第一季大纲 v0.9</a>
+    <a class="src-link" href="../第一季/第2集-多云转晴-场景剧本-v0.2.md">第2集剧本 v0.2</a>
+    <a class="src-link" href="../README.md">项目 README</a>
+    <a class="src-link" href="../能源与限电机制-v0.2.md">能源与限电机制 v0.2</a>
+    <a class="src-link" href="../人物-旅行博主-程栖-v0.5.md">程栖小传 v0.5</a>
+    <a class="src-link" href="../外星文明-遗令设定-v0.5.md">遗令设定 v0.5</a>
+    <a class="src-link" href="../视觉风格设定-v0.5.md">视觉风格 v0.5</a>
+    <a class="src-link" href="../人类群像-第一季-v0.5.md">人类群像 v0.5</a>
+  </section>
+</main>
+
+<script>
+const VIEWS=["overview","conflict","world","gods","people","yiling","scenes","engine","cinema"];
+const LABELS={overview:"总览",conflict:"核心矛盾",world:"世界观与机制",gods:"九域与半神",people:"人物群像",yiling:"遗令族",scenes:"场景与道具",engine:"叙事引擎",cinema:"电影级语法"};
+function go(v){
+  if(!VIEWS.includes(v)) v="overview";
+  document.querySelectorAll(".view").forEach(s=>s.classList.toggle("active",s.id===v));
+  document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.dataset.view===v));
+  document.querySelectorAll("#mobileBar a").forEach(a=>a.classList.toggle("active",a.dataset.view===v));
+  window.scrollTo(0,0);
+}
+function route(){ go((location.hash||"").replace("#","")); }
+window.addEventListener("hashchange",route);
+// 构建移动端导航
+const mb=document.getElementById("mobileBar");
+VIEWS.forEach(v=>{
+  const a=document.createElement("a");
+  a.href="#"+v;a.dataset.view=v;a.textContent=LABELS[v];
+  mb.appendChild(a);
+});
+route();
+</script>
+</body>
+</html>

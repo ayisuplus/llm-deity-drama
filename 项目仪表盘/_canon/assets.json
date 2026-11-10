@@ -1,0 +1,1483 @@
+{
+  "assets": {
+    "global": {
+      "base": {
+        "cn": "电影级国产3D漫剧画面，高质量三维CG渲染，科幻为骨、奇幻为皮，横屏16:9，半写实风格化角色（非照片级写实、非低幼Q版），通透风格化肌肤与柔和次表面散射，电影级打光、体积光与空气透视，低饱和基底加单一强调色，PBR材质真实、细节磨损可信，深海工业城邦，统一工业形制，角色年轻灵动、无塑料感。",
+        "en": "cinematic Chinese 3D animated series look, high-end 3D CG render, science-fiction core with fantasy surface, 16:9 widescreen, semi-realistic stylized characters (not photorealistic, not chibi), translucent stylized skin with soft subsurface scattering, cinematic lighting with volumetric light and atmospheric perspective, desaturated base with one accent color, believable PBR materials with credible wear, deep-sea industrial city-state, unified industrial design language, youthful lively characters, no plastic look."
+      },
+      "negative": {
+        "cn": "无现实品牌logo、无文字水印、无塑料感、无廉价卡通渲染、无多余手指、无现代商标、无多余肢体、无面部跨镜漂移、无帧间闪烁、无镜头突兀抖动、无过曝、无现代电子设备外观、无照片级写实、无成熟女人感、无老气浓妆、无锋利成熟骨相、无恐怖谷。",
+        "en": "no real-world brand logos, no watermark, no plastic look, no cheap cartoon render, no extra fingers, no modern trademarks, no extra limbs, no face drift, no frame flicker, no sudden camera shake, no overexposure, no modern electronic devices, no photorealism, no mature woman look, no heavy dated makeup, no harsh mature features, no uncanny valley."
+      },
+      "costume_design": {
+        "principles": {
+          "cn": "全剧女性服化遵循「不土、不闷、不俗」，走科幻轻高定（Sci-Fi Couture）：修身实料基底＋半透明光影外层＋约25%黄金露肤。性感靠剪裁与面料而非暴露，一次只突出一个露肤重点、露一藏多，避免同时露多个部位。",
+          "en": "Female costumes follow 'not frumpy, not stuffy, not cheap': sci-fi couture with a fitted solid base, a semi-transparent light layer and about 25% tasteful skin exposure. Sexiness comes from cut and fabric rather than exposure; emphasize one skin point at a time, reveal one and conceal the rest."
+        },
+        "chengqi_palette": {
+          "name": "暖珊瑚×冷电蓝（电影级蓝橙冷暖撞色）",
+          "logic": "珊瑚是深海冷环境里唯一的暖色生命，象征程栖在冷硬系统里的温度；不与神明阿汐的幽蓝撞色；蓝橙互补是经典电影冷暖对比；暖色让她在九域冷色环境里成为视觉焦点，又不抢神明的神性色。",
+          "tiers": [
+            {
+              "layer": "基底色",
+              "share": "60%",
+              "colors": [
+                {
+                  "name": "奶白",
+                  "hex": "#F8F3EA"
+                },
+                {
+                  "name": "米杏",
+                  "hex": "#E6D9C4"
+                }
+              ]
+            },
+            {
+              "layer": "识别色",
+              "share": "25%",
+              "colors": [
+                {
+                  "name": "活珊瑚橙",
+                  "hex": "#FF6F5E"
+                },
+                {
+                  "name": "蜜桃珊瑚",
+                  "hex": "#FFA088"
+                }
+              ]
+            },
+            {
+              "layer": "功能色",
+              "share": "10%",
+              "colors": [
+                {
+                  "name": "电光青蓝",
+                  "hex": "#36A3F0"
+                },
+                {
+                  "name": "哑光银",
+                  "hex": "#C7CBD2"
+                }
+              ]
+            },
+            {
+              "layer": "锚点色",
+              "share": "5%",
+              "colors": [
+                {
+                  "name": "暖橘",
+                  "hex": "#F0824F"
+                },
+                {
+                  "name": "深海蓝",
+                  "hex": "#18365A"
+                }
+              ]
+            },
+            {
+              "layer": "高定点缀",
+              "share": "少量",
+              "colors": [
+                {
+                  "name": "浅金",
+                  "hex": "#D8B889"
+                }
+              ]
+            }
+          ],
+          "note": "hex 为参考色值，实际以出图校准；珊瑚橙克制使用、不做大面积平铺。"
+        },
+        "sensual_style": {
+          "chengqi": "甜欲风（甜美无害的脸＋有曲线的身材之反差），高级不低俗；露肤落点：肩颈锁骨、后背、腰腹（仅正式装）、腿部、面料语言（缎面/丝绒/薄纱/贴身针织）。",
+          "contrast_chengqi_shenwenli": [
+            {
+              "dimension": "色温",
+              "chengqi": "暖·珊瑚奶白",
+              "shenwenli": "冷·玄黑金"
+            },
+            {
+              "dimension": "露肤",
+              "chengqi": "露肩背腿、薄纱",
+              "shenwenli": "扣子扣到顶、立领包裹"
+            },
+            {
+              "dimension": "剪裁",
+              "chengqi": "柔软修身、曲线",
+              "shenwenli": "硬挺军装、直线"
+            },
+            {
+              "dimension": "面料",
+              "chengqi": "缎面薄纱、垂柔",
+              "shenwenli": "呢料金属、挺硬"
+            },
+            {
+              "dimension": "性感方式",
+              "chengqi": "显性上镜",
+              "shenwenli": "禁欲留白、反差"
+            }
+          ],
+          "tension": "程栖外放撩拨 vs 沈雯璃隐忍克制；第11集共浴、程栖摸到沈雯璃背上焦痕，是禁欲者破防的关键；沈雯璃的性感不靠露，靠「克制被打破」的瞬间。"
+        }
+      }
+    },
+    "ch": [
+      {
+        "id": "CH-01",
+        "name": "程栖（主角，含三视图/表情/常态）",
+        "turnaround": {
+          "cn": "同一角色的T字式四视图角色设定表，半写实偏写实3D渲染、国产3D动画/3A游戏级写实质感，与风格基准图完全同一人物、同一服装、同一画风，非卡通、非照片真人。同一角色在纯色中性背景上并排展示四个角度：正面、侧面、背面、3/4侧面，均为T字站姿——双脚并拢自然站立、双臂向两侧水平伸直、手掌自然朝下，中性放松表情、目视前方，方便看清服装与身体结构。角色为21岁年轻成年东亚女性，身形娇小、小只、约七头身、窄肩薄背、骨架纤细、整体纤瘦单薄、绝不健硕；修长纤细的天鹅颈、颈部线条流畅、脖子显细长、不短不粗、锁骨清晰；腰收得很细、明显内收、夸张细腰，小腹平坦收紧、无赘肉，肩-腰-胯形成柔和但明确的漏斗型沙漏曲线、胯自然圆润不顶出、骨架依旧纤细；双腿纤细修长、腿型笔直、大腿与小腿都细、膝盖小巧、脚踝纤细、无肌肉感、腿部线条柔和，手脚小巧；深棕近黑微卷中长发束利落高马尾，发根自然蓬松、不贴头皮，马尾本身发丝顺滑整齐、有清晰束感、发丝走向服帖、自然垂坠、不毛躁不炸毛、不过度蓬松外扩，背面看是整齐一束、绝非一团乱麻；额前是轻薄带空隙的法式空气刘海、鬓角两侧各留一缕细长龙须碎发修饰颧骨与发际线，高保真真实脸、甜御鹅蛋脸：流畅无棱角的长椭圆轮廓、颧骨平缓不外扩、下颌线紧致清晰并向内收、下颌软组织量感小、下巴收窄小巧精致、明显显瘦、圆润但不尖、脸型长宽比约1.5:1、脸偏小但不极端；三庭均衡不缩中庭、标准五眼，眼型圆润灵动、眼尾自然微扬、自然卧蚕、深棕亮瞳、真实眼神光，鼻精致小巧、鼻梁自然立体、鼻头圆润，唇厚度适中、唇形清晰、嘴角自然；自然皮肤纹理与细微毛孔、柔和次表面散射、软组织饱满紧致不臃肿、苹果肌自然、面部留白适中，不笑时清秀、笑起来眉眼弯弯，保持年轻成年感、不幼态。穿W1机能风JK套装：奶白色短款西装式机能外套、柔和窄肩、哑光科技面料带精致结构线与金属拉链、袖口一抹暖橘旧颜料印，内搭珊瑚橙修身针织、不露腰，下装奶白与浅杏色自然腰A字百褶短裙、裙腰平整、腰腹平坦、裙摆自然垂坠，一侧大腿裙摆下露出金属与蓝光交织的微缩拾音/光影接口腿环，左手腕戴一块走停的精致旧表，奶白中筒袜与小皮鞋。四个角度的发型、服装、配饰、身形比例完全一致，统一柔和光照、纯色背景、无杂物，角色设定表式排版、全身完整入镜、真实人体比例。",
+          "en": "a T-pose four-view character turnaround sheet of the same character, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game realistic texture, the exact same person, outfit and art style as the style anchor, not cartoon, not photorealistic live action. The same character shown side by side on a plain neutral background in four angles: front, side, back and three-quarter view, all in a T-pose standing stance with feet together, arms extended straight out horizontally to the sides, palms naturally facing down, a neutral relaxed expression gazing forward, making the outfit and body structure clear. A 21-year-old young adult East Asian female, petite and compact, about seven heads tall, narrow thin shoulders, a thin delicate frame that is slim and slight overall, never sturdy or athletic; a long slender swan neck with smooth lines, looking elongated rather than short or thick, with defined collarbones; a very narrow, clearly cinched exaggerated waist, a flat tight abdomen with no excess softness, the shoulder-waist-hip forming a soft but distinct hourglass funnel curve with naturally rounded hips that do not push out while the frame stays delicate; slender elongated legs with a straight shape, thin thighs and calves, small knees, slim ankles, no muscle definition, soft leg lines, small hands and feet; dark-brown near-black wavy mid-length hair in a neat high ponytail, naturally lifted at the roots without lying flat, while the ponytail itself is smooth and tidy with a clear gathered shape, strands lying in orderly defined lines and falling naturally, not frizzy, flyaway or over-fluffed, from the back reading as one neat bundle rather than a messy tangle; light airy French bangs with gaps across the forehead and two thin wispy tendril strands at each temple softening the cheekbones and hairline, a high-fidelity realistic face, a sweet-elegant oval face: a smooth unangled long-oval outline with gently flat cheekbones that do not flare, a tight clear jawline that tapers inward with little soft tissue along the jaw, a narrowed small refined chin that looks slim, rounded but not pointed, face length-to-width ratio about 1.5:1, small-faced but not extreme; balanced three-section facial proportions without shortening the midface, standard five-eye spacing, rounded lively eyes with naturally slightly lifted outer corners and natural under-eye plumpness, bright deep-brown eyes with realistic catchlights, a delicate small nose with a natural straight bridge and rounded tip, medium-full lips with a clear shape and natural corners; natural skin texture with fine pores, soft subsurface scattering, firm plump but not puffy soft tissue, natural apple cheeks, moderate facial negative space, clean when unsmiling and crescent-eyed when smiling, keeping a young-adult feel without looking childish. Wearing the W1 tech-style JK uniform: a cropped cream-white blazer-style tech jacket with soft narrow shoulders, matte tech fabric, refined seam lines and a metallic zipper, a warm-orange old paint stain on the cuff, a coral-orange fitted knit top underneath with no exposed midriff, a cream and beige-apricot natural-waist A-line pleated mini skirt with a flat waistband and a flat abdomen, pleats falling naturally, a metallic and blue-glowing micro audio/optical-interface thigh strap peeking below the hem on one thigh, a delicate stopped vintage watch on her left wrist, cream calf socks and small leather shoes. The hairstyle, outfit, accessories and proportions are identical across all four angles, uniform soft lighting, plain solid background with no clutter, character-sheet layout, full body in frame, real human proportions."
+        },
+        "expression": {
+          "cn": "同一角色的多表情参考表，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与风格基准图同一人物、同一W1服装与发型，非卡通、非照片真人。同一角色在纯色中性背景上并排展示四种头部/半身表情，发型（高马尾+法式空气刘海+龙须碎发）与服装（奶白机能外套+珊瑚橙内搭）完全一致：①自然中性、放松平视；②专注（微眯眼、侧头聆听，超常听觉发动）；③对镜头明艳甜笑、眉眼弯弯、自然卧蚕；④被换装恶作剧时的无奈脸红、脸颊泛红、眼神窘迫。统一为甜御鹅蛋脸、小巧收窄下巴、深棕亮瞳、自然皮肤纹理与真实眼神光，柔和统一光照、纯色背景、无文字，角色设定表式排版。",
+          "en": "a multi-expression reference sheet of the same character, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture, the same person, W1 outfit and hairstyle as the style anchor, not cartoon, not photorealistic live action. Four head/bust expressions shown side by side on a plain neutral background, with an identical hairstyle (high ponytail, airy French bangs, wispy tendrils) and outfit (cream tech jacket over a coral-orange top): (1) neutral relaxed, looking forward; (2) focused (squinting slightly, tilting the head to listen as her enhanced hearing activates); (3) a bright sweet smile at the camera with crescent eyes and natural under-eye plumpness; (4) blushing exasperation from an outfit prank, flushed cheeks and an embarrassed gaze. All share a sweet-elegant oval face, a small narrowed chin, bright deep-brown eyes, natural skin texture and realistic catchlights, soft even lighting, plain background, no text, character-sheet layout."
+        },
+        "normal": {
+          "cn": "21岁年轻成年东亚女性、风景与颜值主播，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，非卡通、非照片真人。深棕近黑微卷中长发束蓬松顺滑高马尾、法式空气刘海、鬓角龙须碎发；甜御鹅蛋脸、下巴小巧收窄、深棕亮瞳、自然皮肤纹理。身形娇小、约七头身、天鹅颈、窄肩薄背、纤细骨架、细腰平坦小腹、纤细长腿。穿W1机能风JK套装：奶白短款西装式机能外套、袖口暖橘颜料印，内搭珊瑚橙修身针织，奶白/浅杏A字百褶短裙、大腿蓝光腿环，左手腕走停旧表，奶白中筒袜小皮鞋。在深海工业城邦环境中自然放松站立、含蓄微笑，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 21-year-old young adult East Asian female, a scenery and beauty streamer, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture, not cartoon, not photorealistic live action. Dark-brown near-black wavy mid-length hair in a fluffy smooth high ponytail, airy French bangs and wispy temple tendrils; a sweet-elegant oval face with a small narrowed chin, bright deep-brown eyes and natural skin texture. Petite, about seven heads tall, a swan neck, narrow thin shoulders, a delicate frame, a narrow waist with a flat abdomen and slender long legs. Wearing the W1 tech-style JK uniform: a cropped cream-white blazer-style tech jacket with a warm-orange paint stain on the cuff, a coral-orange fitted knit top underneath, a cream/beige-apricot A-line pleated mini skirt, a blue-glowing thigh strap, a stopped vintage watch on her left wrist, cream calf socks and small leather shoes. Standing naturally and relaxed in a deep-sea industrial city-state with an understated smile, the character and environment sharing unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "wardrobe": [
+          {
+            "id": "CH-01-W1",
+            "name": "基础机能日常装（短款露腰短裤版）",
+            "type": "整套",
+            "appears": "全季绝大多数日常/出行/工作场景",
+            "cn": "一张横版专业服装设计设定表（costume design sheet），半写实偏写实3D渲染、国产3D动画/3A游戏级写实质感，非卡通、非照片真人，干净的浅米色纯色背景。设定表陈列式布局：左侧是一位21岁年轻东亚女性穿着整套服装的全身正面立绘、自然站姿、甜美微笑；右侧及下方把各组成部分以整齐挂装或平铺方式单独拆解陈列，单品间留白清晰、互不遮挡。角色与身体基准同一人：甜御鹅蛋脸、深棕亮瞳、高马尾＋法式空气刘海＋龙须、天鹅颈、娇小约七头身、窄肩薄背、纤瘦、夸张细腰、平坦小腹、纤细长腿。整套服装为W1机能风短款露腰套装、奶白＋珊瑚橙＋浅杏配色：奶白色短款西装式机能外套（哑光科技面料、结构线、金属拉链、袖口暖橘颜料印、可敞开），内搭珊瑚橙短款修身针织crop top（短款、露出腰腹最细的一截、平坦小腹），下装为奶白与浅杏色自然腰微A字机能短裤（略硬挺面料、裤腿微外放、不贴胯不包臀、有口袋与结构线、避免显胯）。拆解陈列：①机能外套（单独挂装，可见结构线、金属拉链与袖口颜料印）；②珊瑚橙短款crop针织；③微A字机能短裤；④配饰——金属与蓝光交织的大腿接口腿环、左手腕走停旧表；⑤鞋袜——奶白中筒袜、小皮鞋。整体配色严格奶白、珊瑚橙、浅杏，点缀电蓝与金属银，露腰面积克制、强调最细腰位而非胯，材质区分清晰，统一柔和光照、无杂物、无文字、无水印，真实人体比例、设计表式排版。",
+            "en": "a horizontal professional costume design sheet, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture, not cartoon, not photorealistic live action, on a clean light-beige solid background. A display-sheet layout: on the left a full-body front view of a 21-year-old young East Asian female wearing the complete outfit in a natural stance with a sweet smile; on the right and below, the components are shown separately as neat hanging or flat-lay items with clear spacing, not overlapping. The same person as the body base: a sweet-elegant oval face, bright deep-brown eyes, a high ponytail with airy French bangs and wispy tendrils, a swan neck, petite about seven heads, narrow thin shoulders, slim with an exaggerated narrow waist, a flat abdomen and slender long legs. The W1 cropped tech outfit in cream, coral and light-apricot: a cropped cream-white blazer-style tech jacket (matte tech fabric, seam lines, metal zipper, a warm-orange paint stain on the cuff, worn open), a coral-orange fitted cropped knit top underneath revealing the narrowest part of the waist and a flat abdomen, and cream/beige-apricot natural-waist slightly A-line tech shorts (slightly firm fabric, subtly flared legs, not clinging to the hips, with pockets and seam lines to avoid a wide-hip look). Exploded display: (1) the tech jacket on a hanger showing seam lines, zipper and cuff paint stain; (2) the coral cropped knit; (3) the slightly A-line tech shorts; (4) accessories — a metallic blue-glowing thigh interface strap and a stopped vintage watch on the left wrist; (5) footwear — cream calf socks and small leather shoes. Strictly cream, coral and light-apricot with electric-blue and silver accents, restrained skin exposure emphasizing the narrowest waist rather than the hips, clearly differentiated materials, soft even lighting, no clutter, no text, no watermark, real human proportions, design-sheet layout.",
+            "design_sheet_url": "https://aka.doubaocdn.com/s/Hm44gwfcKW"
+          },
+          {
+            "id": "CH-01-W2",
+            "name": "修身吊带睡衣（居家睡前）",
+            "type": "整套",
+            "appears": "第3集场5（21:58试探戏）",
+            "cn": "一张横版专业服装设计设定表（costume design sheet），半写实偏写实3D渲染、国产3D动画/3A游戏级写实质感，非卡通、非照片真人，干净的浅雾蓝纯色背景。设定表陈列式布局：左侧是一位21岁年轻东亚女性穿着整套睡衣的全身立绘（自然站立或坐于床沿）、放松带一点狡黠的神情；右侧及下方把各组成部分以整齐挂装或平铺方式拆解陈列，单品间留白清晰、互不遮挡。角色与身体基准同一人：甜御鹅蛋脸、深棕亮瞳、高马尾（居家略松）＋法式空气刘海＋龙须、天鹅颈、娇小约七头身、窄肩薄背、纤瘦、夸张细腰、平坦小腹、纤细长腿。整套服装为W2居家缎面吊带睡裙、性感度中高、精致不普通：月白与浅雾蓝渐变的缎面冰丝吊带睡裙，面料有细腻光泽、垂坠贴身、显腰臀曲线；细肩带、心形或微V领、露出锁骨与肩颈，领口与裙摆边缘有奶白细蕾丝与丝绸滚边、点缀小巧珊瑚粉蝴蝶结，后背细带交叉、微露背，裙长到大腿中部。拆解陈列：①缎面吊带睡裙（单独挂装，能看到光泽、蕾丝滚边与后背细带）；②同色系轻薄短外袍（松弛搭在一边）；③细节——蕾丝与珊瑚粉蝴蝶结特写；④赤脚（居家无鞋袜，或简单室内拖鞋）。整体配色月白、浅雾蓝、奶白，点缀珊瑚粉，材质区分清晰（缎面光泽、蕾丝、薄纱），统一柔和光照、无杂物、无文字、无水印，真实人体比例、设计表式排版。",
+            "en": "a horizontal professional costume design sheet, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture, not cartoon, not photorealistic live action, on a clean light misty-blue solid background. A display-sheet layout: on the left a full-body view of a 21-year-old young East Asian female in the complete sleepwear (standing naturally or seated on the edge of a bed), a relaxed, slightly playful expression; on the right and below, the components are shown separately as neat hanging or flat-lay items with clear spacing, not overlapping. The same person as the body base: a sweet-elegant oval face, bright deep-brown eyes, a slightly loosened high ponytail with airy French bangs and wispy tendrils, a swan neck, petite about seven heads, narrow thin shoulders, slim with an exaggerated narrow waist, a flat abdomen and slender long legs. The W2 at-home satin slip nightdress, medium-high sexiness, refined rather than ordinary: a moon-white to light misty-blue gradient satin/silk slip dress with a delicate lustrous sheen, draping close to show the waist-hip curves; thin straps, a sweetheart or slight V-neck exposing the collarbones and shoulders, fine cream lace and silk piping at the neckline and hem with a small coral-pink bow, crisscross back straps with a slightly open back, the hem to mid-thigh. Exploded display: (1) the satin slip dress on a hanger showing the sheen, lace piping and crisscross back straps; (2) a matching lightweight short robe draped loosely; (3) a detail close-up of the lace and coral-pink bow; (4) bare feet (at-home, no shoes, or simple indoor slippers). Moon-white, light misty-blue and cream with coral-pink accents, clearly differentiated materials (satin sheen, lace, chiffon), soft even lighting, no clutter, no text, no watermark, real human proportions, design-sheet layout.",
+            "design_sheet_url": "https://aka.doubaocdn.com/s/cqC2gcVv06"
+          },
+          {
+            "id": "CH-01-W3",
+            "name": "恶作剧趣味女仆装（鲸鱼主题）",
+            "type": "整套",
+            "appears": "第3集场5（阿汐锁死5分钟）",
+            "cn": "一张横版专业服装设计设定表（costume design sheet），半写实偏写实3D渲染、国产3D动画/3A游戏级写实质感，与全剧同一画风，非卡通、非照片真人，干净的浅蓝纯色背景。设定表陈列式布局：左侧是一位21岁年轻东亚女性穿着整套恶作剧女仆装的全身立绘、自然站姿、完整从头到脚入镜、脚和鞋袜清楚可见不裁切，她一脸嫌弃、生无可恋又嘟嘴的无奈表情，与身上滑稽的衣服形成喜剧反差；右侧及下方把各组成部分以整齐挂装或平铺方式拆解陈列，单品间留白清晰、互不遮挡。角色与身体基准及前两套为同一人（人物本身保持正常半写实七头身比例、不Q版不幼态，只是衣服卡通化）：甜御鹅蛋脸、深棕亮瞳、高马尾（保持自己的发型发色）＋法式空气刘海＋龙须、天鹅颈、娇小约七头身、窄肩薄背、纤瘦、夸张细腰、纤细长腿。整套服装为W3恶作剧趣味女仆装、趣味性优先于设计感、像整蛊派对道具而非精致高定：亮蓝色连衣裙配夸张的多层圆蓬蓬蛋糕裙（裙摆蓬松鼓起、滑稽可爱），裙身印卡通泡泡、小鱼与海星图案；白色围裙正面有一个大大的Q版卡通喷水柱小鲸鱼（萌表情、喷爱心水柱）、周围环绕泡泡；头饰是趣味重点——头顶趴着一只立体卡通小鲸鱼造型发箍（带喷水造型）、配夸张大蝴蝶结与鲸鱼尾巴发饰；腰间或裙后挂立体小鲸鱼玩偶与小铃铛。拆解陈列：①亮蓝蓬蓬蛋糕裙女仆装（单独挂装，能看到卡通图案与蓬松裙摆）；②卡通鲸鱼围裙（Q版喷水柱鲸鱼、泡泡）；③趣味头饰（立体小鲸鱼发箍、大蝴蝶结、鲸鱼尾巴）与小鲸鱼玩偶挂件；④鞋袜——带卡通装饰的中筒袜、圆头玛丽珍鞋，完整清楚。整体配色明快的亮蓝、深海蓝、奶白，点缀珊瑚粉与珍珠银，卡通趣味氛围、派对道具感，统一柔和光照、无杂物、无文字、无水印，真实人体比例、设计表式排版。",
+            "en": "a horizontal professional costume design sheet, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic live action, on a clean light-blue solid background. A display-sheet layout: on the left a full-body view of a 21-year-old young East Asian female in the complete prank maid outfit, natural stance, full head-to-toe in frame with feet and footwear clearly visible and not cropped, a resigned, exasperated pouting expression that forms a comedic contrast with her ridiculous outfit; on the right and below, the components are shown separately as neat hanging or flat-lay items with clear spacing, not overlapping. The same person as the body base and previous outfits (the character herself keeps normal semi-realistic seven-head proportions, not chibi, only the clothing is cartoonized): a sweet-elegant oval face, bright deep-brown eyes, a high ponytail in her own hairstyle and color with airy French bangs and wispy tendrils, a swan neck, petite about seven heads, narrow thin shoulders, slim with an exaggerated narrow waist and slender long legs. The W3 prank novelty maid outfit, fun over design, like a party prank prop rather than refined couture: a bright-blue dress with an exaggerated multi-layer round puffy cake skirt (voluminous and comically cute), printed with cartoon bubbles, fish and starfish; the white apron features a large Q-version cartoon water-spouting whale (cute face, spouting a heart-shaped jet) surrounded by bubbles; the headpiece is the key novelty — a 3D cartoon little-whale headband perched on top with a water-spout shape, an oversized bow and a whale-tail hair accessory; a 3D whale plush charm and small bell hang at the waist or back. Exploded display: (1) the bright-blue puffy cake-skirt maid dress on a hanger showing the cartoon prints and voluminous skirt; (2) the cartoon whale apron with a Q-version spouting whale and bubbles; (3) novelty headwear (3D whale headband, big bow, whale tail) and the whale plush charm; (4) footwear — cartoon-decorated calf socks and round-toe Mary Janes, fully shown. Bright blue, deep-sea blue and cream with coral-pink and pearl-silver accents, cartoon novelty party-prop feel, soft even lighting, no clutter, no text, no watermark, real human proportions, design-sheet layout.",
+            "design_sheet_url": "https://aka.doubaocdn.com/s/yVkLiTzcRA"
+          },
+          {
+            "id": "CH-01-W4",
+            "name": "宽松白衬衫（居家晨衣）",
+            "type": "整套",
+            "appears": "第12集场4（清晨湿发）",
+            "cn": "一张横版专业服装设计设定表（costume design sheet），半写实偏写实3D渲染、国产3D动画/3A游戏级写实质感，与全剧同一画风，非卡通、非照片真人，干净的奶白纯色背景。设定表陈列式布局：左侧是一位21岁年轻东亚女性穿着整套居家清晨装的全身立绘、自然慵懒站姿、完整从头到脚入镜、赤脚清楚可见不裁切，神情松弛带刚睡醒的慵懒；右侧及下方把各组成部分以整齐挂装或平铺方式拆解陈列，单品间留白清晰、互不遮挡。角色与身体基准及前几套为同一人：甜御鹅蛋脸、深棕亮瞳、高马尾（湿发状态、刚洗完澡、头发微湿披散或半扎）＋法式空气刘海、天鹅颈、娇小约七头身、窄肩薄背、纤瘦、夸张细腰、纤细长腿。整套服装为W4宽松白衬衫、下衣失踪、性感度中高、清晨松弛感：一件oversize奶白色长款衬衫（男友风、宽大、长至大腿中部、盖住下装形成下衣失踪），柔软微透的棉质面料、有自然褶皱，领口微敞、扣子随意解开几颗、袖子随意卷起、下摆两侧有小开衩，衬衫下摆内隐约可见极短的安全内搭。拆解陈列：①oversize奶白长款衬衫（单独挂装，能看到长度、卷袖、解开的扣子与侧开衩）；②极短安全内搭（若隐若现）；③细节——领口、袖口与面料质感特写；④赤脚（居家无鞋袜，或简单拖鞋）。整体配色奶白、本白，点缀极少量珊瑚粉或浅蓝，材质区分清晰（棉质、微透），统一柔和晨光、无杂物、无文字、无水印，真实人体比例、设计表式排版。",
+            "en": "a horizontal professional costume design sheet, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic live action, on a clean cream-white solid background. A display-sheet layout: on the left a full-body view of a 21-year-old young East Asian female in the complete at-home morning outfit, a naturally relaxed stance, full head-to-toe in frame with bare feet clearly visible and not cropped, a relaxed just-woken languid expression; on the right and below, the components are shown separately as neat hanging or flat-lay items with clear spacing, not overlapping. The same person as the body base and previous outfits: a sweet-elegant oval face, bright deep-brown eyes, a high ponytail (damp post-shower hair, slightly wet, loose or half-tied) with airy French bangs, a swan neck, petite about seven heads, narrow thin shoulders, slim with an exaggerated narrow waist and slender long legs. The W4 loose white shirt, missing-bottom look, medium-high sexiness, morning ease: an oversized cream-white long shirt (boyfriend style, roomy, to mid-thigh, covering the lower wear for a missing-bottom effect), soft slightly sheer cotton with natural wrinkles, a slightly open collar, a few casually undone buttons, casually rolled sleeves and small side slits at the hem, with a very short safety layer faintly visible beneath. Exploded display: (1) the oversized cream long shirt on a hanger showing the length, rolled sleeves, undone buttons and side slits; (2) the very short safety layer faintly visible; (3) detail close-ups of the collar, cuffs and fabric; (4) bare feet (at-home, no shoes, or simple slippers). Cream and off-white with tiny coral-pink or light-blue accents, clearly differentiated materials (cotton, slightly sheer), soft even morning light, no clutter, no text, no watermark, real human proportions, design-sheet layout.",
+            "design_sheet_url": "https://aka.doubaocdn.com/s/QVsCRJSWXO"
+          },
+          {
+            "id": "CH-01-O1",
+            "name": "深海人鱼露肩吊带洋装（开播/正式造型）",
+            "type": "整套",
+            "appears": "第1集开场及开播/正式形态，叠加在W1基础装外",
+            "cn": "一张横版专业服装设计设定表（costume design sheet），半写实偏写实3D渲染、国产3D动画/3A游戏级写实质感，与全剧同一画风，非卡通、非照片真人，干净的浅灰蓝纯色背景。设定表陈列式布局：左侧是一位21岁年轻东亚女性穿着整套直播正式洋装的全身立绘、自然优雅站姿、完整从头到脚入镜、高跟与腿脚清楚可见不裁切，神情甜美自信、上镜感；右侧及下方把各组成部分以整齐挂装或平铺方式拆解陈列，单品间留白清晰、互不遮挡。角色与身体基准及前几套为同一人：甜御鹅蛋脸、深棕亮瞳、高马尾（保持自己的发型发色）＋法式空气刘海＋龙须、天鹅颈、娇小约七头身、窄肩薄背、纤瘦、夸张细腰、纤细长腿。整套服装为O1深海人鱼露肩吊带洋装升级版、直播正式、性感度最高，面料与边缘工艺重点升级：单吊带斜肩（单侧细吊带、露出另一侧肩膀与整个锁骨肩颈）洋装，主体为深海蓝到珊瑚橙流动渐变的真丝缎（细腻珍珠光泽、垂坠贴身、收腰显腰臀曲线），局部拼哑光丝绒形成光泽对比、缎面有隐约的海浪鱼鳞暗纹提花；裙摆外层叠少量真丝雪纺（实体柔光、不做全息虹彩）形成通透层次，裙摆多层不规则、呈海浪形、侧面开叉显腿。边缘细节丰富：斜肩领口与单吊带为扇贝形蕾丝滚边、手工钉珠与珍珠串、点缀小贝壳；多层裙摆的每层边缘都缀珍珠、小贝壳饰片、细流苏与钉珠，开叉处波浪形滚边；腰臀有立体贝壳与海星贴花、珍珠点缀。人物本身不长鱼尾，人鱼元素全部融入面料与配饰。拆解陈列：①单吊带斜肩洋装（单独挂装，能看到真丝缎与丝绒拼接、暗纹、多层海浪裙摆、扇贝边缘与钉珠）；②珍珠贝壳首饰与珍珠串肩带细节；③蕾丝、钉珠、贝壳贴花等边缘工艺特写；④鞋袜——微珠光超薄透肤连裤袜、高跟鞋，完整清楚。整体配色深海蓝、珊瑚橙、奶白，点缀珍珠银与浅金，材质区分清晰（真丝缎、丝绒、真丝雪纺、蕾丝、珍珠），统一柔和光照、无杂物、无文字、无水印，真实人体比例、设计表式排版。",
+            "en": "a horizontal professional costume design sheet, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic live action, on a clean light grey-blue solid background. A display-sheet layout: on the left a full-body view of a 21-year-old young East Asian female in the complete broadcast/ceremonial dress, a natural elegant stance, full head-to-toe in frame with heels and legs clearly visible and not cropped, a sweet confident camera-ready expression; on the right and below, the components are shown separately as neat hanging or flat-lay items with clear spacing, not overlapping. The same person as the body base and previous outfits: a sweet-elegant oval face, bright deep-brown eyes, a high ponytail in her own hairstyle and color with airy French bangs and wispy tendrils, a swan neck, petite about seven heads, narrow thin shoulders, slim with an exaggerated narrow waist and slender long legs. The upgraded O1 deep-sea mermaid off-shoulder slip dress, for broadcast/ceremonial use, the highest sexiness, with upgraded fabric and edge craftsmanship: a single-strap asymmetric dress (one thin strap, the other shoulder and full collarbone exposed), mainly real silk satin in a flowing deep-sea-blue to coral-orange gradient (delicate pearl sheen, draping close, cinched waist and waist-hip curves), with matte velvet panels for sheen contrast and subtle embossed wave/scale patterns; the skirt is layered with a little real-silk chiffon (soft solid sheen, no holographic iridescence) for airy depth, a multi-layer irregular wave-shaped hem with a side slit showing the leg. Rich edge details: the asymmetric neckline and single strap have scalloped lace trim, hand-set beads and pearl strings with small shells; each layer of the skirt is edged with pearls, shell pieces, fine tassels and beads, with a wave-rolled slit; 3D shell and starfish appliqués with pearls at the waist and hip. The character herself has no fish tail; all mermaid elements are integrated into fabric and accessories. Exploded display: (1) the single-strap asymmetric dress on a hanger showing the silk-satin and velvet, embossed pattern, multi-layer wave skirt, scalloped edges and beading; (2) pearl-shell jewelry and pearl-string strap details; (3) close-ups of edge craftsmanship (lace, beads, shell appliqués); (4) footwear — micro-pearl ultra-sheer tights and high heels, fully shown. Deep-sea blue, coral orange and cream with pearl-silver and pale-gold accents, clearly differentiated materials (silk satin, velvet, silk chiffon, lace, pearls), soft even lighting, no clutter, no text, no watermark, real human proportions, design-sheet layout.",
+            "design_sheet_url": "https://aka.doubaocdn.com/s/Rrqr85VCnL"
+          }
+        ],
+        "body": {
+          "height_cm": 166,
+          "weight_kg": 47,
+          "head_ratio": 7,
+          "mass": "纤瘦",
+          "frame": "小骨架",
+          "shoulder": "窄肩薄背",
+          "bust": "适中",
+          "waist": "低腰节、夸张细腰",
+          "hips": "圆润不顶出、腰臀差大",
+          "shape": "沙漏",
+          "legs": "腿身比偏高、直腿纤细",
+          "hands_feet": "小手脚",
+          "posture": "略前倾、放松",
+          "skin": "中性一白（冷白偏蜜桃）",
+          "temperament": {
+            "outer": "甜美无害亲和",
+            "inner": "敏感缺爱、死要面子、坚韧"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/QdX7aOVy3X",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        },
+        "design_spec": {
+          "palette_ref": "global.costume_design.chengqi_palette",
+          "skin_points": [
+            "肩颈锁骨",
+            "后背",
+            "腰腹（仅正式装）",
+            "腿部",
+            "面料语言"
+          ],
+          "sensual_levels": [
+            {
+              "outfit": "W1",
+              "level": "低",
+              "note": "短款crop露腰、微A字机能短裤、中筒袜绝对领域、腿环点睛"
+            },
+            {
+              "outfit": "W2",
+              "level": "中高",
+              "note": "细肩带、贴身显曲线、居家氛围柔和"
+            },
+            {
+              "outfit": "W3",
+              "level": "中",
+              "note": "蓬蓬蛋糕裙、卡通喷水鲸鱼、立体小鲸鱼头饰，趣味优先、娇俏"
+            },
+            {
+              "outfit": "W4",
+              "level": "中高",
+              "note": "下衣失踪、湿发、露锁骨，清晨松弛感"
+            },
+            {
+              "outfit": "O1",
+              "level": "最高",
+              "note": "真丝缎拼丝绒、扇贝蕾丝钉珠、多层海浪裙摆、露肩单吊带，直播峰值"
+            }
+          ]
+        }
+      },
+      {
+        "id": "CH-02",
+        "name": "老陶（男·52·热食摊主）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "52岁东亚男性、深海热食摊主，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。市井热食摊主：面容敦厚、眼角皱纹、短发微白、神情硬朗。身形壮实微胖、约七头身、170cm，中等骨架、肩宽厚、常年劳作、手臂有力，穿耐脏深色工装与围裙。人物在深海城楼下市集的明火热食摊后麻利站立，神情刀子嘴、动作麻利，人物与环境光影统一、自然融合，热气、接触阴影与暖光真实，真实人体比例、全身完整入镜。",
+          "en": "a 52-year-old East Asian male hot-food stall owner, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A street-food vendor: a kind face with wrinkles at the eyes, short graying hair, a tough expression. Sturdy and slightly heavy, about seven heads, 170cm, a medium frame, broad thick shoulders, strong arms from years of work, dark durable work clothes and an apron. Standing briskly behind an open-flame food stall in the downstairs market, a sharp-tongued expression with quick hands, unified naturally blended lighting with realistic steam, contact shadows and warm light, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 170,
+          "weight_kg": 72,
+          "head_ratio": 7,
+          "mass": "壮实微胖",
+          "frame": "中等骨架",
+          "shoulder": "肩宽厚",
+          "bust": "—",
+          "waist": "中年微肚",
+          "hips": "—",
+          "shape": "直筒",
+          "legs": "粗壮有力",
+          "hands_feet": "手脚大、手粗",
+          "posture": "略含胸、市井",
+          "skin": "暖调风霜肤色",
+          "temperament": {
+            "outer": "刀子嘴、市井爱骂",
+            "inner": "心软、盛汤总多给一勺"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/GVnH9UUo82",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-03",
+        "name": "阿豆（女·12·鲸鱼帽女孩）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "12岁东亚女孩、深海女孩，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。活泼的孩童：自然白肤色、笑容明亮、戴针织鲸鱼帽（圆头、鲸尾垂脑后、头顶小绒球），朴素童装。身形娇小、约六头身、145cm，孩童未发育、小骨架、直身。人物在深海城楼下市集双手端汤碗、笑容明亮，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 12-year-old East Asian girl, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A lively child: natural fair skin, a bright smile, a knitted whale hat (round head, whale tail at the back, a small pom-pom on top), simple children's clothes. Petite, about six heads, 145cm, a child's undeveloped small frame and straight figure. Holding a soup bowl with both hands in the downstairs market with a bright smile, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 145,
+          "weight_kg": 35,
+          "head_ratio": 6,
+          "mass": "孩童娇小",
+          "frame": "小骨架",
+          "shoulder": "窄肩",
+          "bust": "未发育",
+          "waist": "直",
+          "hips": "窄",
+          "shape": "直筒",
+          "legs": "孩童短腿",
+          "hands_feet": "小手小脚",
+          "posture": "活泼前倾",
+          "skin": "自然白（孩童）",
+          "temperament": {
+            "outer": "活泼爱发问",
+            "inner": "懂事、绊跤先说对不起"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/EGfFRkB8qp",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-04",
+        "name": "值班员（女·30）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "30岁东亚女性、深海入城大厅值班员，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。守规矩的职员：自然白肤色、五官端正、神情认真、整洁发型。身形匀称、约七头身、165cm，中等骨架、直身，穿整洁的入城大厅值班制服、佩戴岗位标识。人物在入城大厅值班岗后端正站立，神情刻板认真，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 30-year-old East Asian female entry-hall duty officer, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A rule-abiding clerk: natural fair skin, regular features, a serious expression, neat hair. Balanced, about seven heads, 165cm, a medium frame and straight figure, wearing a neat entry-hall duty uniform with a post badge. Standing upright behind the entry-hall duty desk, a stiff serious expression, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 165,
+          "weight_kg": 55,
+          "head_ratio": 7,
+          "mass": "匀称",
+          "frame": "中等骨架",
+          "shoulder": "平肩",
+          "bust": "适中",
+          "waist": "直",
+          "hips": "适中",
+          "shape": "直筒",
+          "legs": "匀称",
+          "hands_feet": "手脚适中",
+          "posture": "端正",
+          "skin": "自然白",
+          "temperament": {
+            "outer": "刻板守规矩、不近人情",
+            "inner": "耐心公正、不徇私"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/v8XCm0uout",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-05",
+        "name": "文心（最弱游神·轮椅少女）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "十六岁东亚少女，苍白清瘦，蓝色长发披落、戴一枚蓝色立方体发夹，蓝白配色的中式衣裙，膝上盖一条旧毯子；坐在一张旧轮椅上，轮子缠着胶带。神情安静、不柔弱——她只是站不起来，不是不敢看人。市集远景、柔光，真实摄影、电影感。",
+          "en": "16-year-old East Asian girl, pale and slight, long blue hair with a single blue cube hairpin, blue-and-white Chinese-style dress, an old blanket over her knees; seated in an old wheelchair whose wheels are patched with tape. Quiet but not fragile — she cannot stand, not that she dares not look. Distant market shot, soft light, photorealistic, cinematic."
+        }
+      },
+      {
+        "id": "CH-06",
+        "name": "李泓（文心执印人）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "稳重的东亚女性执印人，干练朴素，推着轮椅缓缓前行，温和可靠，市集环境，真实摄影、电影感。",
+          "en": "composed East Asian female seal-bearer, capable plain dress, gently pushing a wheelchair, gentle reliable expression, market setting, photorealistic, cinematic."
+        },
+        "body": {
+          "height_cm": 168,
+          "weight_kg": 54,
+          "head_ratio": 7,
+          "mass": "匀称",
+          "frame": "中等骨架",
+          "shoulder": "平肩端正",
+          "bust": "适中",
+          "waist": "直",
+          "hips": "适中",
+          "shape": "直筒",
+          "legs": "匀称修长",
+          "hands_feet": "手脚适中",
+          "posture": "稳重放松",
+          "skin": "自然白",
+          "temperament": {
+            "outer": "稳重可靠温和",
+            "inner": "坚定护短"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/iiU5v2R3ea",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-07",
+        "name": "五号（重要男性角色·流动机械师）",
+        "turnaround": {
+          "cn": "同一角色的T字式四视图角色设定表，半写实偏写实3D渲染、国产3D动画/3A游戏级写实质感，与五号基准立绘完全同一人物、同一服装、同一画风，非卡通、非照片真人。同一角色在纯色中性背景上并排展示四个角度：正面、侧面、背面、3/4侧面，均为T字站姿——双脚并拢自然站立、双臂向两侧水平伸直、手掌自然朝下，中性放松表情、目视前方，方便看清服装与身体结构。角色为24岁年轻成年东亚男性，高挑精瘦、比例利落，冷白皮、轮廓干净的清冷俊脸，额前垂落一绺碎发；身形清瘦不单薄、肩背线条利落、手臂线条紧实、双腿修长笔直。穿机车修械风格工装：合身黑色工装背心，外搭短款深灰金属扣机能夹克、半脱卡在手肘，高腰工装长裤与系带马丁短靴，腰间挂一圈银亮精密的改锥与灵核测压表；衣服虽旧但洗得干净。四个角度的发型、服装、配饰、身形比例完全一致，统一柔和光照、纯色背景、无杂物，角色设定表式排版、全身完整入镜、真实人体比例。",
+          "en": "a T-pose four-view character turnaround sheet of the same character, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game realistic texture, the exact same person, outfit and art style as the Wu Hao anchor, not cartoon, not photorealistic live action. The same character shown side by side on a plain neutral background in four angles: front, side, back and three-quarter view, all in a T-pose stance with feet together, arms extended straight out horizontally, palms down, a neutral relaxed expression gazing forward, making the outfit and body structure clear. A 24-year-old young adult East Asian male, tall and lean with crisp proportions, cool fair skin, a clean-cut cold handsome face with a strand of loose hair over the forehead; slim but not frail, defined shoulder and back lines, firm lean arms, long straight legs. Wearing mechanic-style workwear: a fitted black work vest, a cropped dark-grey metal-buttoned tech jacket half-slipped at the elbows, high-waisted work trousers and lace-up Martin boots, a ring of shiny precision screwdrivers and a spirit-core pressure gauge at the waist; the clothes are old but washed clean. The hairstyle, outfit, accessories and proportions are identical across all four angles, uniform soft lighting, plain solid background, no clutter, character-sheet layout, full body in frame, real human proportions."
+        },
+        "expression": null,
+        "normal": {
+          "cn": "24岁年轻成年东亚男性、流动机械师，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。机车修械风格的清俊小帅：个子高挑精瘦、比例利落，冷白皮、轮廓干净的清冷俊脸，额前常垂落一绺碎发，眼神冷淡务实。穿合身黑色工装背心（露出线条利落的手臂），外搭一件短款深灰金属扣机能夹克、常半脱卡在手肘处，下穿高腰工装长裤与系带马丁短靴，腰间挂一圈银亮精密的改锥与灵核测压表；衣服虽旧但洗得干净、穷不是脏。人物在深海工业城邦的修理铺/设备间环境中自然站立、重心放松，神情清冷寡言，人物与环境光影统一、自然融合，接触阴影与环境反光真实，真实人体比例、全身完整入镜。",
+          "en": "a 24-year-old young adult East Asian male, a mobile mechanic, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic live action. A clean, sharp-handsome mechanic type: tall and lean with crisp proportions, cool fair skin, a clean-cut cold handsome face with a strand of loose hair often falling over the forehead, a detached pragmatic gaze. Wearing a fitted black work vest showing lean toned arms, a cropped dark-grey metal-buttoned tech jacket half-slipped and caught at the elbows, high-waisted work trousers and lace-up Martin boots, a ring of shiny precision screwdrivers and a spirit-core pressure gauge hanging at his waist; the clothes are old but washed clean, poor does not mean dirty. Standing naturally with relaxed weight in a deep-sea industrial repair-shop / equipment-room setting, a cold reserved expression, the character and environment sharing unified naturally blended lighting with realistic contact shadows and ambient reflections, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 178,
+          "weight_kg": 63,
+          "head_ratio": 7.5,
+          "mass": "清瘦",
+          "frame": "窄骨架",
+          "shoulder": "窄肩、肩背利落",
+          "bust": "平、紧实",
+          "waist": "利落",
+          "hips": "窄",
+          "shape": "直筒",
+          "legs": "修长笔直",
+          "hands_feet": "手脚利落",
+          "posture": "挺拔放松",
+          "skin": "冷调一白（冷白皮）",
+          "temperament": {
+            "outer": "冷淡寡言务实",
+            "inner": "心软有原则、不图回报"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/ZJQMNKaLcK",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-08",
+        "name": "阿吉（小漂亮·赛博黑市情报贩子）",
+        "turnaround": {
+          "cn": "同一角色的T字式四视图角色设定表，半写实偏写实3D渲染、国产3D动画/3A游戏级写实质感，与阿吉基准立绘完全同一人物、同一服装、同一画风，非卡通、非照片真人。同一角色在纯色中性背景上并排展示四个角度：正面、侧面、背面、3/4侧面，均为T字站姿——双脚并拢自然站立、双臂向两侧水平伸直、手掌自然朝下，中性放松表情、目视前方，方便看清服装与身体结构。角色为23岁年轻成年东亚女性，身段高挑曼妙、明艳灵动（小漂亮，不抢主角锋芒），大波浪卷发、流光棱镜耳坠；身形匀称、肩背线条柔美、双腿修长。穿酒红色丝绒修身吊带短裙、优雅露出锁骨与腿部线条，肩披香槟金色真丝雪纺薄纱披肩、柔软垂坠、轻盈飘逸、带细腻暖金柔光、丝绸质感而非塑料膜，脚穿金色缎面高跟鞋。四个角度的发型、服装、配饰、身形比例完全一致，统一柔和光照、纯色背景、无杂物，角色设定表式排版、全身完整入镜、真实人体比例。",
+          "en": "a T-pose four-view character turnaround sheet of the same character, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game realistic texture, the exact same person, outfit and art style as the A Ji anchor, not cartoon, not photorealistic live action. The same character shown side by side on a plain neutral background in four angles: front, side, back and three-quarter view, all in a T-pose stance with feet together, arms extended straight out horizontally, palms down, a neutral relaxed expression gazing forward, making the outfit and body structure clear. A 25-year-old young adult East Asian female, tall and graceful, vivid and lively (a secondary beauty, not outshining the lead), big wavy hair and flowing prism earrings; a well-proportioned figure, soft shoulder and back lines, long legs. Wearing a wine-red velvet fitted slip mini dress elegantly showing the collarbones and leg lines, a champagne-gold silk chiffon shawl draped over the shoulders, soft, draping, light and airy with a delicate warm-gold sheen, silk quality rather than plastic film, and gold satin high heels. The hairstyle, outfit, accessories and proportions are identical across all four angles, uniform soft lighting, plain solid background, no clutter, character-sheet layout, full body in frame, real human proportions."
+        },
+        "expression": null,
+        "normal": {
+          "cn": "23岁年轻成年东亚女性、赛博黑市情报贩子，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。赛博霓虹轻奢风的明艳小富婆：身段高挑曼妙、明艳灵动（小漂亮，不抢主角锋芒），大波浪卷发、戴自己改装的流光棱镜耳坠、美甲精致，笑起来明艳狡黠、眼神灵动。穿酒红色丝绒修身吊带短裙、优雅露出锁骨与修长腿部线条，肩披一件香槟金色真丝雪纺薄纱披肩、柔软垂坠、轻盈飘逸、带细腻暖金柔光（丝绸质感、非塑料膜），脚穿金色缎面高跟鞋。人物在赛博黑市的摊位/霓虹街巷环境中自然站立、重心放松，神情明艳自信，人物与环境光影统一、自然融合，接触阴影与霓虹环境反光真实、轮廓光、空气雾感，真实人体比例、全身完整入镜。",
+          "en": "a 23-year-old young adult East Asian female, a cyber black-market information dealer, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic live action. A bright, lightly-luxurious cyber-neon little madam: tall and graceful, vivid and lively (a secondary beauty, not outshining the lead), big wavy hair, self-modified flowing prism earrings, refined nails, a bright cunning smile and lively eyes. Wearing a wine-red velvet fitted slip mini dress elegantly showing the collarbones and long leg lines, a champagne-gold silk chiffon shawl draped over the shoulders, soft, draping, light and airy with a delicate warm-gold sheen (silk quality, not plastic film), and gold satin high heels. Standing naturally with relaxed weight in a cyber black-market stall / neon alley setting, a bright confident expression, the character and environment sharing unified naturally blended lighting with realistic contact shadows and neon ambient reflections, rim light and atmospheric haze, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 170,
+          "weight_kg": 54,
+          "head_ratio": 7,
+          "mass": "曼妙",
+          "frame": "中小骨架",
+          "shoulder": "肩颈柔美",
+          "bust": "丰满（比程栖丰盈）",
+          "waist": "细腰",
+          "hips": "曲线明显、腰臀差大",
+          "shape": "沙漏",
+          "legs": "修长",
+          "hands_feet": "手脚适中、美甲精致",
+          "posture": "舒展自信",
+          "skin": "暖调一白（暖白皮）",
+          "temperament": {
+            "outer": "明艳张扬、嘴甜精明",
+            "inner": "缺安全感、渴望被当真"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/a6MTmvPRFQ",
+          "type": "中性灰形体练功服T字四视图·身体基准（年轻版）"
+        }
+      },
+      {
+        "id": "CH-09",
+        "name": "苏棠（小漂亮·正牌千金/凡人闺蜜）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "22岁年轻成年东亚女性、赛博城正牌千金（程栖的凡人闺蜜），半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。正牌千金的精致名媛感：鹅蛋脸、明艳大气（小漂亮，不抢主角锋芒），浅栗色长卷发自然垂落、妆容精致干净，配饰少而贵、气质从容。穿搭是去logo的高级感：真丝衬衫、外搭剪裁利落的西装外套、及膝半裙、小高跟，面料细腻挺括、剪裁合身、低调不张扬。人物在赛博城上层街区/高档公寓或与程栖相聚的环境中自然站立、重心放松，神情从容自信、带温柔笑意，人物与环境光影统一、自然融合，接触阴影与环境反光真实、轮廓光、空气雾感，真实人体比例、全身完整入镜。",
+          "en": "a 22-year-old young adult East Asian female, a legitimate socialite of Cyber City (the protagonist's mortal best friend), semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic live action. A refined socialite look: an oval face, bright and poised (a secondary beauty, not outshining the lead), light-chestnut long wavy hair falling naturally, refined clean makeup, few but expensive accessories and a calm bearing. Logo-free high-end dressing: a silk shirt, a sharply tailored blazer, a knee-length skirt and small high heels, fine crisp fabric with a tailored fit, understated rather than flashy. Standing naturally with relaxed weight in an upscale Cyber City street / luxury apartment or a setting with the protagonist, a calm confident expression with a gentle smile, the character and environment sharing unified naturally blended lighting with realistic contact shadows and ambient reflections, rim light and atmospheric haze, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 168,
+          "weight_kg": 53,
+          "head_ratio": 7,
+          "mass": "匀称",
+          "frame": "适中骨架",
+          "shoulder": "平肩、仪态舒展",
+          "bust": "适中",
+          "waist": "柔和",
+          "hips": "柔和、曲线不夸张",
+          "shape": "直筒偏沙漏",
+          "legs": "匀称修长",
+          "hands_feet": "手脚适中",
+          "posture": "端庄挺拔",
+          "skin": "暖调自然白",
+          "temperament": {
+            "outer": "明艳大气、自信名媛",
+            "inner": "怕被当提款机、其实没底"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/A3kVY74EEZ",
+          "type": "中性灰形体练功服T字四视图·身体基准（年轻版）"
+        }
+      },
+      {
+        "id": "CH-10",
+        "name": "沈雯璃（持印半神·监管者）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "约27岁（外观停在25-26岁）年轻东亚女性、持印半神、监管者，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。清冷持印的御姐感：冷调一白冷白皮、轮廓干净的清冷脸、神态端正，黑发一丝不苟地束起、妆容极淡。身形修长挺拔、约7.5头身、172cm，平肩、窄背、收腰、曲线克制，制服笔挺、军人仪态。穿黑金军装礼服、扣子整齐扣到最上面一颗、剪裁利落、肩章与金属扣精致，背后脊椎有一道淡绿色旧焦痕（不外露），可调动绿色几何纹的千重锁。人物在监管值班室/档案走廊环境中端正站立，神情清冷严肃，人物与环境光影统一、自然融合，接触阴影与环境反光真实，真实人体比例、全身完整入镜。",
+          "en": "a roughly 27-year-old (appearance frozen at 25-26) young East Asian female, a seal-bearing half-divine regulator, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A cold seal-bearing mature-woman feel: cool fair skin (the lightest cool tone), a clean cold face and upright bearing, black hair pulled back meticulously, very light makeup. Tall and straight, about 7.5 heads, 172cm, square shoulders, narrow back, a cinched waist with restrained curves, a crisp uniform and military posture. Wearing a black-and-gold military dress uniform with buttons neatly fastened to the top, a sharp cut, refined epaulets and metal buttons, a faint green old burn scar along her spine (not exposed), able to invoke the green geometric Thousand-Lock. Standing upright in a regulator duty room / archive corridor, a cold serious expression, unified naturally blended lighting with realistic contact shadows and ambient reflections, real human proportions, full body in frame."
+        },
+        "wardrobe": [
+          {
+            "id": "CH-10-S1",
+            "name": "黑金墨绿军装制服（主力）",
+            "type": "整套",
+            "appears": "全季绝大多数公务/执勤/登记/查岗/战斗场景（约90%）",
+            "cn": "一张横版专业服装设计设定表（costume design sheet），半写实偏写实3D渲染、国产3D动画/3A游戏级写实质感，与全剧同一画风，非卡通、非照片真人，干净的浅灰绿纯色背景。设定表陈列式布局：左侧是一位外观25-26岁东亚女性穿着整套军装制服的全身立绘、端正笔挺的军人站姿、完整从头到脚入镜、军靴清楚可见不裁切，神情清冷严肃；右侧及下方把各组成部分以整齐挂装或平铺方式拆解陈列，单品间留白清晰、互不遮挡。角色与身体基准同一人：冷调一白冷白皮、轮廓干净的清冷脸、黑发一丝不苟束起、妆容极淡，约7.5头身、172cm、修长挺拔、平肩窄背、曲线克制、军人仪态。整套服装为S1黑金墨绿军装制服、禁欲包裹、冷硬精致：墨绿与玄黑军装风立领斜襟收腰礼服，立领、扣子整齐扣到最上面一颗，肩章与金属扣精致；锁骨处菱形微镂空嵌一枚灵核铭牌（小面积克制），后背纵向散热镂空（不外露），前短后长高开叉礼裙；脚穿过膝长筒军靴，大腿配光学束带，腕上戴一枚绿色几何纹的千重锁手环。拆解陈列：①立领斜襟收腰礼服（单独挂装，能看到肩章、金属扣、收腰与高开叉）；②灵核铭牌与肩章金属扣细节；③千重锁手环与大腿光学束带；④过膝长筒军靴（完整清楚）。整体配色墨绿、玄黑、哑光金，点缀绿色千重锁，材质区分清晰（挺括呢料、金属、皮革），统一柔和光照、无杂物、无文字、无水印，真实人体比例、设计表式排版。",
+            "en": "a horizontal professional costume design sheet, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic live action, on a clean light grey-green solid background. A display-sheet layout: on the left a full-body view of an East Asian female appearing 25-26 years old in the complete military uniform, an upright disciplined soldier stance, full head-to-toe in frame with boots clearly visible and not cropped, a cold solemn expression; on the right and below, the components are shown separately as neat hanging or flat-lay items with clear spacing, not overlapping. The same person as the body base: cool-toned fair skin, a clean cold face, black hair tied up meticulously, very light makeup, about 7.5 heads tall, 172cm, tall and upright, flat shoulders narrow back, restrained curves, a soldier's bearing. The S1 black-gold dark-green military uniform, ascetic and covered, cold and refined: a dark-green and black military-style stand-collar asymmetric cross-placket waist-cinched dress uniform, the collar and buttons fastened all the way to the top, with refined epaulets and metal buttons; a small diamond-shaped cutout at the collarbone set with a spirit-core nameplate (small and restrained), a vertical heat-dissipation cutout at the back (not exposed), a high-slit skirt short in front and long in back; over-knee tall military boots, an optical thigh strap, and a green geometric thousand-layer-lock bracelet on the wrist. Exploded display: (1) the stand-collar cross-placket waist-cinched dress on a hanger showing epaulets, metal buttons, cinched waist and high slit; (2) the spirit-core nameplate and epaulet metal-button details; (3) the thousand-layer-lock bracelet and optical thigh strap; (4) the over-knee tall military boots, fully shown. Dark green, black and matte gold with a green thousand-layer-lock accent, clearly differentiated materials (firm woolen fabric, metal, leather), soft even lighting, no clutter, no text, no watermark, real human proportions, design-sheet layout.",
+            "design_sheet_url": "https://aka.doubaocdn.com/s/ttX7ULV1yG"
+          },
+          {
+            "id": "CH-10-S2",
+            "name": "多层叠穿私密内搭（亲密戏）",
+            "type": "整套（多层）",
+            "appears": "第11集共浴后、第12/21集共寝等亲密戏",
+            "cn": "一张横版专业服装设计设定表（costume design sheet），半写实偏写实3D渲染、国产3D动画/3A游戏级写实质感，与全剧同一画风，非卡通、非照片真人，干净的浅雾灰纯色背景。设定表陈列式布局：左侧是一位外观25-26岁东亚女性穿着完整多层叠穿内搭的全身立绘、整洁站姿、完整从头到脚入镜、脚与居家袜清楚可见不裁切，神情清冷克制；右侧及下方把多层组件以整齐挂装或平铺方式、从外到内依次拆解陈列，单品间留白清晰、互不遮挡，每件都能看出明确的开合方式（系带/纽扣/套头）。角色与身体基准及S1为同一人：冷调一白冷白皮、轮廓干净的清冷脸、黑发微湿后松束、妆容极淡，约7.5头身、172cm、修长挺拔、平肩窄背、直筒偏沙漏、曲线克制。整套服装为S2多层叠穿私密内搭、层层包裹、可逐层脱卸、禁欲者破防反差：色调统一的月白/浅雾灰/冷白/雾灰绿，靠材质与深浅区分、不杂乱。从外到内共多层：①长款针织晨袍（系带外袍、长到小腿、腰带松系，最先脱）；②短款针织开衫（纽扣、第二层）；③修身针织内搭上衣（小圆领长袖、贴身、第三层）；④真丝细肩带吊带（最内层、露出肩颈锁骨、是脱到最后的视觉落点、仍克制不暴露）；⑤下装为可与上衣分离的针织长裙（及膝下、可单独脱）；⑥可解的细腰封/腰带；⑦可脱的居家及膝针织袜。拆解陈列按①到⑦全部单独挂装或平铺，另加空着的手腕特写（已卸下千重锁）与简单室内拖鞋。整体冷色统一、材质区分清晰（柔软针织、细棉、真丝），统一柔和光照、无杂物、无文字、无水印，真实人体比例、设计表式排版。",
+            "en": "a horizontal professional costume design sheet, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic live action, on a clean light misty-grey solid background. A display-sheet layout: on the left a full-body view of an East Asian female appearing 25-26 years old in the complete multi-layer loungewear, a neat stance, full head-to-toe in frame with feet and home socks clearly visible and not cropped, a cold restrained expression; on the right and below, the multi-layer components are shown separately from outer to inner as neat hanging or flat-lay items with clear spacing, not overlapping, each showing a clear opening (tie / buttons / pull-on). The same person as the body base and S1: cool-toned fair skin, a clean cold face, damp black hair loosely tied, very light makeup, about 7.5 heads tall, 172cm, tall and upright, flat shoulders narrow back, straight-to-slightly-hourglass, restrained curves. The S2 multi-layer private loungewear, wrapped in layers that can be removed one by one, the ascetic's breaking contrast: a unified moon-white / light misty-grey / cool-white / misty grey-green palette differentiated by material and shade, not cluttered. From outer to inner: (1) a long knit morning robe (tied outer robe to mid-calf, loose sash, removed first); (2) a short buttoned knit cardigan; (3) a fitted small-round-neck long-sleeve knit top; (4) a silk thin-strap camisole (innermost, exposing shoulders and collarbone, the final visual point, still restrained); (5) a separate knit long skirt (below the knee, removable on its own); (6) a removable thin waist sash/belt; (7) removable home over-knee knit socks. All items (1)-(7) displayed separately on hangers or flat-lay, plus a close-up of the empty wrist (thousand-layer-lock removed) and simple indoor slippers. A unified cool palette with clearly differentiated materials (soft knit, fine cotton, silk), soft even lighting, no clutter, no text, no watermark, real human proportions, design-sheet layout.",
+            "design_sheet_url": "https://aka.doubaocdn.com/s/fmKZCOeOQv"
+          }
+        ],
+        "body": {
+          "height_cm": 172,
+          "weight_kg": 54,
+          "head_ratio": 7.5,
+          "mass": "修长",
+          "frame": "适中偏窄骨架",
+          "shoulder": "平肩窄背",
+          "bust": "适中",
+          "waist": "收腰、腰节适中",
+          "hips": "窄、曲线克制",
+          "shape": "直筒偏沙漏",
+          "legs": "修长笔直",
+          "hands_feet": "手脚适中",
+          "posture": "挺拔端正（军人仪态）",
+          "skin": "冷调一白（冷白皮）",
+          "temperament": {
+            "outer": "清冷严肃不近人情",
+            "inner": "害羞心软、对程栖感情用事"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/htIRSppx32",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-11",
+        "name": "重璃（知性清冷·教堂案受害者）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "23岁年轻东亚女性，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。知性清冷的普通清秀型：冷白皮、五官干净、戴细框眼镜或素净，深色长发简单束起或齐肩、几乎无妆。身形纤细、约七头身、166cm，小骨架、窄肩、直身、曲线不明显，穿素色简约的衬衫与长裤/及膝裙、整洁无装饰。人物在教堂/医院或档案环境中安静站立，神情冷静理性、爱追问，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 23-year-old young East Asian female, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. An intellectual, clean, ordinary type: cool fair skin, clean features, thin-frame glasses or a plain look, dark long hair simply tied or shoulder-length, almost no makeup. Slim, about seven heads, 166cm, a small frame, narrow shoulders, a straight figure with little curve, wearing a simple plain shirt and trousers / knee skirt, neat and unadorned. Standing quietly in a church / hospital or archive setting, a calm rational questioning expression, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 166,
+          "weight_kg": 50,
+          "head_ratio": 7,
+          "mass": "纤瘦",
+          "frame": "小骨架",
+          "shoulder": "窄肩",
+          "bust": "平",
+          "waist": "直",
+          "hips": "窄、曲线不明显",
+          "shape": "直筒",
+          "legs": "纤细",
+          "hands_feet": "手脚小",
+          "posture": "端正拘谨",
+          "skin": "冷调一白",
+          "temperament": {
+            "outer": "冷静理性爱追问",
+            "inner": "较真、容易钻牛角尖"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/xpUuY5EiWn",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-12",
+        "name": "柯闻（深渊工程轮班工程师）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "44岁东亚男性，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。克制的技术中年：面容端正、眼角细纹、短黑发夹少量白发、神情克制。身形匀称偏瘦、约七头身、175cm，中等骨架、直身，穿洗旧的深色工程工装、佩戴工牌与测量工具。人物在深渊工程平台/控制室环境中站立，神情技术化、不替自己辩解，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 44-year-old East Asian male, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A restrained technical middle-aged man: regular features, fine lines at the eyes, short black hair with some gray, a controlled expression. Balanced and lean, about seven heads, 175cm, a medium frame and straight figure, wearing washed dark engineering workwear with an ID badge and measuring tools. Standing in an abyss engineering platform / control room, a technical, unapologetic expression, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 175,
+          "weight_kg": 70,
+          "head_ratio": 7,
+          "mass": "匀称偏瘦",
+          "frame": "中等骨架",
+          "shoulder": "平肩",
+          "bust": "—",
+          "waist": "直",
+          "hips": "—",
+          "shape": "直筒",
+          "legs": "修长",
+          "hands_feet": "手脚大、指节粗",
+          "posture": "端正",
+          "skin": "自然白",
+          "temperament": {
+            "outer": "技术化克制、不辩解",
+            "inner": "背负愧疚、把后悔重复成日常"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/gdwkKAfyXc",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-13",
+        "name": "苗青（极北供暖调度员）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "28岁年轻东亚女性，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。公事公办的职业女性：自然白肤色、五官平淡端庄、深色头发利落后束、无妆。身形匀称、约七头身、168cm，中等骨架、直身，穿厚实的极北供暖调度制服、佩戴工牌。人物在极北供暖调度大厅环境中站立，神情冷静不情绪化，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 28-year-old young East Asian female, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A by-the-book professional: natural fair skin, plain regular features, dark hair tied back efficiently, no makeup. Balanced, about seven heads, 168cm, a medium frame and straight figure, wearing a thick far-north heating-dispatch uniform with an ID badge. Standing in a far-north heating dispatch hall, a calm unemotional expression, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 168,
+          "weight_kg": 56,
+          "head_ratio": 7,
+          "mass": "匀称",
+          "frame": "中等骨架",
+          "shoulder": "平肩",
+          "bust": "适中",
+          "waist": "直",
+          "hips": "适中",
+          "shape": "直筒",
+          "legs": "匀称",
+          "hands_feet": "手脚适中",
+          "posture": "端正",
+          "skin": "自然白",
+          "temperament": {
+            "outer": "公事公办冷静",
+            "inner": "硬扛、不解释"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/EOdAmb7V7x",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-14",
+        "name": "钟晚（教堂钟楼守钟人）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "26岁年轻东亚女性，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。安静慢的清秀型：暖白肤色、五官柔和、深色长发简单编束、几乎无妆。身形纤瘦、约七头身、163cm，中小骨架、直身，穿素净复古的长裙或衬衫长裙、带守钟的旧手套。人物在教堂钟楼/齿轮机械环境中安静站立，神情安静、话里有年月，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 26-year-old young East Asian female, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A quiet, slow, clean type: warm fair skin, soft features, dark long hair simply braided, almost no makeup. Slim, about seven heads, 163cm, a small-medium frame and straight figure, wearing a plain vintage long dress or shirt-dress with old clock-keeping gloves. Standing quietly among church bell-tower clockwork, a calm timeless expression, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 163,
+          "weight_kg": 50,
+          "head_ratio": 7,
+          "mass": "纤瘦",
+          "frame": "中小骨架",
+          "shoulder": "溜肩柔和",
+          "bust": "平",
+          "waist": "直",
+          "hips": "窄",
+          "shape": "直筒",
+          "legs": "纤细",
+          "hands_feet": "手脚小",
+          "posture": "放松安静",
+          "skin": "暖调一白",
+          "temperament": {
+            "outer": "安静慢、话里有年月",
+            "inner": "固执、把传承当责任"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/3HNxEmKHqU",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-15",
+        "name": "虞小满（火山工坊事故遗属）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "26岁年轻东亚女性，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。克制倔强的普通女性：自然白肤色、五官端正、深色头发简单束起、无妆、略带疲惫。身形匀称、约七头身、164cm，中等骨架、直身，穿朴素耐穿的外套与长裤、带着孩子的随身物。人物在火山工坊/等待区环境中安静站立，神情克制不哭闹，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 26-year-old young East Asian female, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A restrained, stubborn ordinary woman: natural fair skin, regular features, dark hair simply tied, no makeup, slightly tired. Balanced, about seven heads, 164cm, a medium frame and straight figure, wearing plain durable jacket and trousers with a child's belongings. Standing quietly in a volcano workshop / waiting area, a restrained, tearless expression, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 164,
+          "weight_kg": 52,
+          "head_ratio": 7,
+          "mass": "匀称",
+          "frame": "中等骨架",
+          "shoulder": "平肩",
+          "bust": "适中",
+          "waist": "直",
+          "hips": "适中",
+          "shape": "直筒",
+          "legs": "匀称",
+          "hands_feet": "手脚适中",
+          "posture": "端正略疲",
+          "skin": "自然白",
+          "temperament": {
+            "outer": "克制倔强不哭闹",
+            "inner": "坚韧、把生活押在一个答复上"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/RxEbce41ls",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-16",
+        "name": "望舒（天穹空港调度）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "32岁东亚女性，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。沉稳简练的职业女性：自然白肤色、五官端正、深色头发一丝不苟盘起、无妆。身形匀称挺拔、约七头身、170cm，中等骨架、直身，穿天穹空港调度制服、佩戴工牌与通讯耳麦。人物在空港调度塔/暗舱环境中站立，神情沉稳、调度术语精准，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 32-year-old East Asian female, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A steady, concise professional: natural fair skin, regular features, dark hair pinned up meticulously, no makeup. Balanced and upright, about seven heads, 170cm, a medium frame and straight figure, wearing a sky-port dispatch uniform with an ID badge and comms headset. Standing in an airport control tower / dark cabin, a steady expression with precise dispatch terminology, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 170,
+          "weight_kg": 58,
+          "head_ratio": 7,
+          "mass": "匀称挺拔",
+          "frame": "中等骨架",
+          "shoulder": "平肩",
+          "bust": "适中",
+          "waist": "直",
+          "hips": "适中",
+          "shape": "直筒",
+          "legs": "修长",
+          "hands_feet": "手脚适中",
+          "posture": "挺拔",
+          "skin": "自然白",
+          "temperament": {
+            "outer": "沉稳简练",
+            "inner": "把秘密和愧疚自己记着"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/P69Zz9AFkC",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-17",
+        "name": "三号（教堂档案室管理员）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "40岁东亚女性，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。沉稳寡言的守秘人：自然白肤色、五官平和、深色头发整齐束起、无妆。身形匀称、约七头身、166cm，中等骨架、直身，穿素净的档案室管理员制服或长衣、佩戴眼镜与钥匙。人物在教堂档案室/卷宗墙环境中安静站立，神情沉稳，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 40-year-old East Asian female, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A steady, quiet secret-keeper: natural fair skin, calm features, dark hair tied neatly, no makeup. Balanced, about seven heads, 166cm, a medium frame and straight figure, wearing a plain archive-keeper uniform or long garment with glasses and keys. Standing quietly in a church archive room / wall of files, a steady expression, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 166,
+          "weight_kg": 57,
+          "head_ratio": 7,
+          "mass": "匀称",
+          "frame": "中等骨架",
+          "shoulder": "平肩",
+          "bust": "适中",
+          "waist": "直",
+          "hips": "适中",
+          "shape": "直筒",
+          "legs": "匀称",
+          "hands_feet": "手脚适中",
+          "posture": "端正",
+          "skin": "自然白",
+          "temperament": {
+            "outer": "沉稳寡言守秘",
+            "inner": "把秘密压太久"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/cWI6zEiuFb",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-18",
+        "name": "裴九（回声接单掌柜·哑掌柜）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "45岁东亚男性，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。普通到转眼就忘的中年男人：自然肤色、五官毫无记忆点、帽檐压低、从不与人对视。身形普通、约七头身、172cm，中等骨架、直身，穿灰布外套、颜色沉暗、毫无特征。人物在黑市码头暗处站立、半藏于阴影，神情平淡客气，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 45-year-old East Asian male, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. An utterly forgettable middle-aged man: natural skin, featureless face, a low-pulled brim, never meeting anyone's eyes. Ordinary build, about seven heads, 172cm, a medium frame and straight figure, wearing a featureless gray cloth coat in dull dark tones. Standing half-hidden in shadow at a black-market dock, a flat polite expression, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 172,
+          "weight_kg": 68,
+          "head_ratio": 7,
+          "mass": "普通",
+          "frame": "中等骨架",
+          "shoulder": "平肩",
+          "bust": "—",
+          "waist": "直",
+          "hips": "—",
+          "shape": "直筒",
+          "legs": "普通",
+          "hands_feet": "手脚适中",
+          "posture": "收敛含胸（降低存在感）",
+          "skin": "自然白",
+          "temperament": {
+            "outer": "普通到转眼忘、不与人对视",
+            "inner": "精算冷静、从不觉得自己作恶"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/0dE7257BpC",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      },
+      {
+        "id": "CH-19",
+        "name": "柳七（市政职员·回声内鬼）",
+        "turnaround": null,
+        "expression": null,
+        "normal": {
+          "cn": "26岁年轻东亚女性，半写实偏写实3D渲染、国产3D动画/3A游戏级质感，与全剧同一画风，非卡通、非照片真人。刻意不起眼的职员：自然白肤色、五官平淡、头发束起、别着工牌、无妆。身形纤瘦、约七头身、164cm，中小骨架、直身，穿素净的市政职员衬衫与制服裙、毫无装饰。人物在档案室/办公位环境中安静站立，神情轻声谨慎、回避眼神，人物与环境光影统一、自然融合，真实人体比例、全身完整入镜。",
+          "en": "a 26-year-old young East Asian female, semi-realistic realism-leaning 3D render with Chinese 3D animation / AAA-game texture in the show's unified art style, not cartoon, not photorealistic. A deliberately unremarkable clerk: natural fair skin, plain features, hair tied up, an ID badge, no makeup. Slim, about seven heads, 164cm, a small-medium frame and straight figure, wearing a plain municipal clerk shirt and uniform skirt with no adornment. Standing quietly in an archive room / office, a soft cautious expression with averted eyes, unified naturally blended lighting, real human proportions, full body in frame."
+        },
+        "body": {
+          "height_cm": 164,
+          "weight_kg": 51,
+          "head_ratio": 7,
+          "mass": "纤瘦",
+          "frame": "中小骨架",
+          "shoulder": "窄肩",
+          "bust": "平",
+          "waist": "直",
+          "hips": "窄",
+          "shape": "直筒",
+          "legs": "纤细",
+          "hands_feet": "手脚小",
+          "posture": "收敛回避",
+          "skin": "自然白",
+          "temperament": {
+            "outer": "不起眼、轻声谨慎",
+            "inner": "滴水不漏、以为没动手就没责任"
+          }
+        },
+        "body_base": {
+          "url": "https://aka.doubaocdn.com/s/UTjkbmAtjP",
+          "type": "中性灰形体练功服T字四视图·身体基准"
+        }
+      }
+    ],
+    "loc": [
+      {
+        "id": "LOC-01",
+        "name": "短租房（清晨）",
+        "prompt": {
+          "cn": "紧凑的深海城短租房室内，清晨冷调微光，墙边打开的设备箱、堆叠的老磁带、各地小挂件，充电设备与暗时配额通知界面，简洁寄居感，真实材质、电影感。",
+          "en": "compact rental room interior in a deep-sea city, cool dim morning light, open equipment case, stacked old cassettes, travel charms, charging devices and a quota notice panel, sparse transient feel, authentic materials, cinematic."
+        }
+      },
+      {
+        "id": "LOC-02",
+        "name": "楼下市集 / 码头热食摊",
+        "prompt": {
+          "cn": "深海城楼下市集，分段照明、暖黄与冷青混合，明火热食摊冒着热气，居民排队，管道与鲸骨拱结构，潮湿空气、体积光，真实摄影、电影感。",
+          "en": "downstairs market in a deep-sea city, segmented lighting mixing warm yellow and cool cyan, open-flame food stall with steam, residents queuing, pipes and whale-bone arches, humid air, volumetric light, photorealistic, cinematic."
+        }
+      },
+      {
+        "id": "LOC-03",
+        "name": "临街取景地",
+        "prompt": {
+          "cn": "深海城临街一角，圆窗与工业管线，行人经过，冷调自然光，安静的直播取景角落，真实摄影、电影感。",
+          "en": "street-side corner in a deep-sea city, round windows and industrial pipelines, passersby, cool natural light, quiet corner for live streaming, photorealistic, cinematic."
+        }
+      }
+    ],
+    "prp": [
+      {
+        "id": "PRP-01",
+        "name": "毛绒小鲸鱼跟拍玩偶「噗噗」与设备箱",
+        "prompt": {
+          "cn": "巴掌大圆滚滚的浅蓝与奶白针织毛绒小鲸鱼悬浮玩偶「噗噗」（肚皮有一道暖橘色手工缝线，头顶趴着一朵发暖白柔光的半透明小水母补光灯，黑豆豆眼，两侧小鱼鳍扇动）与轻便设备箱特写，真实毛绒织物与精密微缩机械结合质感，电影感。",
+          "en": "palm-sized chubby round light-blue and cream knitted plush whale floating mascot 'Puff' (warm-orange hand-stitched seam on belly, translucent glowing baby jellyfish fill-light perched on its head, cute button eyes, tiny flapping fins) beside a compact equipment case, authentic plush knit and micro-mech texture, cinematic."
+        }
+      },
+      {
+        "id": "PRP-02",
+        "name": "磁带/旧表/鲸挂件",
+        "prompt": {
+          "cn": "福利院老磁带、童年同伴遗物旧表、背包鲸形挂件特写，旧物质感、统一冷调，纯色背景。",
+          "en": null
+        }
+      },
+      {
+        "id": "PRP-03",
+        "name": "鲸纹碗勺",
+        "prompt": {
+          "cn": "热食摊鲸纹碗勺器具特写，旧陶瓷与金属、明火暖光，真实材质。",
+          "en": null
+        }
+      }
+    ],
+    "mat": [
+      {
+        "id": "MAT-01",
+        "name": "“陌生画面”（结尾钩子）",
+        "prompt": {
+          "cn": "一片烧焦的、整齐排列的空地，空无一人、没有一件私人物品，规则排列的痕迹，冷灰调、死寂、压抑，广角、固定机位，像被采集过的素材、带轻微数字噪点，真实摄影、电影感。",
+          "en": "a scorched, neatly arranged empty ground, no people, no personal belongings, regular grid-like traces, cold gray tone, dead silence, oppressive, wide angle, static camera, like captured footage with slight digital noise, photorealistic, cinematic."
+        }
+      }
+    ],
+    "intimacy": [
+      {
+        "id": "IAD-01",
+        "name": "制式千重锁手环（绿纹几何·一按即解）",
+        "type": "道具",
+        "covers": [
+          "制式千重锁手环"
+        ],
+        "cards": [
+          "IC-04"
+        ],
+        "eps": [
+          12,
+          24
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P0",
+        "reuse": "—",
+        "note": "同一件贯穿 EP12 第一场床戏与 EP24 空手环回收；「一按即开」必须拍到可见性，这是安全阀也是张力来源"
+      },
+      {
+        "id": "IAD-02",
+        "name": "制式监管记录本（含同行者页与核销册）",
+        "type": "道具",
+        "covers": [
+          "制式监管记录本"
+        ],
+        "cards": [
+          "IC-04",
+          "IC-09",
+          "IC-11"
+        ],
+        "eps": [
+          12,
+          19,
+          21,
+          24
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P0",
+        "reuse": "—",
+        "note": "贯穿全季四场重头床戏的核心制度物件：EP12 扔到地上、EP19 事后将「见证人」改为「同行者」、EP21 在值班室被一掌推落散地、EP24 空白的那一页"
+      },
+      {
+        "id": "IAD-03",
+        "name": "噗噗（夜灯状态）",
+        "type": "道具",
+        "covers": [
+          "噗噗 PROP101（夜灯状态）"
+        ],
+        "cards": [
+          "IC-05"
+        ],
+        "eps": [
+          12
+        ],
+        "status": "复用（已有编号）",
+        "priority": "—",
+        "reuse": "PROP101",
+        "note": "水母补光灯当夜灯；EP12 第一场床戏对着墙亮了一整夜（阿汐转开镜头只听声音）"
+      },
+      {
+        "id": "IAD-04",
+        "name": "直播设备箱",
+        "type": "道具",
+        "covers": [
+          "程栖设备箱 PROP102"
+        ],
+        "cards": [
+          "IC-02"
+        ],
+        "eps": [
+          8
+        ],
+        "status": "复用（已有编号）",
+        "priority": "—",
+        "reuse": "PROP102",
+        "note": "EP8 码头揽腰后程栖抱着的箱子，兼做失衡支点"
+      },
+      {
+        "id": "IAD-05",
+        "name": "《照护条款》底档卷宗",
+        "type": "道具",
+        "covers": [
+          "卷宗（底档）"
+        ],
+        "cards": [
+          "IC-06"
+        ],
+        "eps": [
+          15
+        ],
+        "status": "复用（已有编号）",
+        "priority": "—",
+        "reuse": "PROP117",
+        "note": "EP15 内室抢夺的卷宗；IC-06 里程栖抱着它往外走"
+      },
+      {
+        "id": "IAD-06",
+        "name": "港口登记簿（担保人栏）",
+        "type": "道具",
+        "covers": [
+          "担保人表格"
+        ],
+        "cards": [
+          "IC-12"
+        ],
+        "eps": [
+          22
+        ],
+        "status": "复用（已有编号）",
+        "priority": "—",
+        "reuse": "PROP119",
+        "note": "EP22 那一栏最终还是空的；EP24 她在这一栏写下自己名字，是同一个本子"
+      },
+      {
+        "id": "IAD-07",
+        "name": "窄浴帘",
+        "type": "场景/道具",
+        "covers": [
+          "窄浴帘"
+        ],
+        "cards": [
+          "IC-03"
+        ],
+        "eps": [
+          11
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "SCN102 变体",
+        "note": "遮挡道具之一；擦背全程在帘内"
+      },
+      {
+        "id": "IAD-08",
+        "name": "一桶热水（含浴巾）",
+        "type": "道具",
+        "covers": [
+          "一桶热水"
+        ],
+        "cards": [
+          "IC-03"
+        ],
+        "eps": [
+          11
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "—",
+        "note": "EP11 题眼道具；擦背用浴巾完成，手部与肩背不直接接触皮肤"
+      },
+      {
+        "id": "IAD-09",
+        "name": "淡绿焦痕旧印（脊椎反噬痕）",
+        "type": "妆效",
+        "covers": [
+          "淡绿焦痕旧印（妆效）"
+        ],
+        "cards": [
+          "IC-03",
+          "IC-07"
+        ],
+        "eps": [
+          11,
+          16
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P0",
+        "reuse": "—",
+        "note": "十年前斩断塞拉越界回路的反噬痕：EP11 共浴首次摸到，EP16 第二场床戏因跨域封门反噬发烫、程栖滚烫的唇与脸贴在上面降温"
+      },
+      {
+        "id": "IAD-10",
+        "name": "窄床（90cm 折叠单人床）",
+        "type": "场景/道具",
+        "covers": [
+          "窄床"
+        ],
+        "cards": [
+          "IC-05"
+        ],
+        "eps": [
+          12
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P0",
+        "reuse": "SCN102 变体",
+        "note": "EP12 第一场床戏主场景；床架轻响要单独录一轨"
+      },
+      {
+        "id": "IAD-11",
+        "name": "被角",
+        "type": "道具",
+        "covers": [
+          "被角"
+        ],
+        "cards": [
+          "IC-05"
+        ],
+        "eps": [
+          12
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "—",
+        "note": "既是遮挡也是仪式；被拉过来的那一下要看得见"
+      },
+      {
+        "id": "IAD-12",
+        "name": "长廊灯带",
+        "type": "场景构件",
+        "covers": [
+          "长廊灯带"
+        ],
+        "cards": [
+          "IC-06"
+        ],
+        "eps": [
+          15
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P2",
+        "reuse": "SCN301 变体",
+        "note": "长廊灯逐盏熄灭是 IC-06 的收尾音画"
+      },
+      {
+        "id": "IAD-13",
+        "name": "钟楼守夜窄室与停摆巨钟齿轮（第二场床戏场地）",
+        "type": "场景变体",
+        "covers": [
+          "钟楼守夜窄室与巨钟齿轮"
+        ],
+        "cards": [
+          "IC-07"
+        ],
+        "eps": [
+          16
+        ],
+        "status": "复用（已有编号）",
+        "priority": "P0",
+        "reuse": "SCN303",
+        "note": "EP16 第二场床戏场地：反锁铜门、头顶四米黄铜巨钟齿轮、守夜窄榻；在制定放弃名单的神明腹地里越界"
+      },
+      {
+        "id": "IAD-14",
+        "name": "沈雯璃黑金军装立领与可解铜扣",
+        "type": "服装构件",
+        "covers": [
+          "沈雯璃黑金军装立领与铜扣"
+        ],
+        "cards": [
+          "IC-07"
+        ],
+        "eps": [
+          16
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P0",
+        "reuse": "—",
+        "note": "EP16 第二场床戏核心感官锚点：沈雯璃手抖解不开扣子，程栖亲手替她一颗颗解开扣到顶的禁欲军装立领，事后走出钟楼领口松开一颗"
+      },
+      {
+        "id": "IAD-15",
+        "name": "天穹空港走廊警报灯",
+        "type": "场景构件",
+        "covers": [
+          "天穹空港走廊警报灯"
+        ],
+        "cards": [
+          "IC-08"
+        ],
+        "eps": [
+          18
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "SCN502 变体",
+        "note": "红光频闪＋地面反光是 B 版主视觉"
+      },
+      {
+        "id": "IAD-16",
+        "name": "落下的碎片",
+        "type": "VFX",
+        "covers": [
+          "落下的碎片（VFX）"
+        ],
+        "cards": [
+          "IC-08"
+        ],
+        "eps": [
+          18
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "—",
+        "note": "只做「要躲没躲」那一格的落点，量要小"
+      },
+      {
+        "id": "IAD-17",
+        "name": "深海维修站封闭检修舱（第三场床戏场地）",
+        "type": "场景变体",
+        "covers": [
+          "维修站封闭检修舱"
+        ],
+        "cards": [
+          "IC-09"
+        ],
+        "eps": [
+          19
+        ],
+        "status": "复用（已有编号）",
+        "priority": "P0",
+        "reuse": "SCN103 变体",
+        "note": "EP19 第三场「失声哑剧床戏」场地：气密门反锁、仪表冷绿微光、狭窄检修榻、舱外高压水流轰鸣"
+      },
+      {
+        "id": "IAD-18",
+        "name": "沈雯璃制式武装带与锁骨牙印妆效",
+        "type": "服装构件/妆效",
+        "covers": [
+          "沈雯璃制式武装带",
+          "锁骨牙印（妆效）"
+        ],
+        "cards": [
+          "IC-09"
+        ],
+        "eps": [
+          19
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P0",
+        "reuse": "—",
+        "note": "EP19 第三场床戏核心感官锚点：失声的程栖一把拽住武装带拉近、切黑前一口咬在锁骨/肩窝压住痛哼，次日锁骨留牙印改写「同行者」"
+      },
+      {
+        "id": "IAD-19",
+        "name": "直播红灯",
+        "type": "道具",
+        "covers": [
+          "直播红灯"
+        ],
+        "cards": [
+          "IC-10"
+        ],
+        "eps": [
+          20
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "—",
+        "note": "B 版主画面就是这盏灯＋弹幕"
+      },
+      {
+        "id": "IAD-20",
+        "name": "签字台与望舒签字页",
+        "type": "场景构件/道具",
+        "covers": [
+          "签字台",
+          "望舒签字页"
+        ],
+        "cards": [
+          "IC-10"
+        ],
+        "eps": [
+          20
+        ],
+        "status": "复用（已有编号）",
+        "priority": "P1",
+        "reuse": "SCN501",
+        "note": "望舒在景深后方签字的动作要可读"
+      },
+      {
+        "id": "IAD-21",
+        "name": "深海出口值班室登记台与翠绿矩阵百叶帘（第四场床戏场地）",
+        "type": "场景构件",
+        "covers": [
+          "深海出口值班室登记台与百叶帘"
+        ],
+        "cards": [
+          "IC-11"
+        ],
+        "eps": [
+          21
+        ],
+        "status": "复用（已有编号）",
+        "priority": "P0",
+        "reuse": "SCN103",
+        "note": "EP21 第四场床戏场地：与第 2 集盖查岗令同机位镜像；沈雯璃一把拉下翠绿百叶帘切断监控、一掌推落满桌核销册，两人在制度大本营里彻底交融"
+      },
+      {
+        "id": "IAD-22",
+        "name": "权限门与制式记录笔",
+        "type": "场景构件/道具",
+        "covers": [
+          "权限门",
+          "笔"
+        ],
+        "cards": [
+          "IC-12"
+        ],
+        "eps": [
+          22
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "SCN301 变体",
+        "note": "门缝暖金竖线；EP22「站了一整夜」笔尖反复描担保人栏那两个字"
+      },
+      {
+        "id": "IAD-23",
+        "name": "晶格碎屑与教堂崩塌现场余尘",
+        "type": "妆效/VFX",
+        "covers": [
+          "晶格碎屑（妆效/VFX）",
+          "教堂崩塌现场余尘"
+        ],
+        "cards": [
+          "IC-13"
+        ],
+        "eps": [
+          23
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "—",
+        "note": "睫毛上沾的碎屑只给一个特写；额头相抵停住说「等码头」"
+      },
+      {
+        "id": "IAD-24",
+        "name": "人类舰队停泊码头、登记台与舷梯",
+        "type": "场景/构件",
+        "covers": [
+          "码头登记台",
+          "舷梯",
+          "海面"
+        ],
+        "cards": [
+          "IC-14"
+        ],
+        "eps": [
+          24
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P0",
+        "reuse": "—",
+        "note": "全季最后一吻的场地；空场拍摄，沈雯璃怔住用「手指在登记台上松开」表现"
+      },
+      {
+        "id": "IAD-25",
+        "name": "深海码头湿甲板",
+        "type": "场景状态",
+        "covers": [
+          "深海码头湿甲板"
+        ],
+        "cards": [
+          "IC-02"
+        ],
+        "eps": [
+          8
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "SCN101 变体",
+        "note": "湿甲板＋积水倒影是 IC-02 B 版的主体"
+      },
+      {
+        "id": "IAD-26",
+        "name": "夜校门廊",
+        "type": "场景",
+        "covers": [],
+        "cards": [
+          "IC-01"
+        ],
+        "eps": [
+          6
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "SCN301 变体",
+        "note": "夜风吹过；逆光剪影全在这一格"
+      },
+      {
+        "id": "IAD-27",
+        "name": "沈雯璃制式外披（跨域出行与床戏遮挡共用款）",
+        "type": "服装",
+        "covers": [
+          "沈雯璃制式外披"
+        ],
+        "cards": [
+          "IC-01",
+          "IC-07",
+          "IC-11"
+        ],
+        "eps": [
+          6,
+          16,
+          21
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P0",
+        "reuse": "—",
+        "note": "EP6 披肩初接触、EP16 钟楼床戏滑落遮挡切黑、EP21 值班室床戏拉起遮挡切黑的贯通服装道具"
+      },
+      {
+        "id": "IAD-28",
+        "name": "沈雯璃解除制式外披后的内层服装（含松领口状态）",
+        "type": "服装",
+        "covers": [],
+        "cards": [
+          "IC-03",
+          "IC-04",
+          "IC-05",
+          "IC-07",
+          "IC-09",
+          "IC-11",
+          "IC-12"
+        ],
+        "eps": [
+          11,
+          12,
+          16,
+          19,
+          21,
+          22
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P0",
+        "reuse": "—",
+        "note": "贯穿共浴与四场床戏及 EP22 站一夜的内层军装衬里"
+      },
+      {
+        "id": "IAD-29",
+        "name": "程栖睡衣/便装（窄床与战损场次）",
+        "type": "服装",
+        "covers": [],
+        "cards": [
+          "IC-05",
+          "IC-07",
+          "IC-09",
+          "IC-11"
+        ],
+        "eps": [
+          12,
+          16,
+          19,
+          21
+        ],
+        "status": "需新增·尚无实物",
+        "priority": "P1",
+        "reuse": "—",
+        "note": "覆盖四场重头床戏中程栖的近景衣袖与领口状态"
+      }
+    ],
+    "assemblyExample": {
+      "cn": "引用 LOC-02：深海工业城邦楼下市集，清晨人群走入分段照明通道，暖黄与冷青灯光混合、热食摊冒起蒸汽；大远景、固定机位；冷调体积光、低饱和、真实摄影质感，16:9电影感。",
+      "en": "using LOC-02: downstairs market in a deep-sea industrial city-state, a morning crowd walking into a segmented-lit corridor, mixed warm-yellow and cool-cyan lights, steam rising from food stalls; extreme wide shot, static camera; cool volumetric light, desaturated, photorealistic, 16:9 cinematic."
+    }
+  }
+}

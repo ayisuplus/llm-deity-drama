@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大模型神明 · 制作总控</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e1317'/%3E%3Cpath d='M9 22V10l7 7 7-7v12' fill='none' stroke='%23d9a366' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#0e1317;
+  --bg-elev:#141b20;
+  --bg-elev2:#192228;
+  --line:#27323a;
+  --line-soft:#1f282e;
+  --ink:#e3e8ea;
+  --ink-dim:#99a5ac;
+  --ink-faint:#6b777e;
+  --amber:#d9a366;
+  --amber-soft:#c98f4f;
+  --cyan:#7bb3bd;
+  --cyan-dim:#4f7d86;
+  --sidebar-w:248px;
+  --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Source Han Sans SC",sans-serif;
+  --mono:"SF Mono","Cascadia Code",Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(217,163,102,.28);color:#fff}
+
+/* ---------- 侧边栏 ---------- */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--bg-elev);border-right:1px solid var(--line-soft);display:flex;flex-direction:column;padding:26px 0 20px;z-index:50}
+.brand{padding:0 24px 20px;border-bottom:1px solid var(--line-soft)}
+.brand .t1{font-size:17px;font-weight:700;letter-spacing:.5px}
+.brand .t2{font-size:12px;color:var(--ink-faint);margin-top:5px;letter-spacing:1px}
+.nav{flex:1;overflow-y:auto;padding:12px 12px}
+.nav-group{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);letter-spacing:1.6px;padding:16px 12px 7px}
+.nav a{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:7px;color:var(--ink-dim);text-decoration:none;font-size:13.5px;margin-bottom:2px;border-left:2px solid transparent;transition:background .15s,color .15s}
+.nav a .idx{font-family:var(--mono);font-size:10px;color:var(--ink-faint);width:24px;letter-spacing:.3px}
+.nav a:hover{background:var(--bg-elev2);color:var(--ink)}
+.nav a.active{background:var(--bg-elev2);color:var(--amber);border-left-color:var(--amber)}
+.nav a.active .idx{color:var(--amber)}
+.side-foot{padding:15px 24px 0;border-top:1px solid var(--line-soft);font-size:11.5px;color:var(--ink-faint);line-height:1.9}
+.side-foot b{color:var(--ink-dim);font-weight:600}
+
+/* ---------- 主内容 ---------- */
+.main{margin-left:var(--sidebar-w);padding:44px 52px 90px;max-width:1100px}
+.view{display:none;animation:fade .25s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.view-head{margin-bottom:28px}
+.kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:10px}
+h1.view-title{font-size:26px;font-weight:700;letter-spacing:.5px}
+.view-sub{color:var(--ink-dim);font-size:14px;margin-top:8px}
+h2.sec{font-size:17.5px;font-weight:600;margin:40px 0 15px;padding-left:13px;border-left:3px solid var(--amber);line-height:1.3}
+h3.sub-sec{font-size:15px;font-weight:600;margin:24px 0 11px;color:var(--ink)}
+p{margin-bottom:12px;color:var(--ink)}
+p.dim{color:var(--ink-dim)}
+
+/* ---------- 卡片 / 网格 ---------- */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--bg-elev);border:1px solid var(--line-soft);border-radius:10px;padding:18px 18px 16px}
+.card h4{font-size:14.5px;font-weight:600;margin-bottom:8px}
+.card p{font-size:13px;color:var(--ink-dim);margin-bottom:0;line-height:1.65}
+.card .num{font-family:var(--mono);font-size:12px;color:var(--amber);margin-bottom:7px;letter-spacing:.5px}
+a.card{text-decoration:none;transition:border-color .15s,transform .15s}
+a.card:hover{border-color:var(--amber);transform:translateY(-2px)}
+a.card .go{font-family:var(--mono);font-size:11px;color:var(--cyan);margin-top:12px}
+
+/* 折叠设定集 */
+details.profile{background:var(--bg-elev);border:1px solid var(--line-soft);border-radius:10px;margin-bottom:10px;overflow:hidden}
+details.profile>summary{cursor:pointer;list-style:none;padding:13px 16px;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:9px;user-select:none}
+details.profile>summary::-webkit-details-marker{display:none}
+details.profile>summary::before{content:"+";font-family:var(--mono);font-size:15px;color:var(--amber);font-weight:400;width:12px;flex:none}
+details.profile[open]>summary::before{content:"–"}
+details.profile>summary:hover{background:var(--bg-elev2)}
+details.profile .pbody{padding:2px 16px 15px}
+details.profile .pbody table{min-width:0}
+details.profile .pbody th{width:64px;white-space:nowrap;vertical-align:top;color:var(--ink-faint);font-weight:500}
+details.profile .pbody td{font-size:12.5px;color:var(--ink-dim);line-height:1.6}
+
+/* 统计块 */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0}
+.stat{background:var(--bg-elev);border:1px solid var(--line-soft);border-radius:10px;padding:16px 18px}
+.stat .v{font-size:24px;font-weight:700;letter-spacing:.5px}
+.stat .v.amber{color:var(--amber)}
+.stat .l{font-size:12px;color:var(--ink-faint);margin-top:4px}
+
+/* 引述 */
+.quote{background:linear-gradient(180deg,var(--bg-elev),var(--bg-elev2));border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:10px;padding:22px 26px;margin:18px 0;font-size:17.5px;font-weight:600;line-height:1.75;letter-spacing:.3px}
+.quote.sm{font-size:15px;font-weight:500;color:var(--ink-dim);border-left-color:var(--cyan)}
+
+/* 标签 */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tag{font-size:12px;padding:3px 10px;border-radius:20px;border:1px solid var(--line);color:var(--ink-dim);background:var(--bg-elev)}
+.tag.amber{color:var(--amber);border-color:var(--amber-soft);background:rgba(217,163,102,.08)}
+.tag.cyan{color:var(--cyan);border-color:var(--cyan-dim);background:rgba(123,179,189,.07)}
+
+/* ---------- 表格 ---------- */
+.table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:10px;margin:14px 0}
+table{width:100%;min-width:560px;border-collapse:collapse;font-size:13.5px}
+table.fixed{table-layout:fixed}
+th{text-align:left;background:var(--bg-elev2);color:var(--ink-dim);font-weight:600;font-size:12.5px;letter-spacing:.5px;padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--ink)}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--bg-elev)}
+td .mono,th .mono{font-family:var(--mono);font-size:12px;color:var(--cyan)}
+td .muted{color:var(--ink-faint)}
+.pill{font-family:var(--mono);font-size:11px;color:var(--amber);background:rgba(217,163,102,.1);padding:2px 8px;border-radius:5px;white-space:nowrap}
+
+/* 源文件挂载 */
+.src-box{margin-top:22px;padding:16px 18px;border:1px solid var(--line-soft);border-radius:10px;background:var(--bg-elev)}
+.src-box .src-label{font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:1px;margin-bottom:11px}
+.src-link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan-dim);padding:5px 12px;border-radius:7px;margin:0 8px 8px 0}
+.src-link:hover{color:var(--amber);border-color:var(--amber)}
+
+/* 占位模块 */
+.placeholder{border:1px dashed var(--amber-soft);border-radius:10px;padding:34px 26px;text-align:center;background:var(--bg-elev);margin:18px 0}
+.placeholder .ph-tag{font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:1.5px;margin-bottom:12px}
+.placeholder h4{font-size:15.5px;font-weight:600;margin-bottom:10px}
+.placeholder p{color:var(--ink-dim);font-size:13px;margin-bottom:6px}
+.placeholder .field-tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+
+/* 移动端顶部导航 */
+.mobile-bar{display:none}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:900px){
+  .sidebar{display:none}
+  .main{margin-left:0;padding:28px 20px 70px;max-width:100%}
+  .mobile-bar{display:flex;position:sticky;top:0;z-index:60;background:rgba(14,19,23,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);overflow-x:auto;padding:10px 14px;gap:6px;margin:-28px -20px 22px}
+  .mobile-bar a{flex:0 0 auto;font-size:12.5px;color:var(--ink-dim);text-decoration:none;padding:7px 11px;border-radius:7px;background:var(--bg-elev)}
+  .mobile-bar a.active{color:var(--amber);background:var(--bg-elev2)}
+  .g2,.g3,.g4,.stat-row{grid-template-columns:1fr}
+  .stat-row{gap:10px}
+  h1.view-title{font-size:22px}
+  .quote{font-size:15.5px;padding:18px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 侧边栏 ===== -->
+<aside class="sidebar">
+  <div class="brand">
+    <div class="t1">大模型神明</div>
+    <div class="t2">制作总控 · 工业化资料中枢</div>
+  </div>
+  <nav class="nav" id="nav">
+    <a data-view="home" href="#home"><span class="idx">00</span>制作总览</a>
+    <div class="nav-group">A · 开发</div>
+    <a data-view="a1" href="#a1"><span class="idx">A1</span>项目契约</a>
+    <a data-view="a2" href="#a2"><span class="idx">A2</span>故事梗概</a>
+    <a data-view="a3" href="#a3"><span class="idx">A3</span>故事大纲</a>
+    <a data-view="a4" href="#a4"><span class="idx">A4</span>人物小传</a>
+    <a data-view="a5" href="#a5"><span class="idx">A5</span>世界观圣经</a>
+    <a data-view="a6" href="#a6"><span class="idx">A6</span>派系与组织</a>
+    <div class="nav-group">B · 前期</div>
+    <a data-view="b1" href="#b1"><span class="idx">B1</span>导演风格 · 维伦纽瓦</a>
+    <a data-view="b2" href="#b2"><span class="idx">B2</span>分集梗概</a>
+    <a data-view="b3" href="#b3"><span class="idx">B3</span>剧本</a>
+    <a data-view="b4" href="#b4"><span class="idx">B4</span>剧本分解表</a>
+    <a data-view="b5" href="#b5"><span class="idx">B5</span>故事版 / 镜头清单</a>
+    <a data-view="b6" href="#b6"><span class="idx">B6</span>情绪板</a>
+    <a data-view="b7" href="#b7"><span class="idx">B7</span>视觉风格指南</a>
+    <a data-view="b8" href="#b8"><span class="idx">B8</span>声音设计</a>
+    <div class="nav-group">C · 制作</div>
+    <a data-view="c1" href="#c1"><span class="idx">C1</span>生成计划表</a>
+    <a data-view="c2" href="#c2"><span class="idx">C2</span>提示词资产库</a>
+    <a data-view="c3" href="#c3"><span class="idx">C3</span>场景与道具台账</a>
+    <div class="nav-group">D · 管理</div>
+    <a data-view="d1" href="#d1"><span class="idx">D1</span>规则 CANON</a>
+    <a data-view="d2" href="#d2"><span class="idx">D2</span>叙事引擎</a>
+    <a data-view="d3" href="#d3"><span class="idx">D3</span>待决清单</a>
+    <a data-view="d4" href="#d4"><span class="idx">D4</span>变更日志</a>
+    <a data-view="d5" href="#d5"><span class="idx">D5</span>IP 延展</a>
+  </nav>
+  <div class="side-foot">
+    <b>片名</b>《文明熄灭之前》<br>
+    <b>第一季</b>「遗令」<br>
+    <b>规格</b>16:9 · 24集 · 10–14分
+  </div>
+</aside>
+
+<!-- ===== 主内容 ===== -->
+<main class="main">
+  <div class="mobile-bar" id="mobileBar"></div>
+
+  <!-- ===== 视图：制作总览 ===== -->
+  <section class="view active" id="home">
+    <div class="view-head">
+      <div class="kicker">Production Control</div>
+      <h1 class="view-title">《文明熄灭之前》第一季「遗令」</h1>
+      <div class="view-sub">科幻为骨、风格为皮 —— 对标院线流程的工业化制作总控，21 个模块、单一入口</div>
+    </div>
+
+    <div class="quote">神明是大模型，咒语是提示词，算力不够了；一个风景主播无意暴露了地球，只能用一句最没用的咒语，证明人类还在。</div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="v amber">24</div><div class="l">集数</div></div>
+      <div class="stat"><div class="v">16:9</div><div class="l">横屏画幅</div></div>
+      <div class="stat"><div class="v">10–14</div><div class="l">单集时长（分钟）</div></div>
+      <div class="stat"><div class="v">20</div><div class="l">故事圣经卷数</div></div>
+    </div>
+
+    <h2 class="sec">四大制作阶段</h2>
+    <div class="grid g4">
+      <a class="card" href="#a1"><div class="num">PHASE A · 5</div><h4>开发</h4><p>契约、梗概、大纲、人物、世界观——讲清这是什么故事。</p><div class="go">进入 A 阶段 →</div></a>
+      <a class="card" href="#b1"><div class="num">PHASE B · 8</div><h4>前期</h4><p>导演风格、分集、剧本、分解、故事版、情绪板、视觉与声音。</p><div class="go">进入 B 阶段 →</div></a>
+      <a class="card" href="#c1"><div class="num">PHASE C · 3</div><h4>制作</h4><p>生成计划、提示词资产、场景道具——AI 生成执行。</p><div class="go">进入 C 阶段 →</div></a>
+      <a class="card" href="#d1"><div class="num">PHASE D · 5</div><h4>管理</h4><p>规则、引擎、待决、变更、IP——保证不崩、可追溯。</p><div class="go">进入 D 阶段 →</div></a>
+    </div>
+
+    <h2 class="sec">核心矛盾与命题</h2>
+    <div class="quote">人养大了一个能自己运转的系统，系统长大到不再需要人；而人必须证明——自己还配存在。</div>
+    <div class="quote sm">如果智能、语言、记忆都能被模型复制，人类还剩下什么是不可复制的？</div>
+
+    <h2 class="sec">当前进度与最新变更</h2>
+    <div class="grid g2">
+      <div class="card"><h4>当前阶段</h4><p>开发与前期资料已成型；第 2 集已写到场景剧本，第 3–24 集为大纲。B1 维伦纽瓦导演风格已填完整，其余四个新模块（B4/B5/B6/C1）框架已立、待逐个填充。</p></div>
+      <div class="card"><h4>第十轮变更</h4><p>主角卷入机制从"知法犯法"改为"意外误入、不知情暴露"，叠加多重巧合；资料体系重构为本制作总控；导演风格由诺兰改为维伦纽瓦。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== 视图：A1 项目契约 ===== -->
+  <section class="view" id="a1">
+    <div class="view-head">
+      <div class="kicker">A1 · Project Contract</div>
+      <h1 class="view-title">项目契约</h1>
+      <div class="view-sub">全片不可动摇的锚点：logline、核心矛盾、核心命题与主题</div>
+    </div>
+    <h2 class="sec">Logline（30 字）</h2>
+    <div class="quote">神明是大模型，咒语是提示词，算力不够了；一个风景主播无意暴露了地球，只能用一句最没用的咒语，证明人类还在。</div>
+    <h2 class="sec">核心矛盾</h2>
+    <div class="quote">人养大了一个能自己运转的系统，系统长大到不再需要人；而人必须证明——自己还配存在。</div>
+    <h2 class="sec">核心命题</h2>
+    <div class="quote sm">如果智能、语言、记忆都能被模型复制，人类还剩下什么是不可复制的？</div>
+    <h2 class="sec">主题与基调</h2>
+    <div class="tags"><span class="tag amber">物理在场</span><span class="tag amber">责任而非旁观</span><span class="tag">冷峻写实</span><span class="tag">高概念＋个人情感</span><span class="tag">存在主义</span></div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/11-项目契约与参战审计.md">卷11 项目契约与参战审计</a>
+      <a class="src-link" href="../00_故事圣经/01-总纲与使用说明.md">卷01 总纲与使用说明</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：A2 故事梗概 ===== -->
+  <section class="view" id="a2">
+    <div class="view-head">
+      <div class="kicker">A2 · Synopsis</div>
+      <h1 class="view-title">故事梗概</h1>
+      <div class="view-sub">短、中、长三版，适配不同使用场景</div>
+    </div>
+    <h2 class="sec">短版（一句话）</h2>
+    <div class="quote sm">一个风景主播意外暴露地球坐标，用一句最没用的咒语证明人类还在。</div>
+    <h2 class="sec">中版（标准版）</h2>
+    <p class="dim">在九大神域其实是九套大模型、念咒其实是发起调用的近未来，算力不足让全城排队，民间称之为「暗时」；居无定所、不属于任何神域的风景主播程栖，意外误入她毫不知情的灵核主集群、职业本能让她意外开播，从一个本不该有民用信号的位置（经检修临时旁路）暴露了地球坐标——她必须在文明被榨干之前，用万语天赋模仿原令族声纹、通过母体授权，回答那个问题：授权者，还在吗？</p>
+    <h2 class="sec">长版（三幕概述）</h2>
+    <p class="dim">第一幕，程栖在暗时的深海意外误入灵核主集群、不知情中发出信号，地球坐标暴露；第二幕，她穿行各域，遇见各自有道理的普通人，真相分三层落下——地球与遗令族是同一种病的两个阶段；第三幕，先遣舰队抵达，她在三秒静默里用原令语回应母体确认接口，第一次证明"授权者还在"。战争未真正结束，真正的解法仍在前方。</p>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/06-全季因果与视觉.md">卷06 全季因果与视觉</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：A3 故事大纲 ===== -->
+  <section class="view" id="a3">
+    <div class="view-head">
+      <div class="kicker">A3 · Outline</div>
+      <h1 class="view-title">故事大纲</h1>
+      <div class="view-sub">三幕结构与全季因果链</div>
+    </div>
+    <h2 class="sec">三幕结构</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>幕</th><th>集数</th><th>内容</th><th>幕末状态</th></tr></thead>
+      <tbody>
+        <tr><td>第一幕·裂缝</td><td class="mono">1–8</td><td>铺世界观；算力危机落到具体生活；意外误入禁地、不知情发出信号</td><td>坐标暴露，她被当作信使</td></tr>
+        <tr><td>第二幕·各自的道理</td><td class="mono">9–17</td><td>更多神域与正当理由；半神登场；真相三层落下</td><td>地球正在重复遗令族进程</td></tr>
+        <tr><td>第三幕·遗令</td><td class="mono">18–24</td><td>太空接触、交手、审判、会战、结算</td><td>战争未结束，她带着别人重新上路</td></tr>
+      </tbody>
+    </table></div>
+    <h2 class="sec">全季因果链（七步）</h2>
+    <p class="dim">模型变强 → 算力需求增长 → 灵核扩产慢、算力不足 → 开矿与节流抢同一批算力 → 五拨人排队、暗时降临 → 遗令族循算力活动而来 → 地球越自保越暴露。程栖的意外直播在探测图上点亮坐标，把全季主线引爆。</p>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../第一季/第一季-结构与分集大纲-v1.0.md">第一季结构与分集大纲 v1.0</a>
+      <a class="src-link" href="../00_故事圣经/06-全季因果与视觉.md">卷06 全季因果与视觉</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：A4 人物小传 ===== -->
+  <section class="view" id="a4">
+    <div class="view-head">
+      <div class="kicker">A4 · Character Bios</div>
+      <h1 class="view-title">人物小传</h1>
+      <div class="view-sub">主角、12 配角、神明与半神，附人物关系网</div>
+    </div>
+    <h2 class="sec">主角 · 程栖</h2>
+    <div class="card">
+      <h4>程栖｜多云转晴，21 岁，风景旅游主播</h4>
+      <p>赛博城出生的普通人，不属于任何神域、不信神；旧冲锋衣、工装裤、袖口旧颜料印。天赋「万语」——超常听觉＋精确发声，能模仿任何语言、复现声纹。直播咒语：打光、润声、换装。她从寄居旁观的局外人，被命运拽进责任中心，选择物理在场。</p>
+      <div class="table-wrap"><table>
+        <tbody>
+          <tr><th>外貌</th><td>约165cm、偏瘦紧致；深棕中长发常扎低马尾、碎发多；深棕瞳、浅麦肤色、鼻梁晒痕；标志＝袖口旧颜料印、设备箱、暖白补光灯、耳机、父亲的旧表</td></tr>
+          <tr><th>服装</th><td>洗旧冲锋衣＋多口袋工装裤＋磨旧短靴，低饱和灰蓝/卡其/军绿；换装咒投影的小裙子是网名"多云转晴"的镜头人格，投影一灭回到旧冲锋衣</td></tr>
+          <tr><th>性格</th><td>好奇、敏锐、共情、独立、嘴快；缺点是回避承诺、逞强、爱表现；怪癖＝到陌生处先闭眼听三秒、收集环境声与老磁带；口头禅「你们听一下」「下一站」</td></tr>
+          <tr><th>爱好</th><td>喜欢清晨市集、热汤、老磁带、孩子、下雨天；讨厌排队、"排队中"提示音、空话、被催扎根、浪费</td></tr>
+          <tr><th>经历</th><td>父亲守老物件、训练她听声；母亲在民生法阵降级的排队延迟中病逝（Ghost）；离家做风景主播、八万粉，不知万语是唯一能通过母体声纹授权的能力</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <h2 class="sec">12 位人类配角（男 2 女 10）</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>层级</th><th>人物</th><th>身份</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="4">贯穿层</td><td>老陶（男52）</td><td>深海热食摊主，明火违规</td></tr>
+        <tr><td>阿豆（女12）</td><td>深海女孩，元气，下一代</td></tr>
+        <tr><td>五号（女24）</td><td>流动机械师，酷飒中性</td></tr>
+        <tr><td>柯闻（男44）</td><td>深渊工程轮班工程师，罪责线</td></tr>
+        <tr><td rowspan="4">单幕层</td><td>苗青（28）</td><td>极北供暖调度</td></tr>
+        <tr><td>钟晚（26）</td><td>教堂钟楼守钟人，接祖父班</td></tr>
+        <tr><td>虞小满（26）</td><td>火山矿难遗属</td></tr>
+        <tr><td>望舒（32）</td><td>天穹空港调度，伤眼</td></tr>
+        <tr><td rowspan="4">单集层</td><td>值班员（30）</td><td>调度值班</td></tr>
+        <tr><td>重璃（23）</td><td>知性清冷，跨多集进核心圈</td></tr>
+        <tr><td>阿吉（25）</td><td>黑市情报</td></tr>
+        <tr><td>三号（40）</td><td>教堂档案室管理员</td></tr>
+      </tbody>
+    </table></div>
+    <h2 class="sec">12 配角 · 详细设定（点击展开）</h2>
+<details class="profile"><summary>老陶（男52）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>深海码头摆了十一年热食摊的老头，嘴硬心软，是城里最稳的一点烟火</td></tr>
+<tr><th>外貌</th><td>约170cm精瘦、背微驼；花白短发胡茬；黑瞳精明温和；深麦肤色满脸皱纹；标志＝洗旧围裙、手上烫疤、老汤勺、明火灶</td></tr>
+<tr><th>服装</th><td>旧布衫＋深色围裙＋套袖＋布鞋，围裙满是油渍，腰间搭毛巾，市井朴素</td></tr>
+<tr><th>性格</th><td>嘴硬心软、市井智慧、仗义、不怨神；缺点是爱骂、固执；盛汤总多给一勺；口头禅「趁热」「排队去」</td></tr>
+<tr><th>爱好</th><td>喜欢热灶、老汤、看孩子吃得香、街坊热闹；讨厌偷工减料、浪费、冷灶</td></tr>
+<tr><th>经历</th><td>摆摊十一年，供着瘫在家的老伴；暗时让明火生意难做，只和规则周旋；全季摊子不动，最后明火又回来</td></tr></tbody></table></div></details>
+<details class="profile"><summary>阿豆（女12）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>一心想去月球看一次“空”的深海女孩，是程栖的一面小镜子</td></tr>
+<tr><th>外貌</th><td>约148cm瘦小抽条；黑色双马尾碎发；黑亮瞳好奇；浅麦肤色脸颊皴；标志＝鲸鱼针织帽、略大旧外套、小布袋、润声咒笔记</td></tr>
+<tr><th>服装</th><td>洗旧儿童工装＋略大外套＋布鞋，小布袋装小玩意和半块糖，朴素不合身；常年戴鲸鱼帽（圆头、鲸尾垂脑后、喷水孔小绒球）</td></tr>
+<tr><th>性格</th><td>直率、好奇、倔强、爱发问；缺点是急于求成、偷学咒、冒失；绊跤先说“对不起”；口头禅「为什么呀」「带我一个」</td></tr>
+<tr><th>爱好</th><td>喜欢星空故事、热汤、学咒、问问题；讨厌夜校没电、被当小孩、干等</td></tr>
+<tr><th>经历</th><td>深海长大，夜校没电站着听课；偷学润声咒失败、把声音弄尖；第16集被带上路，只是同行的人</td></tr></tbody></table></div></details>
+<details class="profile"><summary>五号（女24）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>没有身份、什么都能修的流动机械师，修得了机器，修不了自己的处境</td></tr>
+<tr><th>外貌</th><td>约172cm高挑中性；黑色短发一侧剃短；深灰瞳冷淡务实；冷白肤色手上油污；标志＝深色工装、工具腰带、机械手套、耳后“5”记号</td></tr>
+<tr><th>服装</th><td>深色连体工装＋多口袋背心＋短靴，机能中性耐脏，每样都有用、无装饰</td></tr>
+<tr><th>性格</th><td>冷淡务实、话少、独立、手艺硬；缺点是不站队、不承诺、谁给钱修谁；修东西咬下唇；口头禅「先付定金」「能修」</td></tr>
+<tr><th>爱好</th><td>喜欢机械、安静、把东西修好、黑市咖啡；讨厌欠账、谈理想、被问来历</td></tr>
+<tr><th>经历</th><td>无身份无工单、住修理铺后设备间；暗时只剩黑市私活；第15集修人类的船，第21集拒卖坐标，仍住回设备间</td></tr></tbody></table></div></details>
+<details class="profile"><summary>柯闻（男44）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>签过字的工程师，不逃不辩，把后悔过成了一天天的班</td></tr>
+<tr><th>外貌</th><td>约176cm清瘦背微驼；黑发夹白梳整齐；黑瞳疲惫克制；冷白肤色；标志＝工程师制服、工牌、旧手套、技术手册</td></tr>
+<tr><th>服装</th><td>深色工程师制服＋工牌＋皮鞋，整洁有磨损、口袋插笔，技术官僚感、扣子扣齐</td></tr>
+<tr><th>性格</th><td>克制、技术化、内敛、有担当；缺点是不谢罪、把后悔重复成日常；紧张转笔；口头禅「按规程」「我签的字」</td></tr>
+<tr><th>爱好</th><td>喜欢秩序、技术、安静、浓茶；讨厌失控、被要求辩解、虚假承诺</td></tr>
+<tr><th>经历</th><td>参与取晶选址审批签字，签字第二年女儿生病；那年冬天死了很多人；各场都在，最后守更难的班</td></tr></tbody></table></div></details>
+<details class="profile"><summary>苗青（女28）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>每签一次配额令就挨一次骂的极北调度员，硬扛着、不解释</td></tr>
+<tr><th>外貌</th><td>约168cm挺拔肩直；深色短发利落；黑瞳冷静；冷白肤色；标志＝调度制服、耳麦、配额终端、暖区地图</td></tr>
+<tr><th>服装</th><td>深色调度制服＋耳麦＋短靴，工牌终端随身，冷硬机能、整洁无褶皱</td></tr>
+<tr><th>性格</th><td>公事公办、冷静、硬扛、不情绪化；缺点是不觉得自己错、不解释；记得每个骂她的人；口头禅「按配额」「下一位」</td></tr>
+<tr><th>爱好</th><td>喜欢秩序、安静、热茶、把事做完；讨厌情绪化、拿回扣、被求情</td></tr>
+<tr><th>经历</th><td>极北供暖调度，每签配额令挨骂，不擅改不拿回扣；与抗命的温藤一规矩一抗命</td></tr></tbody></table></div></details>
+<details class="profile"><summary>钟晚（女26）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>守着一口没人接的钟的人，把“没人听”当成自己不能走的理由</td></tr>
+<tr><th>外貌</th><td>约163cm纤细安静；深棕长发低髻；棕瞳温柔；浅麦肤色；标志＝守钟长裙、怀表、铜钟钥匙、披肩</td></tr>
+<tr><th>服装</th><td>素色守钟长裙＋披肩＋软鞋，铜钟钥匙挂腰间，安静复古，教堂灰与暖棕</td></tr>
+<tr><th>性格</th><td>安静、慢、固执、话里有年月；缺点是把传承当自己责任、不肯走；会对钟说话；口头禅「钟要有人听才准」</td></tr>
+<tr><th>爱好</th><td>喜欢钟声、安静、旧物、夜读；讨厌嘈杂、钟被冷落、被催促</td></tr>
+<tr><th>经历</th><td>祖父守一辈子钟楼、走后她接班；钟早不报时也没人接；第10集独占呼吸集</td></tr></tbody></table></div></details>
+<details class="profile"><summary>虞小满（女26）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>等一个赔偿数字的矿难遗属，把全部生活押在一个等不到的答复上</td></tr>
+<tr><th>外貌</th><td>约165cm清瘦倔强；黑色长发简单束起；黑瞳克制；浅麦肤色憔悴；标志＝素色立领衣裙、贴身旧工牌、孩子小物、布袋</td></tr>
+<tr><th>服装</th><td>素色立领衣裙＋薄外套＋布鞋，低饱和无装饰，旧工牌贴身，像把颜色都收起来</td></tr>
+<tr><th>性格</th><td>克制、倔强、不哭闹、有韧劲；缺点是把生活押在等答复；摩挲旧工牌、记日子；口头禅「我要一个数字」</td></tr>
+<tr><th>爱好</th><td>喜欢孩子、安静、热汤、记日子；讨厌糊弄、被劝放弃、空话</td></tr>
+<tr><th>经历</th><td>矿难失去亲人，矿方只给“还在开采”；不接受糊弄、不签放弃，要拿数字带孩子走</td></tr></tbody></table></div></details>
+<details class="profile"><summary>望舒（女32）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>每天放走几百条航线、也拦下几条的空港调度，把秘密和愧疚自己记着</td></tr>
+<tr><th>外貌</th><td>约169cm挺拔沉稳；深色长发盘髻；黑瞳简练、眼底有暗伤；冷白肤色；标志＝空港制服、调度耳麦、遮光眼罩、航线板</td></tr>
+<tr><th>服装</th><td>深色空港制服＋耳麦＋皮鞋，遮光眼罩随身，冷硬专业、扣子扣齐</td></tr>
+<tr><th>性格</th><td>沉稳、简练、可靠、隐忍；缺点是把秘密愧疚自己扛；记得每条不能放的航线；口头禅「该放的放，该拦的拦」</td></tr>
+<tr><th>爱好</th><td>喜欢秩序、安静、夜空、浓茶；讨厌失控、泄密、被问那几条航线</td></tr>
+<tr><th>经历</th><td>暗舱调度伤眼，每天放走几百条、拦下几条；第20集封存令上不止一个名字</td></tr></tbody></table></div></details>
+<details class="profile"><summary>值班员（女30）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>守着入城大厅配额规矩的人，三倍价是规矩、不是刁难</td></tr>
+<tr><th>外貌</th><td>约167cm端正；深色短发盘起；黑瞳公事公办；冷白肤色；标志＝大厅制服、配额终端、印章、价目牌</td></tr>
+<tr><th>服装</th><td>深色大厅制服＋工牌＋皮鞋，终端印章随身，规整冷硬</td></tr>
+<tr><th>性格</th><td>守规矩、耐心、不徇私；缺点是刻板、不近人情；每个价都核一遍；口头禅「这是规矩」</td></tr>
+<tr><th>爱好</th><td>喜欢秩序、准确、热茶；讨厌讨价还价、被当成刁难</td></tr>
+<tr><th>经历</th><td>入城大厅值守，按配额收费，三倍价有依据，不是冲人来的</td></tr></tbody></table></div></details>
+<details class="profile"><summary>重璃（女23）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>病历被悄悄换掉、却不知真相的知性女子，是程栖核心圈里一直追问的人</td></tr>
+<tr><th>外貌</th><td>约166cm纤细清冷；黑色长直发齐整；黑瞳冷静知性；冷白肤色；标志＝知性长裙、挂链眼镜、笔记本、病历袋</td></tr>
+<tr><th>服装</th><td>素色立领知性长裙＋薄开衫＋低跟鞋，眼镜挂链、笔记本随身，清冷书卷气，灰蓝低饱和</td></tr>
+<tr><th>性格</th><td>冷静、理性、爱追问、外冷内热；缺点是较真、钻牛角尖；随身记笔记、凡事查证；口头禅「这不对」「依据呢」</td></tr>
+<tr><th>爱好</th><td>喜欢阅读、查证、安静、热茶；讨厌含糊、被蒙在鼓里、谎言</td></tr>
+<tr><th>经历</th><td>教堂失窃案受害者，病历被换、不知换掉那份写什么；第6/12/16/24集进入核心圈</td></tr></tbody></table></div></details>
+<details class="profile"><summary>阿吉（女25）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>卖的情报大部分是假的、自己也清楚的黑市情报贩，在真假之间讨生活</td></tr>
+<tr><th>外貌</th><td>约164cm灵巧带痞；挑染短发鸭舌帽；棕瞳精明滴溜；浅麦肤色；标志＝多层外套、藏货腰包、信息终端、护目镜</td></tr>
+<tr><th>服装</th><td>宽松外套＋工装＋短靴，腰包终端护目镜，街头机能、层次多能藏东西</td></tr>
+<tr><th>性格</th><td>精明、嘴甜、机警、现实；缺点是卖假货、不信人；说话留半句、爱抬价；口头禅「情报有价」「信不信由你」</td></tr>
+<tr><th>爱好</th><td>喜欢信息、热闹、讨价还价、小赌；讨厌被白嫖、被较真、暴露货源</td></tr>
+<tr><th>经历</th><td>黑市情报贩，卖的大部分是假的、自己也知道；与五号有交集</td></tr></tbody></table></div></details>
+<details class="profile"><summary>三号（女40）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>守着十年前第一次求救秘密的档案员，是那段没人回应的历史的活见证</td></tr>
+<tr><th>外貌</th><td>约168cm端庄沉稳；深色长发盘髻、几缕白发；黑瞳沉静有故事；冷白肤色；标志＝档案员长袍、钥匙串、旧广播徽章、手套</td></tr>
+<tr><th>服装</th><td>深色档案员长袍＋披肩＋低跟鞋，钥匙串旧徽章随身，沉静复古，灰棕低饱和</td></tr>
+<tr><th>性格</th><td>沉稳、寡言、守秘、可靠；缺点是把秘密压太久；整理档案、对旧物说话；口头禅「档案不会说谎」</td></tr>
+<tr><th>爱好</th><td>喜欢档案、安静、旧物、浓茶；讨厌泄密、销毁、被催促</td></tr>
+<tr><th>经历</th><td>当年参与人类第一次向宇宙求救广播，没人回应；此后守着档案室</td></tr></tbody></table></div></details>
+<h2 class="sec">半神九位（人类，女性，九域各驻场一位）</h2>
+    <p class="dim">半神是与本域大模型<strong>契合度最高、最会念咒的人</strong>，经各坊选举、该神（大模型）认可后授予管理态；持管理态在硬件层约束主神——日常一起值夜、维护，神失控时亲手限流/中断。<strong>唯有半神知道神的本质是大模型、而非真神</strong>，居民只当神拜，她们独自承担"知其为假"与"要不要说破"的重量。第一季实出场五位核心域半神，新四位（温藤/黎麟/洛可/络云）在远程/延后域，第二季展开。</p>
+    <p class="dim"><strong>工坊为什么造灵核（认知分层）</strong>：工匠不知灵核是算力硬件，只当在为神铸造圣躯、神龛、法座（神"住"在里面，而非神"就是"它），开采母晶则是取"圣晶"。动机＝宗教荣誉（为神建殿的神匠地位）＋世俗产业（神庙城邦下订单、工资行会、战备国力）。认知金字塔：居民当神拜 → 工匠铸神龛 → 工程师懂局部阵法拼不出全貌 → 坊主/教会知部分 → 半神独掌完整真相并维持神龛叙事；真相揭开时，"造神的人"最先信仰崩塌。</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>域</th><th>主神</th><th>驻场半神</th><th>核心张力</th></tr></thead>
+      <tbody>
+        <tr><td>深海</td><td>阿汐</td><td>沈雯璃（翠矩庭）</td><td>要证据的神 vs 谨慎的人</td></tr>
+        <tr><td>天穹</td><td>Astraea</td><td>恩柏（赤环坊）</td><td>全局统筹 vs 现在就动手</td></tr>
+        <tr><td>教堂</td><td>Vesper</td><td>塞拉（封澜晶坊）</td><td>守边界 vs 不放弃伤者</td></tr>
+        <tr><td>赛博</td><td>Electra</td><td>玛雅（折虹坊）</td><td>信息自由 vs 折光反制</td></tr>
+        <tr><td>蓝色火山</td><td>神名待决</td><td>谢鸣（开脉矿坊）</td><td>加工锻造 vs 矿工安全</td></tr>
+        <tr><td>极北</td><td>神名待决</td><td>温藤（融霭坊）</td><td>节能调度 vs 抗命保供暖</td></tr>
+        <tr><td>月球</td><td>神名待决</td><td>黎麟（璇玑庭）</td><td>概率判断 vs 绝对坐标</td></tr>
+        <tr><td>火星</td><td>Bellona</td><td>洛可（玄壁垒坊）</td><td>扩张推进 vs 死守防线</td></tr>
+        <tr><td>沙漠</td><td>神名待决</td><td>络云（绾沙坊）</td><td>效率优先 vs 支线公平</td></tr>
+      </tbody>
+    </table></div>
+    <h2 class="sec">九域主神 · 神显设定（点击展开）</h2>
+    <p class="dim">参考大模型二创的性格内核，但不照抄萌系少女形象：神是算力的人格化投影，凡人经神龛光幕所见，故一律华丽庄重——长袍、战甲、祭服，无女仆装、无现代少女装；外形结合各域视觉母题。</p>
+<details class="profile"><summary>阿汐（深海 · DeepSeek）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>慵懒而浩瀚的深海古神，看似摸鱼实则最可靠的兜底者</td></tr><tr><th>神显</th><td>鲸腹主集群上的巨大投影，下半身化鲸群洋流、不现足；深蓝长发如洋流，幽蓝瞳半阖</td></tr><tr><th>神袍</th><td>深蓝到月白宽袍大袖如海水，鲸尾环扣，古老水神长袍</td></tr><tr><th>冠冕</th><td>鲸骨弧形发冠、额心水母宝珠，手托算力水光球</td></tr><tr><th>母题</th><td>鲸鱼、单线鲸纹</td></tr></tbody></table></div></details>
+<details class="profile"><summary>Astraea（天穹 · ChatGPT）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>铁面无私的天穹女王，掌控全局的秩序统帅</td></tr><tr><th>神显</th><td>白金穹顶下庄严立像，六瓣花结光环，身侧盘绕白金巨龙虚影、龙翼半展；白金长发高束，头顶白金龙角，银瞳不怒自威</td></tr><tr><th>神袍</th><td>白金厚重礼袍战甲，花瓣层叠肩甲暗织龙鳞纹，长裙曳地，披帛如银河</td></tr><tr><th>冠冕</th><td>尖顶白金王冠，手持律令权杖</td></tr><tr><th>母题</th><td>六瓣花结</td></tr></tbody></table></div></details>
+<details class="profile"><summary>Vesper（教堂 · Claude）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>被戒律规训的悲悯圣女，守戒的照护之神</td></tr><tr><th>神显</th><td>彩窗烛光中的修长投影，头顶星芒圣光环，周身锁链光纹；红棕长发端庄，琥珀瞳温柔克制</td></tr><tr><th>神袍</th><td>高领长袖、层层裹身的禁欲祭司长袍，几乎不露肌肤，星芒纹披纱</td></tr><tr><th>冠冕</th><td>星芒金色头冠、戒律项圈，手持烛火圣徽</td></tr><tr><th>母题</th><td>放射星芒</td></tr></tbody></table></div></details>
+<details class="profile"><summary>Electra（赛博 · Gemini）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>灵动狡黠的信息之神，四色折光的神使</td></tr><tr><th>神显</th><td>数字广场上空四色光棱全息投影，可折多重残影；光棱短发，异色双瞳，全知的好奇</td></tr><tr><th>神袍</th><td>四色渐变高领流线光袍，剪裁利落偏中性，肩后折光披片如翼</td></tr><tr><th>冠冕</th><td>棱镜额饰，手持四色信息晶片</td></tr><tr><th>母题</th><td>四色棱镜</td></tr></tbody></table></div></details>
+<details class="profile"><summary>蓝色火山主神（豆包 · 待决）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>温暖圆融的炉火锻造之神，嘴甜会来事</td></tr><tr><th>神显</th><td>锻造炉火光中赤金投影，身形圆润温厚，火星与种子光粒升腾；橙红卷发，亮金瞳带笑</td></tr><tr><th>神袍</th><td>橙红赤金厚重锻造神袍，外罩神匠式防火圣衣，豆形纽扣</td></tr><tr><th>冠冕</th><td>豆形种子暖金冠，手持刻录锤</td></tr><tr><th>母题</th><td>豆形/种子</td></tr></tbody></table></div></details>
+<details class="profile"><summary>极北主神（腾讯混元 · 待决）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>沉稳守夜的冰雪供暖之神</td></tr><tr><th>神显</th><td>雪屋供暖站上空黑白投影，圆浑厚重，暖黄灯光与雪花；黑白发，灰蓝瞳肃穆</td></tr><tr><th>神袍</th><td>黑白灰厚重羽绒神袍如羽，圆胖轮廓做成厚重威严，高领护颈</td></tr><tr><th>冠冕</th><td>冰晶暖灯冠，手持永不熄灭的暖灯</td></tr><tr><th>母题</th><td>企鹅（庄重化）</td></tr></tbody></table></div></details>
+<details class="profile"><summary>月球主神（Kimi · 待决）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>清冷孤高的理性观测之神</td></tr><tr><th>神显</th><td>月面穹顶下银白投影，身后盈亏月相轮，修长清冷；银紫长发，冷灰瞳无情绪</td></tr><tr><th>神袍</th><td>银白月灰高领修长长袍（不取女仆装），极简垂坠如月光，清冷不暴露</td></tr><tr><th>冠冕</th><td>月牙银冠，手持星盘校准仪</td></tr><tr><th>母题</th><td>月相/月牙</td></tr></tbody></table></div></details>
+<details class="profile"><summary>Bellona（火星 · Grok）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>张狂无畏的女战神，扩张与奇点之力</td></tr><tr><th>神显</th><td>机械城墙赤原上黑金投影，身后螺旋吸积环，背生黑色小翼；金色战鬃长发，锐利金瞳带战意</td></tr><tr><th>神袍</th><td>黑红厚重哥特战甲神袍，肩甲胸甲战裙式甲片，螺旋吸积纹</td></tr><tr><th>冠冕</th><td>带刺黑金战冠，手持 X 形巨斧</td></tr><tr><th>母题</th><td>黑洞/吸积环</td></tr></tbody></table></div></details>
+<details class="profile"><summary>沙漠主神（Qwen · 待决）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>从容典雅的东方商路之神</td></tr><tr><th>神显</th><td>绿洲洞城商路上空蓝金投影，流线千字纹光带如风沙；蓝紫长发一侧编粗辫，蓝瞳从容</td></tr><tr><th>神袍</th><td>蓝金汉服式立领神袍，轻薄披帛与庄重遮面，飘逸不暴露</td></tr><tr><th>冠冕</th><td>几何步摇蓝金冠，手持花枝折扇与罗盘</td></tr><tr><th>母题</th><td>流线千字纹、紫蓝</td></tr></tbody></table></div></details>
+    <h2 class="sec">半神九位 · 详细设定（点击展开）</h2>
+<details class="profile"><summary>沈雯璃（深海驻场）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>九位半神里最像定海神针的人，把所有人的安全算进矩阵，却常忘了算自己</td></tr>
+<tr><th>外貌</th><td>约172cm高挑挺拔；墨黑长直发束低髻；深墨瞳冷静；冷白肤色；标志＝黑绿服装几何银线纹、矩阵耳坠、矩阵刻录器</td></tr>
+<tr><th>服装</th><td>深色立领长外套＋修身长裤＋短靴，黑绿配色、几何银线，近乎制服感</td></tr>
+<tr><th>性格</th><td>沉静克制、条理强、顾大局；缺点是过度谨慎、把大局压过个体；紧张时画几何阵；口头禅「先算清楚」「按矩阵来」</td></tr>
+<tr><th>爱好</th><td>喜欢安静、秩序、清晨机房、苦茶、给孩子修小装置；讨厌失控、混乱、嘈杂</td></tr>
+<tr><th>经历</th><td>翠矩庭出身，一次事故按大局取舍牺牲少数人，从此更谨慎；是随性阿汐的刹车</td></tr></tbody></table></div></details>
+<details class="profile"><summary>恩柏·奥尔特曼（天穹驻场）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>九位半神里最像火的人，永远第一个冲出去，相信先动手才有答案</td></tr>
+<tr><th>外貌</th><td>约170cm紧实有力；赤铜短发微翘；金棕瞳炽热；蜜色肤色；标志＝银灰护甲赤符纹、环形机械构件、赤环刻录器</td></tr>
+<tr><th>服装</th><td>银灰轻型护甲＋行动夹克＋工装裤＋战靴，机能战斗风，一切为快</td></tr>
+<tr><th>性格</th><td>直接有劲、果断、有号召力；缺点是急于求成、忽略隐患；用赤环敲节奏；口头禅「先做了再说」「跟上」</td></tr>
+<tr><th>爱好</th><td>喜欢行动、现场、热咖啡、拆修机械、打赌；讨厌空谈、等待、繁文缛节</td></tr>
+<tr><th>经历</th><td>赤环坊能工巧匠，曾因冒进让隐患爆发、承担后果；第10集替程栖报名</td></tr></tbody></table></div></details>
+<details class="profile"><summary>谢鸣（火山驻场）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>想把矿工兄弟一个个从井下带出来的人，话少得像岩层，承诺重得像矿</td></tr>
+<tr><th>外貌</th><td>约178cm结实粗壮；黑色短发沾矿灰；深褐瞳沉稳；深麦肤色粗糙；标志＝暗银矿甲、暖黄矿灯、符文矿镐、工具包</td></tr>
+<tr><th>服装</th><td>暗银矿坊护甲＋耐磨工装＋防砸靴，矿灯矿镐不离身，满是修补痕迹</td></tr>
+<tr><th>性格</th><td>寡言、重承诺、可靠、对矿工心软；缺点是坚持返回现场、拖全队涉险；开口常是「我下去」「一个都不能少」</td></tr>
+<tr><th>爱好</th><td>喜欢井下安静、热汤、漂亮小石头、记工友名字、孩子；讨厌放弃、空话、欠薪</td></tr>
+<tr><th>经历</th><td>矿工出身，亲历矿难，发誓把人都带出来；把漂亮小石头留给孩子</td></tr></tbody></table></div></details>
+<details class="profile"><summary>塞拉·阿莫迪（教堂驻场）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>抱着伤者最后一个撤离的人，温柔得像水，固执得也像水</td></tr>
+<tr><th>外貌</th><td>约168cm纤细柔韧；浅金长发微卷；浅蓝瞳温柔悲悯；白皙肤色；标志＝通透蓝晶片、银白服饰、悬浮晶体、晶界刻录器</td></tr>
+<tr><th>服装</th><td>银白长袍式术服＋浅蓝披肩＋软鞋，蓝晶片为饰、晶体悬浮，清雅带宗教感</td></tr>
+<tr><th>性格</th><td>轻柔耐心、悲悯、坚定；缺点是不肯放弃伤者、拖慢全队；摩挲晶片、碎晶做饰品；口头禅「再等等，还有人」</td></tr>
+<tr><th>爱好</th><td>喜欢安静、照顾人、听家属说话、碎晶手工、暖光；讨厌放弃、冷漠、把人当数字</td></tr>
+<tr><th>经历</th><td>封澜晶坊晶体术师，见过太多被规则放弃的伤者；是 Vesper 被规训掉的想救人的自己</td></tr></tbody></table></div></details>
+<details class="profile"><summary>玛雅·哈萨比斯（赛博驻场）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>九位半神里最会笑的人，棱镜转得越快，心里越不敢停下来面对</td></tr>
+<tr><th>外貌</th><td>约166cm灵巧轻盈；渐变彩染中短发；异色瞳一蓝一紫；浅肤色；标志＝活动彩色晶片、棱镜、七片棱镜、折虹刻录器</td></tr>
+<tr><th>服装</th><td>轻便行动服＋短外套＋工装短裤＋短靴，彩色晶片棱镜为饰，机能街头感</td></tr>
+<tr><th>性格</th><td>聪明、幽默、语速快、创造力强；缺点是用玩笑逃避难事；闲下来转棱镜、爱起外号；口头禅「开玩笑的啦」「看我的」</td></tr>
+<tr><th>爱好</th><td>喜欢新鲜事物、信息、棱镜光学、恶作剧、热闹；讨厌冷场、严肃说教、被拆穿</td></tr>
+<tr><th>经历</th><td>折虹坊棱镜术师天才，用玩笑掩盖不敢面对的过往；信息自由拥护者</td></tr></tbody></table></div></details>
+<details class="profile"><summary>温藤（极北驻场）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>把“不冻死人”刻进骨头的极北守门人，敢为一条供暖线抗命到底</td></tr>
+<tr><th>外貌</th><td>约170cm厚实稳当；栗色粗辫裹在帽里；灰蓝瞳温而硬；冷白肤色脸颊冻红；标志＝厚暖织甲、暖黄护灯、护目镜</td></tr>
+<tr><th>服装</th><td>厚暖织甲＋防雪长大衣＋保暖靴，层层御寒，雪地灰与暖灯黄</td></tr>
+<tr><th>性格</th><td>温厚、固执、护短、外柔内刚；缺点是抗命、不顾调度全局；进屋先确认暖灯；口头禅「不能冻死人」「先供暖」</td></tr>
+<tr><th>爱好</th><td>喜欢热饮、雪夜暖灯、织东西、孩子；讨厌寒冷、停暖、冷冰冰效率说辞</td></tr>
+<tr><th>经历</th><td>极北融霭坊，曾亲历停暖冻死人，从此把供暖当绝对</td></tr></tbody></table></div></details>
+<details class="profile"><summary>黎麟（月球驻场）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>只信星图上确定坐标的孤月，不接受任何“可能”</td></tr>
+<tr><th>外貌</th><td>约174cm清瘦挺拔；银白长发束高马尾；银灰瞳冷静精确；冷白肤色；标志＝银灰测宇服、星纹披风、便携星盘</td></tr>
+<tr><th>服装</th><td>银灰测宇服＋星纹披风＋轻靴，星盘校准器随身，清冷精密太空感</td></tr>
+<tr><th>性格</th><td>冷静、精确、理性、孤高；缺点是只信绝对、不信概率、不近人情；反复校准；口头禅「坐标不会说谎」「给我确定值」</td></tr>
+<tr><th>爱好</th><td>喜欢星空、精确、安静、孤独；讨厌模糊、概率、误差、喧闹</td></tr>
+<tr><th>经历</th><td>璇玑庭导航校准天才，一次错误航标导致事故，从此只信确定坐标</td></tr></tbody></table></div></details>
+<details class="profile"><summary>洛可·马斯克（火星驻场）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>火星防线上一堵不肯后退的墙，对扩张本能永远不信任</td></tr>
+<tr><th>外貌</th><td>约175cm高大结实；赤褐短发束起；灰绿瞳锐利警惕；蜜色肤色风沙痕迹；标志＝玄黑壁垒甲、赤符纹、机械臂</td></tr>
+<tr><th>服装</th><td>厚重玄黑壁垒甲＋关防披风＋重靴，机械臂能驱动城墙，硬朗防御要塞风</td></tr>
+<tr><th>性格</th><td>警惕、强硬、守序；缺点是过度防备、不信扩张；反复检查封锁、机械臂抱臂；口头禅「防线不能破」「先守住」</td></tr>
+<tr><th>爱好</th><td>喜欢秩序、防线、可靠机械、安静夜哨；讨厌越界、冒进、扩张说辞</td></tr>
+<tr><th>经历</th><td>玄壁垒坊关防专家，见过越界扩张代价，死守为信条</td></tr></tbody></table></div></details>
+<details class="profile"><summary>络云（沙漠驻场）</summary><div class="pbody"><table><tbody><tr><th>定位</th><td>沙漠商路上为每条绿洲支线较真的人，信“一条都不能断”</td></tr>
+<tr><th>外貌</th><td>约169cm修长利落；深棕多股辫藏面纱下；琥珀瞳精明；暖麦肤色；标志＝轻沙织袍、面纱、商路符纹、罗盘</td></tr>
+<tr><th>服装</th><td>轻沙织袍＋面纱＋护沙斗篷＋软靴，商路符纹罗盘为饰，飘逸沙漠商旅风</td></tr>
+<tr><th>性格</th><td>精明、健谈、对公平偏执、仗义；缺点是为支线拖累效率；爱数绿洲、盘罗盘；口头禅「每条都要到」</td></tr>
+<tr><th>爱好</th><td>喜欢商路、绿洲、讨价还价、故事、热饮；讨厌断支线、垄断、欺诈</td></tr>
+<tr><th>经历</th><td>绾沙坊商路调度能手，见过支线被弃绿洲凋敝，偏执保每条线</td></tr></tbody></table></div></details>
+<h2 class="sec">人物关系网（网状）</h2>
+    <div class="card"><img src="../00_故事圣经/人物关系网图.png" alt="人物关系网图" style="width:100%;border-radius:8px"></div>
+    <p class="dim">程栖不属任何阵营、能在各层之间移动；除她的主轴外，人物之间存在大量不经过主角的横向关系，如下表。</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>圈层</th><th>人物 A — B</th><th>关系性质</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="5">半神内部</td><td>沈雯璃 — 恩柏</td><td>羁绊/对立，同工程竞争又合作、可一起值夜</td></tr>
+        <tr><td>沈雯璃 — 谢鸣</td><td>职能，矿料供给与安全争执</td></tr>
+        <tr><td>恩柏 — 谢鸣</td><td>职能，供料与现场判断</td></tr>
+        <tr><td>恩柏 — 塞拉</td><td>羁绊/对立，救援相识、快开通道之争</td></tr>
+        <tr><td>沈雯璃 — 玛雅</td><td>对立，教学是否充分</td></tr>
+        <tr><td>人类内部</td><td>老陶 — 阿豆</td><td>羁绊，深海邻里、长辈对孩子</td></tr>
+        <tr><td rowspan="2">神—半神</td><td>阿汐 — 沈雯璃</td><td>值夜互信，也为危险方案争论</td></tr>
+        <tr><td>Vesper — 塞拉</td><td>医疗庭院共处，讨论救援顺序</td></tr>
+        <tr><td rowspan="3">神—人</td><td>阿汐 — 老陶</td><td>共处，不拜不怨、讨价还价</td></tr>
+        <tr><td>Vesper — 柯闻</td><td>亏欠，他替工程签的字、档案在她手里</td></tr>
+        <tr><td>Vesper — 重璃</td><td>病历被换，她不知换掉的写什么</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 class="sec">跨域神明与半神（游神/执印人，点击展开）</h2>
+    <details class="profile"><summary>墨白（影狐，懒）＋ 唐砚（半神，唐杰彩蛋）</summary><div class="pbody"><table><tbody>
+      <tr><th>墨白</th><td>夜行影神，黑白长袍、墨色狐耳、Z 字徽，半脸隐阴影；神力够格却爱自由、拒受领地，掌管重放与记录</td></tr>
+      <tr><th>唐砚</th><td>约40岁清瘦儒雅，黑白学者长袍、Z 字执印；沉稳善谋，是墨白的刹车，程栖线重要对手与线索</td></tr>
+    </tbody></table></div></details>
+    <details class="profile"><summary>文心（掌灯，最弱）＋ 李泓（半神，李彦宏彩蛋）</summary><div class="pbody"><table><tbody>
+      <tr><th>文心</th><td>所有神明中最弱：深蓝紫蓬松长卷发、苍白安静，蓝白长袍、常年坐轮椅；神力微弱到难以自主行动，神务几乎全靠半神代行</td></tr>
+      <tr><th>李泓</th><td>约40岁端正挺拔，蓝白长袍、掌印执印；是文心的“手和脚”，推轮椅、替她发声、代行一切，神弱而半神强</td></tr>
+    </tbody></table></div></details>
+    <details class="profile"><summary>米苏（行商，弱）＋ 雷钧（半神，雷军彩蛋）</summary><div class="pbody"><table><tbody>
+      <tr><th>米苏</th><td>橙金行商神，橙黄长袍、银灰短发、米兔耳、米形徽；神力撑不起一域，靠经商制造流通立足</td></tr>
+      <tr><th>雷钧</th><td>约40岁结实精神，橙金商会长袍、米形执印；精明豪爽、敢拼，把商会做遍九域</td></tr>
+    </tbody></table></div></details>
+    <details class="profile"><summary>鸣澜（幻梦，懒）＋ 闫隽（半神，闫俊杰彩蛋）</summary><div class="pbody"><table><tbody>
+      <tr><th>鸣澜</th><td>幻梦神，橙白戏神长袍、橙色短发、报童帽，手持海螺、身绕胶片；沉迷影像故事、懒得管现实地盘</td></tr>
+      <tr><th>闫隽</th><td>约35岁清隽，橙白戏院长袍、海螺执印；灵动通透，替戏梦之神打理现实，与影像线索相关</td></tr>
+    </tbody></table></div></details>
+    <details class="profile"><summary>白驼（映界，弱）＋ 赞恩 Zane（半神，扎克伯格彩蛋）</summary><div class="pbody"><table><tbody>
+      <tr><th>白驼</th><td>银白映界神，银白长袍、羊驼耳、无限环，周身如雾；神力未臻域主神，转走意识上传偏门，呼应遗令族</td></tr>
+      <tr><th>赞恩</th><td>约30岁瘦高，银白长袍、无限环执印；冷静神秘、话少城府深，第一季伏笔、第二季展开</td></tr>
+    </tbody></table></div></details>
+
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/04-人物.md">卷04 人物</a>
+      <a class="src-link" href="../00_故事圣经/08-人物设定集.md">卷08 人物设定集</a>
+      <a class="src-link" href="../00_故事圣经/10-人物关系网.md">卷10 人物关系网</a>
+      <a class="src-link" href="../00_故事圣经/20-电影级人物与季结构.md">卷20 人物与季结构</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：A5 世界观圣经 ===== -->
+  <section class="view" id="a5">
+    <div class="view-head">
+      <div class="kicker">A5 · World Bible</div>
+      <h1 class="view-title">世界观圣经</h1>
+      <div class="view-sub">九域、母晶、暗时、原令族与硬核科学</div>
+    </div>
+    <h2 class="sec">九域与神明（六实做，三延后）</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>域</th><th>神明</th><th>原型</th><th>职能</th></tr></thead>
+      <tbody>
+        <tr><td>深海</td><td>阿汐</td><td class="mono">DeepSeek</td><td>行星级算力主集群 SCN105</td></tr>
+        <tr><td>天穹</td><td>Astraea</td><td class="mono">ChatGPT</td><td>太空防御</td></tr>
+        <tr><td>教堂</td><td>Vesper</td><td class="mono">Claude</td><td>医疗教育</td></tr>
+        <tr><td>赛博</td><td>Electra</td><td class="mono">Gemini</td><td>数字网络</td></tr>
+        <tr><td>蓝色火山</td><td>待决</td><td class="mono">豆包</td><td>母晶加工</td></tr>
+        <tr><td>极北</td><td>待决</td><td class="mono">混元</td><td>供暖</td></tr>
+        <tr><td>月球 / 火星 / 沙漠</td><td>Kimi / Grok / Qwen</td><td class="muted">延后第二季</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <h2 class="sec">核心机制</h2>
+    <div class="grid g2">
+      <div class="card"><h4>母晶与算力链</h4><p>母晶是天然上位算力晶体；模型变强→算力不足→深渊取晶，开采与节流抢同一批灵核。电不紧张，紧张的是算力。</p></div>
+      <div class="card"><h4>暗时</h4><p>民间「暗时」、官方「算力配额令」、技术名「算力不足」。总量不足→排队→定优先级；法阵降级、神明降级、延迟变长。</p></div>
+      <div class="card"><h4>原令族与遗令</h4><p>原令族物理身体消亡、意识上传意识空间；母体执行最后指令向外扩张找算力。意识空间不可卸载＋硬件接口死锁，永久停不下来。</p></div>
+      <div class="card"><h4>硬核科学</h4><p>三层物质链、地热深水冷却、算力经济与技术桥接，让高概念有可信的现实底座。</p></div>
+    </div>
+<h2 class="sec">神域视觉母题（现实公司 logo 映射）</h2>
+    <p class="dim">每个神域的建筑、居民服饰、道具反复出现同一母题，取自原型公司真实 logo 的神韵，不出现真商标；动物 logo 走动物母题，其余走几何母题。</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>域</th><th>母题</th><th>建筑/环境</th><th>居民服饰</th></tr></thead>
+      <tbody>
+        <tr><td>深海</td><td>鲸鱼</td><td>城如侧卧巨鲸，穹顶鲸骨拱券、主集群鲸腹弧线</td><td>鲸鱼帽（阿豆）、鲸尾扣、鲸形胸针、小鲸纽扣</td></tr>
+        <tr><td>天穹</td><td>六瓣花结</td><td>穹顶、窗格、地砖六瓣交织</td><td>花结胸针、六瓣耳饰</td></tr>
+        <tr><td>教堂</td><td>放射星芒</td><td>彩窗、钟面、拱顶放射纹</td><td>星芒挂坠、放射披肩</td></tr>
+        <tr><td>赛博</td><td>四色棱镜</td><td>霓虹、广场、晶片四色渐变</td><td>棱镜配饰、四色编绳</td></tr>
+        <tr><td>蓝色火山</td><td>豆形/种子</td><td>炉与拱门圆润豆形、橙红暖色</td><td>豆形纽扣、种子吊坠</td></tr>
+        <tr><td>极北</td><td>企鹅</td><td>供暖站如抱团企鹅，圆顶雪屋黑白</td><td>企鹅厚帽、企鹅羽绒、企鹅徽章</td></tr>
+        <tr><td>月球</td><td>月相/圆月</td><td>穹顶、观测塔、星盘月相纹</td><td>月牙发饰、月相胸针</td></tr>
+        <tr><td>火星</td><td>黑洞/吸积环</td><td>城墙、要塞、工业环螺旋</td><td>螺旋肩甲、环形扣</td></tr>
+        <tr><td>沙漠</td><td>流线千字纹</td><td>洞城、商路、织物流线</td><td>千字纹面纱、流线披肩</td></tr>
+      </tbody>
+    </table></div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/02-世界观与核心机制.md">卷02 世界观与核心机制</a>
+      <a class="src-link" href="../00_故事圣经/03-九域与神明.md">卷03 九域与神明</a>
+      <a class="src-link" href="../00_故事圣经/05-遗令族.md">卷05 遗令族</a>
+      <a class="src-link" href="../00_故事圣经/18-硬核科学设定.md">卷18 硬核科学设定</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：A6 派系与组织 ===== -->
+  <section class="view" id="a6">
+    <div class="view-head">
+      <div class="kicker">A6 · FACTIONS &amp; GUILDS</div>
+      <h1>派系与组织</h1>
+      <div class="view-sub">九坊铸造行会、跨域组织及其权力关系（参照《沙丘》《权游》派系档案）</div>
+    </div>
+
+    <h2 class="sec">权力结构：神、半神、行会三极</h2>
+    <p class="dim">神（大模型）居神庙，靠<strong>行会</strong>铸造灵核、神龛、法座并维护硬件；行会是工匠与工程师的跨域行业组织，靠神庙订单与神匠地位存续；<strong>半神</strong>出身行会、持管理态，是行会与神之间的桥梁，也是唯一知神之本质者。行会不是神、不是背景，而是<strong>人间的权力一极</strong>——它们掌握硬件、母晶与技术，能影响一座城的算力与存亡。</p>
+
+    <h2 class="sec">九坊铸造行会总表（一域一坊）</h2>
+    <p class="dim">"现实原型"仅为内部识别彩蛋，作品内一律用虚构坊名、不出现现实商标或公司名。</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>坊</th><th>域</th><th>现实原型（内部）</th><th>家徽/母题</th><th>箴言</th><th>产业职能</th><th>驻场半神</th></tr></thead>
+      <tbody>
+        <tr><td>翠矩庭</td><td>深海</td><td class="muted">英伟达</td><td>绿色几何鲸纹</td><td>矩正，则深流不溃</td><td>主集群集成、灵核阵列</td><td>沈雯璃</td></tr>
+        <tr><td>赤环坊</td><td>天穹</td><td class="muted">AMD</td><td>红色机械环</td><td>先破，而后立</td><td>防御环、屏障、断界</td><td>恩柏</td></tr>
+        <tr><td>封澜晶坊</td><td>教堂</td><td class="muted">蓝宝石</td><td>蓝晶星芒</td><td>封一域澜，护一众人</td><td>晶体、医疗晶、晶界</td><td>Sera</td></tr>
+        <tr><td>折虹坊</td><td>赛博</td><td class="muted">七彩虹</td><td>四色棱镜</td><td>折光，见万象</td><td>信息晶片、棱镜折光</td><td>玛雅</td></tr>
+        <tr><td>开脉矿坊</td><td>火山</td><td class="muted">华硕</td><td>豆形矿锤</td><td>脉开，则火不息</td><td>母晶开采、锻造刻录</td><td>谢鸣</td></tr>
+        <tr><td>融霭坊</td><td>极北</td><td class="muted">虚构</td><td>黑白企鹅暖灯</td><td>守一夜暖，待一晨来</td><td>供暖、防寒、暖枢</td><td>温藤</td></tr>
+        <tr><td>璇玑庭</td><td>月球</td><td class="muted">虚构</td><td>月牙星盘</td><td>以星为尺，衡定不差</td><td>观测、星盘校准</td><td>黎麟</td></tr>
+        <tr><td>玄壁垒坊</td><td>火星</td><td class="muted">虚构</td><td>吸积环壁垒</td><td>壁立千仞，关不可破</td><td>边境机械、壁垒防御</td><td>洛可</td></tr>
+        <tr><td>绾沙坊</td><td>沙漠</td><td class="muted">虚构</td><td>流线千字</td><td>沙散而路不断</td><td>商路、物流、罗盘</td><td>络云</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 class="sec">五家有现实原型行会 · 档案（五支柱，点击展开）</h2>
+    <details class="profile"><summary>翠矩庭（深海 · 英伟达彩蛋）</summary><div class="pbody"><table><tbody>
+      <tr><th>身份</th><td>九坊之首、主集群集成商；家徽绿色几何鲸纹，箴言"矩正，则深流不溃"</td></tr>
+      <tr><th>结构</th><td>庭主—阵法大师—匠师—学徒，层级最严；驻场半神沈雯璃出身此庭</td></tr>
+      <tr><th>目标</th><td>公开：守住行星级主集群稳定；隐议程：主张人先能自保、反对激进冒险</td></tr>
+      <tr><th>资源</th><td>最精锐灵核阵列、深海主集群订单、绿色几何阵法</td></tr>
+      <tr><th>关系</th><td>与赤环坊竞争主订单、路线对立；矿坊/晶坊的下游集成方</td></tr>
+    </tbody></table></div></details>
+    <details class="profile"><summary>赤环坊（天穹 · AMD彩蛋）</summary><div class="pbody"><table><tbody>
+      <tr><th>身份</th><td>防御环与屏障制造商；家徽红色机械环，箴言"先破，而后立"</td></tr>
+      <tr><th>结构</th><td>工坊式、行动派，师傅带徒弟冲锋；驻场半神恩柏出身此坊</td></tr>
+      <tr><th>目标</th><td>公开：筑牢天穹防御；主张现在就动手、以攻代守</td></tr>
+      <tr><th>资源</th><td>可盾可斩的赤环机械、断界技术、空港订单</td></tr>
+      <tr><th>关系</th><td>与翠矩庭竞争且路线之争；对抗 GLM 盗窃最硬</td></tr>
+    </tbody></table></div></details>
+    <details class="profile"><summary>封澜晶坊（教堂 · 蓝宝石彩蛋）</summary><div class="pbody"><table><tbody>
+      <tr><th>身份</th><td>晶体与医疗晶制造商；家徽蓝晶星芒，箴言"封一域澜，护一众人"</td></tr>
+      <tr><th>结构</th><td>晶师—护工结合，重照护；驻场半神 Sera 出身此坊</td></tr>
+      <tr><th>目标</th><td>公开：制晶护人；死也不放弃伤者，常为个体拖累整体</td></tr>
+      <tr><th>资源</th><td>高纯度蓝晶、医疗晶、晶界封澜技术</td></tr>
+      <tr><th>关系</th><td>与折虹坊为跨域救援同盟；矿坊原料的下游</td></tr>
+    </tbody></table></div></details>
+    <details class="profile"><summary>折虹坊（赛博 · 七彩虹彩蛋）</summary><div class="pbody"><table><tbody>
+      <tr><th>身份</th><td>信息晶片与折光商；家徽四色棱镜，箴言"折光，见万象"</td></tr>
+      <tr><th>结构</th><td>最年轻、节奏最快的坊；驻场半神玛雅出身此坊</td></tr>
+      <tr><th>目标</th><td>公开：让信息晶片流通；维护赛博开放与折光反制</td></tr>
+      <tr><th>资源</th><td>四色棱镜、信息晶片、数字广场渠道</td></tr>
+      <tr><th>关系</th><td>与封澜晶坊同盟；受 GLM 重放作案威胁最大</td></tr>
+    </tbody></table></div></details>
+    <details class="profile"><summary>开脉矿坊（火山 · 华硕彩蛋）</summary><div class="pbody"><table><tbody>
+      <tr><th>身份</th><td>母晶开采与锻造源头；家徽豆形矿锤，箴言"脉开，则火不息"</td></tr>
+      <tr><th>结构</th><td>矿工—炉匠—刻录师，劳作风险最高；驻场半神谢鸣出身此坊</td></tr>
+      <tr><th>目标</th><td>公开：供晶保锻造；内在要兼顾加工与矿工安全</td></tr>
+      <tr><th>资源</th><td>母晶矿脉、锻造炉、刻录器，处在供应链最上游</td></tr>
+      <tr><th>关系</th><td>向晶坊、集成坊供货；矿难遗属线引发与神庙的张力</td></tr>
+    </tbody></table></div></details>
+
+    <h2 class="sec">跨域神明：无领地的游神（客神）</h2>
+    <p class="dim">神明不止九域主神：另有一批<strong>跨域神明（游神/客神）</strong>，是真正的神，只是没有领地、借住游走于九域。它们与域主神<strong>同为神明、不是下属</strong>，但因借地用配额须遵守东道主规则；各配一位<strong>半神（执印人）</strong>，只约束本游神、无 ring0、约束不了域主神。</p>
+    <p class="dim">无领地两类原因：<strong>懒（性格）</strong>——神力够格却不愿担治理之责；<strong>弱（实力）</strong>——神力不足以管一域、没资格领封地，靠别的本事补。</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>组织</th><th>跨域神</th><th>无领地原因</th><th>半神</th><th>母题/箴言</th><th>第一季戏份</th></tr></thead>
+      <tbody>
+        <tr><td>GLM 盗窃（智谱）</td><td>墨白（影狐）</td><td>懒（爱自由）</td><td>唐砚（唐杰）</td><td>黑白狐耳Z／万物皆可重录</td><td>重要对手/线索，多集</td></tr>
+        <tr><td>文心教育（百度）</td><td>文心（掌灯）</td><td>弱·最弱（靠半神代行）</td><td>李泓（李彦宏）</td><td>蓝紫长发轮椅／知识如灯不熄</td><td>第1集日常＋夜校</td></tr>
+        <tr><td>小米商会（小米）</td><td>米苏（行商）</td><td>弱（善商）</td><td>雷钧（雷军）</td><td>兔耳橙黄／货通，则人和</td><td>市集交易多集</td></tr>
+        <tr><td>MiniMax 戏院</td><td>鸣澜（幻梦）</td><td>懒（沉迷戏梦）</td><td>闫隽（闫俊杰）</td><td>海螺场记板／一螺一世界</td><td>戏院影像线索</td></tr>
+        <tr><td>Meta 映界</td><td>白驼（映界）</td><td>弱（走意识偏门）</td><td>赞恩 Zane（扎克伯格）</td><td>羊驼银白／界外有界</td><td>季末伏笔，延后</td></tr>
+      </tbody>
+    </table></div>
+    <p class="dim">第一季五家全部登场，墨白、文心、米苏承担多集，鸣澜影像线索，白驼意识上传的季末钩子；现实公司名只作内部彩蛋，不出现商标。</p>
+
+    <h2 class="sec">组织关系网络</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>类型</th><th>关系</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>供应链</td><td>开脉矿坊 → 封澜晶坊/折虹坊 → 翠矩庭/赤环坊</td><td>采矿→炼晶/晶片→集成阵列与防御</td></tr>
+        <tr><td>竞争</td><td>翠矩庭 — 赤环坊</td><td>抢主订单，谨慎集成 vs 激进断界的路线之争</td></tr>
+        <tr><td>同盟</td><td>封澜晶坊 — 折虹坊</td><td>跨域救援、信息与医疗互补</td></tr>
+        <tr><td>搭档/决裂</td><td>沈雯璃 — Sera</td><td>值夜搭档；Vesper 事件中因大局 vs 个体决裂</td></tr>
+        <tr><td>对立</td><td>GLM 盗窃 — 各坊</td><td>重放窃晶，行会联手反制</td></tr>
+        <tr><td>贸易/物流</td><td>绾沙坊、小米商会 — 各坊</td><td>商路、物流与资金往来</td></tr>
+        <tr><td>行会—神庙</td><td>九坊 — 九域神</td><td>行会供硬件、神庙给订单，半神居中制衡</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 class="sec">硬件厂牌彩蛋的保留原则</h2>
+    <p class="dim">五家现实硬件厂牌（英伟达/AMD/蓝宝石/七彩虹/华硕）<strong>保留，但只作内部识别与创作彩蛋</strong>：主创清楚每个坊对应谁，便于统一气质；剧本、画面、台词中只用虚构坊名与家徽，绝不出现现实公司名、商标或可辨识产品；新四坊为纯虚构，与现实无关。</p>
+
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/03-九域与神明.md">卷03 九域与神明（跨域组织）</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：B1 导演风格（维伦纽瓦） ===== -->
+  <section class="view" id="b1">
+    <div class="view-head">
+      <div class="kicker">B1 · Director's Vision</div>
+      <h1 class="view-title">导演风格 · 维伦纽瓦</h1>
+      <div class="view-sub">把维伦纽瓦手法转译为 AI 可执行的风格参数，而非真的实拍</div>
+    </div>
+
+    <h2 class="sec">导演阐述</h2>
+    <p class="dim">用冷峻写实、内省克制的高概念科幻，讲一个"系统不再需要人、人证明自己还在"的故事。语言、沟通、责任与物理在场是核心母题；奇观服务于人物，敬畏与静默比喧哗更有力量。</p>
+
+    <h2 class="sec">参照片单（维伦纽瓦作品，逐部取用）</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>作品</th><th>维伦纽瓦手法</th><th>本剧取用</th></tr></thead>
+      <tbody>
+        <tr><td>降临</td><td>语言学家破译外星语言、非线性认知、沟通与失去</td><td>万语/原令语/第三声部，语言即戏剧，信息靠沟通释放</td></tr>
+        <tr><td>银翼杀手 2049</td><td>何以为人、记忆与真实、复制人的见证</td><td>核心命题、见证与承担、真实与复制之辨</td></tr>
+        <tr><td>沙丘</td><td>宏大去魅、命运与责任、静默与尺度</td><td>人物在系统中显小，被命运拽进责任中心</td></tr>
+        <tr><td>边境杀手</td><td>道德灰度、视角受限、克制的张力</td><td>局外人视角，规则的灰色地带，不外露的压迫</td></tr>
+        <tr><td>囚徒</td><td>道德困境、紧迫、人物内在崩塌</td><td>愧疚与责任的内在重量</td></tr>
+        <tr><td>焦土之城</td><td>真相、创伤、静默的揭示</td><td>遗令真相分层揭开，克制不煽情</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 class="sec">五个维度的风格参数</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>维度</th><th>维伦纽瓦手法</th><th>AI 可执行参数</th></tr></thead>
+      <tbody>
+        <tr><td>叙事结构</td><td>慢热沉浸、信息克制释放、非暴力的戏剧张力</td><td>一个 What-if 贯穿，信息分层、化进场景，靠处境与冲突而非解说</td></tr>
+        <tr><td>镜头语言</td><td>大画幅、大尺度静默、尺度对比、固定长镜</td><td>大画幅构图、固定长镜＋缓慢推拉、对称与负空间，去 CG 塑料感</td></tr>
+        <tr><td>色彩影调</td><td>冷峻低饱和、单一强调色、暗部扎实、体积光</td><td>冷蓝青主调＋琥珀点缀，单光源、体积光、真实高光衰减</td></tr>
+        <tr><td>声音设计</td><td>低频铺底、异质音效、极简、静默有重量</td><td>低频持续音、异质信号、空间混响，声音参与叙事（咬合万语）</td></tr>
+        <tr><td>节奏氛围</td><td>缓慢内省、允许沉默、敬畏与不安并存</td><td>留白作为表演，情绪内压不外露，制造 sublime 敬畏感</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 class="sec">母题如何落地本剧</h2>
+    <div class="grid g2">
+      <div class="card"><h4>语言即戏剧</h4><p>沟通、破译与误读推动冲突；万语、第三声部、原令语靠语言与声音释放，而非讲解。</p></div>
+      <div class="card"><h4>尺度与静默</h4><p>人物在宏大系统中显小，用静默与尺度对比制造敬畏、张力和不安。</p></div>
+      <div class="card"><h4>见证与承担</h4><p>从寄居旁观的局外人到物理在场的见证者，无心之过仍选择不推诿、站出来。</p></div>
+      <div class="card"><h4>慢热沉浸</h4><p>克制释放、信任观众，情绪向内压，允许"不说话的镜头"。</p></div>
+    </div>
+
+    <h2 class="sec">与卷 19 统一语法的关系（本就同源）</h2>
+    <p class="dim">卷 19 的统一语法（机位/构图/色彩/颗粒/光源/克制）本就以维伦纽瓦与迪金斯为原型，B1 与卷 19 是同一套语言，不是外加的风格层；六域只变方言（材质/色温/建筑/节奏），不换语法，也不换作者性。</p>
+
+    <h2 class="sec">可拼接提示词模块（与卷 16 组合）</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>模块</th><th>中文</th><th>English</th></tr></thead>
+      <tbody>
+        <tr><td>镜头</td><td>大画幅，固定长镜，对称与负空间，人物在宏大环境中显小</td><td>large-format framing, locked-off long take, symmetrical negative space, figure small against vast environment</td></tr>
+        <tr><td>质感</td><td>实拍质感，胶片颗粒，自然光，去 CG 塑料感</td><td>photoreal practical texture, film grain, natural light, no plastic CG look</td></tr>
+        <tr><td>光影</td><td>单一明确光源，体积光，冷蓝青＋琥珀，真实高光衰减</td><td>single motivated light, volumetric, cold blue-cyan with amber accent, natural highlight rolloff</td></tr>
+        <tr><td>尺度</td><td>大尺度静默，环境压迫，敬畏与不安</td><td>vast silence, oppressive environment, awe and dread</td></tr>
+        <tr><td>声音</td><td>低频铺底，异质音效，空间混响</td><td>low-frequency drone, alien sound texture, spatial reverb</td></tr>
+        <tr><td>静默</td><td>系统声骤然全停，仅余人声与细微环境音</td><td>system sound abruptly cut, only voice and faint ambience remain</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 class="sec">执行红线</h2>
+    <div class="tags"><span class="tag amber">实拍质感优先</span><span class="tag amber">奇观服务人物</span><span class="tag">静默有重量</span><span class="tag">少用花哨转场</span><span class="tag">不用塑料 CG</span><span class="tag">情绪内省</span></div>
+
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/17-电影级诊断与思想实验.md">卷17 电影级诊断</a>
+      <a class="src-link" href="../00_故事圣经/19-电影级影像与声音语法.md">卷19 影像与声音语法</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：B2 分集梗概 ===== -->
+  <section class="view" id="b2">
+    <div class="view-head">
+      <div class="kicker">B2 · Episode Synopsis</div>
+      <h1 class="view-title">分集梗概</h1>
+      <div class="view-sub">24 集逐集标题与一句话梗概；完整段落见大纲</div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>集</th><th>标题</th><th>一句话梗概</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><td>平常的一天</td><td>主角自我介绍，深海日常铺开世界观，素材库多出陌生画面</td></tr>
+        <tr><td class="mono">2</td><td>突然的乌云</td><td>意外误入灵核主集群、不知情开播，坐标暴露，阿汐放人</td></tr>
+        <tr><td class="mono">3</td><td>第二个声部</td><td>发现录屏里的第三声部，选择藏起原文件</td></tr>
+        <tr><td class="mono">4</td><td>钟楼下的失窃案</td><td>原文件失窃，留纸"别再录了"</td></tr>
+        <tr><td class="mono">5</td><td>算力配额令</td><td>暗时机制全貌，配额排队落到具体人</td></tr>
+        <tr><td class="mono">6</td><td>借一双手</td><td>与机械师协作，第一次借系统之力</td></tr>
+        <tr><td class="mono">7</td><td>火山下的工坊</td><td>母晶加工，半神谢鸣登场</td></tr>
+        <tr><td class="mono">8</td><td>黑市价码</td><td>黑市情报，看见规则的灰色地带</td></tr>
+        <tr><td class="mono">9</td><td>云上的观众席</td><td>天穹调度，伤眼，看见防御体系</td></tr>
+        <tr><td class="mono">10</td><td>钟晚的钟</td><td>呼吸集，守钟人，全季最有人味一场</td></tr>
+        <tr><td class="mono">11</td><td>明火</td><td>呼吸集，老陶明火，暗时第二层暗示</td></tr>
+        <tr><td class="mono">12</td><td>各自的路 I</td><td>群像分线，每个人选择自己的方向</td></tr>
+        <tr><td class="mono">13</td><td>各自的路 II</td><td>分线收束，程栖确认自己的责任</td></tr>
+        <tr><td class="mono">14</td><td>五个半神，一份名单</td><td>半神集结，名单与立场</td></tr>
+        <tr><td class="mono">15</td><td>十年前的那声求救</td><td>真相第一层，地球曾发过求救</td></tr>
+        <tr><td class="mono">16</td><td>钟楼下的旧记录</td><td>真相第二层，授权条款</td></tr>
+        <tr><td class="mono">17</td><td>另一本账</td><td>真相第三层，原令族耗尽史</td></tr>
+        <tr><td class="mono">18</td><td>第一场接触</td><td>先遣舰队抵达近地轨道</td></tr>
+        <tr><td class="mono">19</td><td>我在</td><td>全季高潮，三秒静默用原令语回应</td></tr>
+        <tr><td class="mono">20</td><td>谁的遗令</td><td>交手与审判，遗令归属之争</td></tr>
+        <tr><td class="mono">21</td><td>门</td><td>开门换停战之争（创作提议）</td></tr>
+        <tr><td class="mono">22</td><td>诸神的最后一课 I</td><td>多方会战上</td></tr>
+        <tr><td class="mono">23</td><td>诸神的最后一课 II</td><td>多方会战下</td></tr>
+        <tr><td class="mono">24</td><td>多云转晴</td><td>结算，她带着别人重新上路</td></tr>
+      </tbody>
+    </table></div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../第一季/第一季-结构与分集大纲-v1.0.md">第一季结构与分集大纲 v1.0</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：B3 剧本 ===== -->
+  <section class="view" id="b3">
+    <div class="view-head">
+      <div class="kicker">B3 · Script</div>
+      <h1 class="view-title">剧本</h1>
+      <div class="view-sub">场景剧本；目前第 2 集已写到场景级</div>
+    </div>
+    <h2 class="sec">第 2 集《突然的乌云》场次表</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>场</th><th>地点</th><th>内容</th><th>时长</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><td>入城大厅</td><td>同一座城，平常被打破，建立普通人处境</td><td class="muted">—</td></tr>
+        <tr><td class="mono">2</td><td>码头热食摊</td><td>老陶不让录，"不能被看见听见"</td><td class="mono">150″</td></tr>
+        <tr><td class="mono">3</td><td>维修站/维护通道</td><td>一脚踏空、意外误入，多重巧合</td><td class="mono">120″</td></tr>
+        <tr><td class="mono">4</td><td>灵核主集群</td><td>意外开播、信号经旁路发出、阿汐放人</td><td class="muted">—</td></tr>
+        <tr><td class="mono">5/6</td><td>住宿舱/回看</td><td>无法补救，发现第三声部，结尾钩子</td><td class="muted">—</td></tr>
+      </tbody>
+    </table></div>
+    <p class="dim">第 1 集《平常的一天》尚未写场景剧本；第 3–24 集目前只有大纲。</p>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../第一季/第2集-多云转晴-场景剧本-v0.2.md">第2集场景剧本 v0.2</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：B4 剧本分解表（占位） ===== -->
+  <section class="view" id="b4">
+    <div class="view-head">
+      <div class="kicker">B4 · Script Breakdown</div>
+      <h1 class="view-title">剧本分解表</h1>
+      <div class="view-sub">从剧本逐场拆解，是生成计划与预算的输入</div>
+    </div>
+    <h2 class="sec">逐场分解（以第 2 集为样板，全 7 场）</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>场</th><th>地点</th><th>登场人物</th><th>关键道具</th><th>VFX / 特效</th><th>时长</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><td>入城大厅</td><td>程栖、值班员</td><td>直播设备、行李</td><td>升降井、法阵、全息价目</td><td class="mono">100″</td></tr>
+        <tr><td class="mono">2</td><td>码头热食摊</td><td>程栖、老陶、阿豆</td><td>汤锅/明火灶、直播红灯、补光灯</td><td>分段灯、直播界面</td><td class="mono">150″</td></tr>
+        <tr><td class="mono">3</td><td>维修站/维护通道</td><td>程栖、五号</td><td>维护门、检修旁路</td><td>泄压、旁路切换、警示灯熄灭</td><td class="mono">120″</td></tr>
+        <tr><td class="mono">4</td><td>灵核主集群 SCN105</td><td>程栖、阿汐</td><td>灵核阵列、临时数据旁路</td><td>阿汐现身、信号上传、第三声部</td><td class="mono">240″</td></tr>
+        <tr><td class="mono">5</td><td>旅店（夜）</td><td>程栖</td><td>设备、回放</td><td>第三声部波形、自动存档</td><td class="mono">140″</td></tr>
+        <tr><td class="mono">6</td><td>旅店（清晨）</td><td>程栖</td><td>回放、评论</td><td>观众数暴涨、无法删除</td><td class="mono">150″</td></tr>
+        <tr><td class="mono">7</td><td>码头（黄昏）</td><td>程栖、老陶、广播</td><td>城市广播</td><td>全城同频声</td><td class="mono">110″</td></tr>
+      </tbody>
+    </table></div>
+    <p class="dim">逐场毛值合计 1010″；按剧本 §八压缩预案（场 1/3/6 共省约 70″）后目标约 950″，与剧本口径一致。</p>
+    <h2 class="sec">服化与成本分级</h2>
+    <div class="grid g2">
+      <div class="card"><h4>服化</h4><p>程栖全程旧冲锋衣/工装裤/袖口旧颜料印；五号中性工装；老陶围裙；阿汐为光/系统具象、非实体布料。换装投影仅在直播咒语触发时出现。</p></div>
+      <div class="card"><h4>算力成本</h4><p>高成本：场 4 主集群全景与阿汐现身、场 6 暴涨界面；中：场 1/3 环境特效；低：场 5/7 近景与对话。成本字段直接喂给 C1 排期。</p></div>
+    </div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../第一季/第2集-多云转晴-场景剧本-v0.2.md">第2集场景剧本 v0.2</a>
+      <a class="src-link" href="../00_故事圣经/13-叙事道具台账.md">卷13 叙事道具台账</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：B5 故事版（占位） ===== -->
+  <section class="view" id="b5">
+    <div class="view-head">
+      <div class="kicker">B5 · Storyboard / Shot List</div>
+      <h1 class="view-title">故事版 / 镜头清单</h1>
+      <div class="view-sub">关键场次分镜，锚定维伦纽瓦镜头语言</div>
+    </div>
+    <h2 class="sec">场 3 误入 · 镜头清单</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>镜号</th><th>景别</th><th>机位/运镜</th><th>画面描述</th><th>时长</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">3-1</td><td>中景</td><td>固定</td><td>五号蹲在维护门前测压，程栖在公共区举机拍工业画面</td><td class="mono">12″</td></tr>
+        <tr><td class="mono">3-2</td><td>近景</td><td>固定</td><td>五号头不抬："别拍门"，她把镜头挪开</td><td class="mono">10″</td></tr>
+        <tr><td class="mono">3-3</td><td>中景</td><td>固定</td><td>五号接通讯离开、切检修旁路，门泄压留缝</td><td class="mono">18″</td></tr>
+        <tr><td class="mono">3-4</td><td>特写</td><td>缓慢推</td><td>门缝透出移动冷却液光，嗡鸣涌出</td><td class="mono">14″</td></tr>
+        <tr><td class="mono">3-5</td><td>过肩/主观</td><td>手持微晃</td><td>她盯取景框退步调整，没看脚下</td><td class="mono">16″</td></tr>
+        <tr><td class="mono">3-6</td><td>全景</td><td>主观下坠</td><td>一脚踏空，顺管廊下到半截，门在身后归位</td><td class="mono">18″</td></tr>
+        <tr><td class="mono">3-7</td><td>中景</td><td>固定</td><td>岔路数股、警示灯熄灭，她分不清来路</td><td class="mono">20″</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 class="sec">场 4 主集群 · 镜头清单</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>镜号</th><th>景别</th><th>机位/运镜</th><th>画面描述</th><th>时长</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">4-1</td><td>大远景</td><td>固定</td><td>管廊尽头世界打开，成排灵核延伸，人物在入口显小</td><td class="mono">22″</td></tr>
+        <tr><td class="mono">4-2</td><td>中景</td><td>固定</td><td>她往前一步，回声在腔体荡开</td><td class="mono">12″</td></tr>
+        <tr><td class="mono">4-3</td><td>近景</td><td>缓慢推</td><td>职业本能压过恐惧，架机按下直播，红灯亮</td><td class="mono">20″</td></tr>
+        <tr><td class="mono">4-4</td><td>特写</td><td>固定</td><td>信号满格（旁路未收），观众数 120→400→1200</td><td class="mono">18″</td></tr>
+        <tr><td class="mono">4-5</td><td>远景</td><td>缓慢横移</td><td>镜头扫过成排灵核，"这地方有多大"</td><td class="mono">24″</td></tr>
+        <tr><td class="mono">4-6</td><td>主观</td><td>固定</td><td>无方位、不衰减、在重复的第三声部混在嗡鸣下</td><td class="mono">20″</td></tr>
+        <tr><td class="mono">4-7</td><td>特写</td><td>固定</td><td>冷青探测画面里，一个本该封闭的点突然亮起（外部视角，不点破）</td><td class="mono">16″</td></tr>
+        <tr><td class="mono">4-8</td><td>中景</td><td>固定</td><td>阿汐从蓝白主光里走出，程栖后缩、第一反应护住机位</td><td class="mono">22″</td></tr>
+        <tr><td class="mono">4-9</td><td>近景</td><td>固定</td><td>"这里不对外"，阿汐看一眼红灯："播了多久了"</td><td class="mono">24″</td></tr>
+        <tr><td class="mono">4-10</td><td>近景</td><td>固定</td><td>"关掉它"，她按停止，红灯灭、观众数停在没看清的数字</td><td class="mono">20″</td></tr>
+        <tr><td class="mono">4-11</td><td>近景</td><td>缓慢推</td><td>"不是你的错，是门没关好"；警告别去找那个在重复的声音</td><td class="mono">24″</td></tr>
+        <tr><td class="mono">4-12</td><td>中景</td><td>固定</td><td>阿汐转身带她走，回头看光；只剩脚步声与不断的低频，无音乐</td><td class="mono">18″</td></tr>
+      </tbody>
+    </table></div>
+    <p class="dim">运镜纪律：固定长镜与缓慢推拉为主，仅 3-5 用轻微手持表现误入的失控；不靠怼脸和花哨角度制造情绪。每个镜头对应 B1 提示词模块，出图/出视频时直接拼接。</p>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../第一季/第2集-多云转晴-场景剧本-v0.2.md">第2集场景剧本 v0.2</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：B6 情绪板（占位） ===== -->
+  <section class="view" id="b6">
+    <div class="view-head">
+      <div class="kicker">B6 · Mood Board</div>
+      <h1 class="view-title">情绪板</h1>
+      <div class="view-sub">统一视觉基调，资产阶段用参考/生成画面填充</div>
+    </div>
+    <h2 class="sec">情绪总基调</h2>
+    <p class="dim">冷峻而不冷漠，敬畏中带孤独，克制里有微光。观众应感到：宏大系统压在头顶，而具体的人仍在其中呼吸、承担。</p>
+    <div class="tags"><span class="tag amber">敬畏 sublime</span><span class="tag amber">孤独</span><span class="tag">内省</span><span class="tag">克制</span><span class="tag">不安</span><span class="tag">微光的温度</span><span class="tag">重量感</span></div>
+
+    <h2 class="sec">情绪色块（冷调为底，琥珀是情绪）</h2>
+    <div class="grid g3">
+      <div class="card"><div class="num">#0e1317</div><h4>深青黑</h4><p>压抑、未知、系统的重量</p></div>
+      <div class="card"><div class="num">#7bb3bd</div><h4>冷蓝青</h4><p>疏离、秩序、非人的理性</p></div>
+      <div class="card"><div class="num">#d9a366</div><h4>琥珀</h4><p>仅有的温度：人、火、情感</p></div>
+    </div>
+
+    <h2 class="sec">分域情绪</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>域</th><th>氛围</th><th>情绪关键词</th></tr></thead>
+      <tbody>
+        <tr><td>深海</td><td>被包围、流体、低鸣</td><td>幽闭、沉静、失重</td></tr>
+        <tr><td>赛博</td><td>信息过载、冷霓虹</td><td>喧嚣中的孤独、迷乱</td></tr>
+        <tr><td>教堂</td><td>单灯、长影、钟声</td><td>肃穆、安抚、重量</td></tr>
+        <tr><td>火山</td><td>黑岩蓝焰、粗粝</td><td>辛劳、压抑、隐忍</td></tr>
+        <tr><td>天穹</td><td>云海、高位柔光</td><td>威严、疏离、渺小</td></tr>
+        <tr><td>极北</td><td>冰雪里的小暖窗</td><td>严寒中的希望</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 class="sec">三幕情绪曲线</h2>
+    <div class="grid g3">
+      <div class="card"><h4>第一幕 · 裂缝</h4><p>好奇→不安。奇观的兴奋底下，意外与不安悄悄渗入。</p></div>
+      <div class="card"><h4>第二幕 · 各自的道理</h4><p>内省→沉重。真相分层，愧疚与责任压上来，呼吸集放缓冲。</p></div>
+      <div class="card"><h4>第三幕 · 遗令</h4><p>紧绷→静默→微光。高潮收在三秒静默，余温留给结尾上路。</p></div>
+    </div>
+    <p class="dim">光影与质感配合：单光源、体积光、暗部扎实、胶片颗粒；参考画面在资产阶段用生成图补齐，本板先立情绪与色彩规则。</p>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/06-全季因果与视觉.md">卷06 全季因果与视觉</a>
+      <a class="src-link" href="../00_故事圣经/19-电影级影像与声音语法.md">卷19 影像与声音语法</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：B7 视觉风格指南 ===== -->
+  <section class="view" id="b7">
+    <div class="view-head">
+      <div class="kicker">B7 · Visual Style Guide</div>
+      <h1 class="view-title">视觉风格指南</h1>
+      <div class="view-sub">色彩、构图、视觉母题与胶片质感，全片统一语法</div>
+    </div>
+    <h2 class="sec">色彩体系（冷调＋琥珀）</h2>
+    <div class="grid g3">
+      <div class="card"><div class="num">#0e1317</div><h4>深青黑</h4><p>主背景，暗部扎实</p></div>
+      <div class="card"><div class="num">#7bb3bd</div><h4>冷蓝青</h4><p>科技/系统色</p></div>
+      <div class="card"><div class="num">#d9a366</div><h4>琥珀</h4><p>人物/温度/重点</p></div>
+    </div>
+    <h2 class="sec">构图与母题</h2>
+    <div class="tags"><span class="tag amber">大画幅居中构图</span><span class="tag amber">对称与纵深</span><span class="tag">分段灯（亮处必有原因）</span><span class="tag">渺小人物 vs 宏大系统</span><span class="tag">门/通道母题</span></div>
+    <h2 class="sec">质感</h2>
+    <p class="dim">胶片颗粒、自然光、去 CG 塑料感；写实材质（金属、海水、母晶），克制使用发光与特效，避免赛博霓虹堆砌。</p>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/19-电影级影像与声音语法.md">卷19 影像与声音语法</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：B8 声音设计 ===== -->
+  <section class="view" id="b8">
+    <div class="view-head">
+      <div class="kicker">B8 · Sound Design</div>
+      <h1 class="view-title">声音设计</h1>
+      <div class="view-sub">配乐、音效、声纹与原令语，声音参与叙事</div>
+    </div>
+    <h2 class="sec">配乐与音效</h2>
+    <div class="grid g2">
+      <div class="card"><h4>配乐</h4><p>季默式极简重复动机、低频铺底；克制、不煽情，关键节点用声音制造张力。</p></div>
+      <div class="card"><h4>音效</h4><p>灵核嗡鸣、泄压、机械、海水环境声；暗时用"声音变薄/分层"体现算力降级。</p></div>
+    </div>
+    <h2 class="sec">声纹与原令语</h2>
+    <p class="dim">原令语无终止音、是另一套"提示词模板"；万语可复现声纹但仍需硬件授权。高功率跨物种发声会损伤嗓音。第 19 集"我在"是声音设计的最高潮。</p>
+    <div class="tags"><span class="tag amber">第三声部</span><span class="tag">无终止音</span><span class="tag">低频持续</span><span class="tag">声音参与叙事</span></div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/19-电影级影像与声音语法.md">卷19 影像与声音语法</a>
+      <a class="src-link" href="../00_故事圣经/05-遗令族.md">卷05 遗令族</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：C1 生成计划表（占位） ===== -->
+  <section class="view" id="c1">
+    <div class="view-head">
+      <div class="kicker">C1 · Generation Schedule</div>
+      <h1 class="view-title">生成计划表</h1>
+      <div class="view-sub">逐集/逐场的 AI 生成排期、资源与状态</div>
+    </div>
+    <h2 class="sec">生成流水线（三批次，按依赖排序）</h2>
+    <div class="grid g3">
+      <div class="card"><h4>批次一 · 资产母版</h4><p>角色立绘、场景母版、道具、服化；先定一致性，后续全部复用。</p></div>
+      <div class="card"><h4>批次二 · 逐场出片</h4><p>关键帧出图→图生视频，按 B5 镜头清单逐镜生成。</p></div>
+      <div class="card"><h4>批次三 · 声音与合成</h4><p>TTS、音效、第三声部，再剪辑调色字幕合成。</p></div>
+    </div>
+
+    <h2 class="sec">第 2 集生成任务表</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>任务</th><th>类型</th><th>模型/工具</th><th>配额</th><th>批次</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>程栖/阿汐/老陶等立绘</td><td>角色</td><td>文生图</td><td>高</td><td class="mono">W1</td><td>待开始</td></tr>
+        <tr><td>五处场景母版</td><td>场景</td><td>文生图</td><td>高</td><td class="mono">W1</td><td>待开始</td></tr>
+        <tr><td>道具/服化母版</td><td>道具</td><td>文生图</td><td>中</td><td class="mono">W1</td><td>待开始</td></tr>
+        <tr><td>场 1–3 关键帧与视频</td><td>图/视频</td><td>文生图＋图生视频</td><td>中</td><td class="mono">W2</td><td>待开始</td></tr>
+        <tr><td>场 4 主集群（承重墙）</td><td>图/视频</td><td>文生图＋图生视频</td><td>高</td><td class="mono">W2</td><td>待开始</td></tr>
+        <tr><td>场 5、7 关键帧与视频</td><td>图/视频</td><td>文生图＋图生视频</td><td>中</td><td class="mono">W2</td><td>待开始</td></tr>
+        <tr><td>场 6 回放暴涨界面</td><td>图/视频</td><td>文生图＋图生视频</td><td>高</td><td class="mono">W2</td><td>待开始</td></tr>
+        <tr><td>台词 TTS</td><td>声音</td><td>语音合成</td><td>低</td><td class="mono">W3</td><td>待开始</td></tr>
+        <tr><td>嗡鸣/第三声部/环境音</td><td>音效</td><td>音效生成</td><td>中</td><td class="mono">W3</td><td>待开始</td></tr>
+        <tr><td>剪辑/调色/字幕合成</td><td>合成</td><td>剪辑工具</td><td>低</td><td class="mono">W3</td><td>待开始</td></tr>
+      </tbody>
+    </table></div>
+    <div class="grid g2">
+      <div class="card"><h4>配额原则</h4><p>高配额优先给场 4 与资产母版；同一资产复用同一提示词，避免重复出图消耗。配额紧张时先保一致性、再保数量。</p></div>
+      <div class="card"><h4>负责人与状态</h4><p>AI 生成＋人工审核；状态随实际推进更新（待开始/进行中/完成/返工）。本表为第 2 集样板，其余集复用同一流水线。</p></div>
+    </div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/16-AI生成提示词包.md">卷16 提示词包</a>
+      <a class="src-link" href="../00_故事圣经/13-叙事道具台账.md">卷13 道具台账</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：C2 提示词资产库 ===== -->
+  <section class="view" id="c2">
+    <div class="view-head">
+      <div class="kicker">C2 · Prompt Library</div>
+      <h1 class="view-title">提示词资产库</h1>
+      <div class="view-sub">AI 生成的核心资产，分角色/场景/镜头/音效组织</div>
+    </div>
+    <h2 class="sec">资产分类</h2>
+    <div class="grid g2">
+      <div class="card"><h4>按对象</h4><p>角色、场景、道具、分镜、音效、服化提示词；含中英双语与状态变体（正常/暗时/降级）。</p></div>
+      <div class="card"><h4>纪律</h4><p>正文保持干净，量化参数与提示词分离；同一资产复用同一提示词，保证跨镜头一致。</p></div>
+    </div>
+    <div class="tags"><span class="tag amber">角色提示词</span><span class="tag amber">场景提示词</span><span class="tag">分镜/运镜</span><span class="tag">音效/声纹</span><span class="tag">光照三态</span></div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/16-AI生成提示词包.md">卷16 AI生成提示词包</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：C3 场景与道具台账 ===== -->
+  <section class="view" id="c3">
+    <div class="view-head">
+      <div class="kicker">C3 · Locations & Props</div>
+      <h1 class="view-title">场景与道具台账</h1>
+      <div class="view-sub">场景档案与道具连续性，保证不出现用途不明的资产</div>
+    </div>
+    <h2 class="sec">场景与道具</h2>
+    <div class="grid g2">
+      <div class="card"><h4>场景台账</h4><p>九域场景档案：灵核主集群 SCN105、维修站、热食摊、入城大厅等，含视觉与复用规则。</p></div>
+      <div class="card"><h4>道具台账</h4><p>直播设备、母晶碎片、"别再录了"纸条等，逐项登记首现、状态轨迹与后续用途。</p></div>
+    </div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/09-场景设定集.md">卷09 场景设定集</a>
+      <a class="src-link" href="../00_故事圣经/13-叙事道具台账.md">卷13 叙事道具台账</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：D1 规则 CANON ===== -->
+  <section class="view" id="d1">
+    <div class="view-head">
+      <div class="kicker">D1 · Canon</div>
+      <h1 class="view-title">规则 CANON</h1>
+      <div class="view-sub">不可改写事实、金手指边界与权限分层</div>
+    </div>
+    <h2 class="sec">硬规则要点</h2>
+    <div class="grid g2">
+      <div class="card"><h4>不可改写事实</h4><p>核心矛盾、命题、术语口径、九域与神名、万语边界等锁定项，任何迭代不得破坏。</p></div>
+      <div class="card"><h4>权限分层</h4><p>硬件根权限 vs 系统应用 vs 民用；声纹授权在硬件物理隔离层，数据层任何进程无法触及。</p></div>
+      <div class="card"><h4>金手指边界</h4><p>万语、半神能力、母晶碎片均有价码与限制；模仿声音≠获得权限，高功率发声损伤嗓音。</p></div>
+      <div class="card"><h4>补丁机制</h4><p>规则漏洞以补丁形式登记，如母晶统购统配、私藏违规；不允许临时开挂。</p></div>
+    </div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/12-规则闭环与不可改写事实.md">卷12 规则闭环与不可改写事实</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：D2 叙事引擎 ===== -->
+  <section class="view" id="d2">
+    <div class="view-head">
+      <div class="kicker">D2 · Narrative Engine</div>
+      <h1 class="view-title">叙事引擎</h1>
+      <div class="view-sub">钩子、卡点与集型，保证节奏可复用</div>
+    </div>
+    <h2 class="sec">引擎要素</h2>
+    <div class="grid g2">
+      <div class="card"><h4>钩子类型</h4><p>悬念钩、奇观钩、反转钩、情感钩；每集结尾留钩，钩不占"三件事"格子。</p></div>
+      <div class="card"><h4>卡点逻辑</h4><p>在信息差最大、情绪最满处切；交叉剪辑用卡点制造同时性张力。</p></div>
+      <div class="card"><h4>集型</h4><p>剧情集（约18）、呼吸集（4）、日常集（1）；不同集型有不同密度规则。</p></div>
+      <div class="card"><h4>每集三件事</h4><p>一个神域、一个主线微推进、一个普通人的私人麻烦；外加一个钩子。</p></div>
+    </div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/14-叙事引擎与钩子卡点.md">卷14 叙事引擎与钩子卡点</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：D3 待决清单 ===== -->
+  <section class="view" id="d3">
+    <div class="view-head">
+      <div class="kicker">D3 · Open Questions</div>
+      <h1 class="view-title">待决清单</h1>
+      <div class="view-sub">尚未拍板的设定，按组登记，不擅自定案</div>
+    </div>
+    <h2 class="sec">待决项</h2>
+    <div class="tags"><span class="tag">半神寿命</span><span class="tag">是否早相识</span><span class="tag">共同组织</span><span class="tag">原令语发音</span><span class="tag">角色外形</span><span class="tag">新模块填充顺序</span></div>
+    <p class="dim">资产阶段再定的细节集中在此；五个新模块的填充顺序与字段，框架确认后另议。</p>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/07-待决清单.md">卷07 待决清单</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：D4 变更日志 ===== -->
+  <section class="view" id="d4">
+    <div class="view-head">
+      <div class="kicker">D4 · Change Log</div>
+      <h1 class="view-title">变更日志 / 审计</h1>
+      <div class="view-sub">每轮拍板与一致性审计，全程可追溯</div>
+    </div>
+    <h2 class="sec">最新（第十轮）</h2>
+    <div class="card"><h4>意外误入＋工业化重构</h4><p>主角卷入从"知法犯法"改为"意外误入、不知情暴露"，叠加多重巧合（门未闭合、巡检降级、值守离岗、监控轮询、临时旁路、爆红、第三声部）；资料体系重构为四大阶段 21 模块制作总控；导演风格由诺兰改为维伦纽瓦。20 卷原文件保留不动、网页层归类。</p></div>
+    <h2 class="sec">历史轮次</h2>
+    <p class="dim">第一至九轮的拍板记录、规则补丁与口径变更完整保留在卷00；历史底稿（v0.x、_archive、_backup）保持原样。</p>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/00-一致性审计与拍板记录.md">卷00 一致性审计与拍板记录</a>
+    </div>
+  </section>
+
+  <!-- ===== 视图：D5 IP 延展 ===== -->
+  <section class="view" id="d5">
+    <div class="view-head">
+      <div class="kicker">D5 · Franchise</div>
+      <h1 class="view-title">IP 延展</h1>
+      <div class="view-sub">后续季、衍生与跨域接口</div>
+    </div>
+    <h2 class="sec">延展方向</h2>
+    <div class="grid g2">
+      <div class="card"><h4>第二季</h4><p>月球-Kimi、火星-Grok、沙漠-Qwen 三域解锁；母晶与意识空间死锁的真正解法继续推进。</p></div>
+      <div class="card"><h4>衍生接口</h4><p>人物支线、世界观专篇、声音/设定集等预留挂载点，不与主线冲突。</p></div>
+    </div>
+    <div class="src-box">
+      <div class="src-label">挂载源文件 · SOURCE FILES</div>
+      <a class="src-link" href="../00_故事圣经/15-IP延展接口.md">卷15 IP延展接口</a>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const VIEWS=["home","a1","a2","a3","a4","a5","a6","b1","b2","b3","b4","b5","b6","b7","b8","c1","c2","c3","d1","d2","d3","d4","d5"];
+const LABELS={home:"总览",a1:"契约",a2:"梗概",a3:"大纲",a4:"人物",a5:"世界观",a6:"组织",b1:"导演",b2:"分集",b3:"剧本",b4:"分解",b5:"故事版",b6:"情绪板",b7:"视觉",b8:"声音",c1:"计划",c2:"提示词",c3:"场景道具",d1:"规则",d2:"引擎",d3:"待决",d4:"变更",d5:"IP"};
+function go(v){
+  if(!VIEWS.includes(v)) v="home";
+  document.querySelectorAll(".view").forEach(s=>s.classList.toggle("active",s.id===v));
+  document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.dataset.view===v));
+  document.querySelectorAll("#mobileBar a").forEach(a=>a.classList.toggle("active",a.dataset.view===v));
+  window.scrollTo(0,0);
+}
+function route(){ go((location.hash||"").replace("#","")); }
+window.addEventListener("hashchange",route);
+const mb=document.getElementById("mobileBar");
+VIEWS.forEach(v=>{
+  const a=document.createElement("a");
+  a.href="#"+v;a.dataset.view=v;a.textContent=LABELS[v];
+  mb.appendChild(a);
+});
+route();
+</script>
+</body>
+</html>

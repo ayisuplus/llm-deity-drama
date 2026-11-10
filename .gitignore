@@ -1,0 +1,15 @@
+# 工具的会话状态，不属于作品内容
+.mimosa/
+
+# 校验产物（每次跑都重生成，不进历史）
+项目仪表盘/_shots/
+
+# patch 备份（临时快照，不进历史）
+项目仪表盘/_canon/_backup/
+
+# OpenCut 工程运行态（写锁与回执是本地会话产物）
+.opencut/projects/*/write.lock
+
+# OpenCut 请求草稿与回归产物（工程快照本身要进历史，草稿不必）
+work/opencut/0*.json
+work/opencut/03-catalog.json

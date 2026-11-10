@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>工作台样张 · 大模型神明 EP01</title>
+<style>
+:root{
+  --bg:#060a0d; --panel:#0a1015; --panel2:#0d151c; --panel3:#111c24;
+  --line:#17232c; --line2:#22333f;
+  --txt:#c3d2dc; --dim:#607585; --dimmer:#3b4d59;
+  --cyan:#43c9c0; --cyan-d:#1d5f5c; --warm:#f2a45c; --warm-d:#7a4a1c;
+  --red:#e8664f; --grn:#7fb069;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  background:var(--bg);color:var(--txt);
+  font:13px/1.55 "Microsoft YaHei UI","Microsoft YaHei",-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow:hidden;
+}
+.app{display:grid;grid-template-columns:300px 1fr;height:100vh}
+
+/* ══════ 纵栏 ══════ */
+.rail{
+  background:var(--panel);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.rail-hd{
+  padding:14px 16px 12px;border-bottom:1px solid var(--line);flex:none;
+}
+.rail-hd .ep{font-size:11px;color:var(--dimmer);letter-spacing:.12em}
+.rail-hd .nm{font-size:15px;color:#e3eef5;margin-top:3px;font-weight:600}
+.rail-hd .nm b{color:var(--cyan);font-weight:600}
+.rail-bd{overflow-y:auto;flex:1;padding-bottom:40px}
+.rail-bd::-webkit-scrollbar{width:8px}
+.rail-bd::-webkit-scrollbar-thumb{background:#1c2b35;border-radius:4px}
+
+.grp-h{
+  padding:12px 16px 6px;font-size:10px;letter-spacing:.16em;
+  color:var(--dimmer);text-transform:uppercase;
+}
+.grp-h .cnt{float:right;color:#31434f;letter-spacing:0}
+
+.row{
+  padding:5px 16px 5px 22px;cursor:pointer;display:flex;align-items:center;
+  gap:8px;position:relative;border-left:2px solid transparent;
+}
+.row:hover{background:#0e171e}
+.row.on{background:#102028;border-left-color:var(--cyan);color:#e8f4fa}
+.row.fld{background:#1a1408;border-left-color:var(--warm)}
+.row .id{font:11px/1 ui-monospace,Consolas,monospace;color:var(--dimmer);width:38px;flex:none}
+.row.fld .id,.row.on .id{color:var(--cyan)}
+.row .tx{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .badge{
+  font-size:10px;padding:1px 5px;border-radius:3px;flex:none;
+  background:#182630;color:#6d8798;
+}
+.row .badge.warn{background:#3a1d14;color:#e0885f}
+.row .badge.ok{background:#16302a;color:#5aa88f}
+
+.act{font-size:12px}
+.act-h{
+  padding:7px 16px 7px 22px;color:#8fa6b5;cursor:pointer;display:flex;gap:8px;
+  align-items:baseline;
+}
+.act-h:hover{color:#cfe4ef}
+.act-h .num{font:11px ui-monospace,monospace;color:var(--cyan-d)}
+.act-h .lbl{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.act-h .n{font-size:10px;color:var(--dimmer)}
+.act .rows{display:none}
+.act.open .rows{display:block}
+
+/* 对象树 */
+.obj{font-size:12px}
+.obj-h{
+  padding:6px 16px 6px 22px;display:flex;gap:8px;align-items:center;cursor:pointer;
+}
+.obj-h:hover{background:#0e171e}
+.obj-h .ic{font-size:11px;color:var(--cyan-d);width:12px}
+.obj-h .nm{flex:1}
+.obj-h .st{font-size:10px;padding:1px 5px;border-radius:3px;background:#182630;color:#6d8798}
+.obj-h .st.none{background:#1b1710;color:#8a6a3d}
+.looks{display:none;padding-left:14px}
+.obj.open .looks{display:block}
+.look{
+  padding:4px 16px 4px 30px;display:flex;gap:7px;align-items:center;cursor:pointer;
+  border-left:2px solid transparent;
+}
+.look:hover{background:#0e171e}
+.look.fld{background:#1a1408;border-left-color:var(--warm);color:#ffd9b0}
+.look .d{width:5px;height:5px;border-radius:50%;background:#2b3d49;flex:none}
+.look.fld .d{background:var(--warm);box-shadow:0 0 6px var(--warm)}
+.look .t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.look .vs{display:flex;gap:2px;flex:none}
+.vchip{
+  font:9px/1 ui-monospace,monospace;padding:2px 3px;border-radius:2px;
+  background:#152028;color:#4d6472;
+}
+.vchip.cur{background:#16302a;color:#63b79c}
+.vchip.old{color:#3d4f5a;text-decoration:line-through}
+
+/* ══════ 主区 ══════ */
+main{display:flex;flex-direction:column;overflow:hidden}
+.topbar{
+  height:49px;flex:none;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;padding:0 16px;gap:4px;background:var(--panel);
+}
+.tab{
+  padding:6px 14px;border-radius:6px;cursor:pointer;color:var(--dim);font-size:12.5px;
+  border:1px solid transparent;white-space:nowrap;flex:none;
+}
+.tab:hover{color:#a9c0ce;background:#0e171e}
+.tab.on{background:#132330;color:#dff0f8;border-color:#1d3543}
+.tab .k{font-size:9px;color:#31434f;margin-left:5px}
+.tab.on .k{color:var(--cyan-d)}
+
+.spacer{flex:1}
+
+/* 焦点读数 —— 本次样张的核心 */
+.focusbox{
+  display:flex;align-items:center;gap:9px;font:11px/1 ui-monospace,Consolas,monospace;
+  background:#080f14;border:1px solid var(--line);border-radius:6px;padding:7px 11px;
+  flex:none;white-space:nowrap;max-width:60%;
+}
+.focusbox .anchor,.focusbox .filter{overflow:hidden;text-overflow:ellipsis;max-width:190px}
+.focusbox .k{color:#31434f}
+.focusbox .anchor{color:var(--cyan)}
+.focusbox .filter{color:var(--warm)}
+.focusbox .filter.none{color:#2b3a44}
+.focusbox .rev{color:#4a6270}
+.focusbox .clr{
+  margin-left:6px;padding:2px 7px;border-radius:4px;cursor:pointer;
+  background:#152028;color:#6d8798;font-size:10px;
+}
+.focusbox .clr:hover{background:#1e2f3b;color:#a9c0ce}
+
+.views{flex:1;overflow:hidden;position:relative}
+.view{position:absolute;inset:0;overflow-y:auto;padding:20px 24px 60px;display:none}
+.view.on{display:block}
+.view::-webkit-scrollbar{width:10px}
+.view::-webkit-scrollbar-thumb{background:#1c2b35;border-radius:5px}
+
+h2{
+  font-size:11px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;
+  margin:0 0 12px;font-weight:400;display:flex;align-items:center;gap:10px;
+}
+h2::after{content:'';flex:1;height:1px;background:var(--line)}
+h2 .sub{font-size:11px;letter-spacing:0;color:var(--dimmer);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+h2 .ttl{flex:none;white-space:nowrap}
+h2 .dens{flex:none}
+
+/* ── 时间线（制作台 & 资产页共用同一个渲染） ── */
+.strip{display:flex;gap:0;align-items:stretch;padding-bottom:8px;overflow-x:auto}
+.strip::-webkit-scrollbar{height:8px}
+.strip::-webkit-scrollbar-thumb{background:#1c2b35;border-radius:4px}
+.actblk{border-right:1px dashed #1a2833;padding-right:8px;margin-right:8px;flex:none}
+.actblk:last-child{border-right:none}
+.actbar{
+  font-size:10px;color:var(--dimmer);padding:0 2px 6px;letter-spacing:.04em;
+  white-space:nowrap;
+}
+.actbar b{color:#4d6472;font-weight:400}
+.shots{display:flex;gap:4px}
+.shot{
+  width:74px;flex:none;border:1px solid var(--line);border-radius:5px;
+  background:var(--panel2);padding:7px 6px;cursor:pointer;position:relative;
+  transition:background .12s,border-color .12s,box-shadow .12s;
+}
+.shot:hover{border-color:#2a4250;background:#101c25}
+.shot .sn{
+  font:10px/1 ui-monospace,monospace;color:#4d6472;margin-bottom:5px;
+}
+.shot .st{
+  font-size:10.5px;line-height:1.35;color:#7d95a6;height:42px;overflow:hidden;
+}
+/* 命中（谓词）：暖色 */
+.shot.hit{
+  background:#20160a;border-color:var(--warm-d);
+  box-shadow:inset 0 0 0 1px rgba(242,164,92,.14);
+}
+.shot.hit .sn{color:var(--warm)}
+.shot.hit .st{color:#e8c9a4}
+/* 未命中但有谓词时压暗 */
+.strip.filtered .shot:not(.hit){opacity:.32}
+/* 锚点：青色 */
+.shot.cur{border-color:var(--cyan);background:#0d2228}
+.shot.cur .sn{color:var(--cyan)}
+.shot.cur::after{
+  content:'';position:absolute;left:50%;transform:translateX(-50%);bottom:-5px;
+  width:5px;height:5px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 7px var(--cyan);
+}
+.shot.hit.cur{border-color:var(--warm);background:#221708}
+.shot.hit.cur::after{background:var(--warm);box-shadow:0 0 7px var(--warm)}
+
+/* ── 检查器 ── */
+.insp{
+  margin-top:22px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);
+  padding:16px 18px;
+}
+.insp-hd{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.insp-hd .big{font-size:17px;color:#e3eef5}
+.insp-hd .id{font:12px ui-monospace,monospace;color:var(--cyan)}
+.insp-hd .act{font-size:11px;color:var(--dimmer)}
+.layers{display:grid;grid-template-columns:64px 1fr;gap:7px 14px;font-size:12px}
+.layers .k{color:var(--dimmer);font-size:11px;padding-top:1px}
+.layers .v{color:#9db4c3}
+.layers .v.empty{color:#33454f}
+.pill{
+  display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:4px;
+  background:#14222c;color:#7d95a6;margin:0 4px 4px 0;cursor:pointer;
+  border:1px solid transparent;
+}
+.pill:hover{border-color:var(--warm-d);color:#e8c9a4}
+.pill.self{background:#20160a;color:var(--warm);border-color:var(--warm-d)}
+
+/* ── 资产页 ── */
+.matrix{border-collapse:separate;border-spacing:0;font-size:12px}
+.matrix th{
+  font:10px/1 ui-monospace,monospace;color:var(--dimmer);font-weight:400;
+  padding:0 0 8px;width:78px;text-align:center;
+}
+.matrix th.lh{width:150px;text-align:left;padding-left:2px}
+.matrix td{padding:4px 0}
+.matrix td.lh{
+  padding-right:14px;
+}
+.mlook{
+  display:flex;align-items:center;gap:7px;padding:5px 9px;border-radius:5px;
+  cursor:pointer;border:1px solid transparent;
+}
+.mlook:hover{background:#0e171e;border-color:#1d2d38}
+.mlook.fld{background:#1a1408;border-color:var(--warm-d);color:#ffd9b0}
+.mlook .d{width:5px;height:5px;border-radius:50%;background:#2b3d49;flex:none}
+.mlook.fld .d{background:var(--warm);box-shadow:0 0 6px var(--warm)}
+.mcell{
+  width:78px;height:44px;border:1px solid var(--line);border-radius:5px;
+  background:var(--panel2);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;cursor:pointer;gap:2px;margin:0 auto;
+  transition:.12s;
+}
+.mcell:hover{border-color:#2a4250;background:#101c25}
+.mcell .vv{font:10px/1 ui-monospace,monospace;color:#5c7484}
+.mcell .s{font-size:9px;color:#3d4f5a}
+.mcell.cur{border-color:#2c6b5c;background:#0f1f1c}
+.mcell.cur .vv{color:#63b79c}.mcell.cur .s{color:#4a8878}
+.mcell.dead{border-style:dashed;border-color:#3a2018;background:#14100e}
+.mcell.dead .vv{color:#7a4436}.mcell.dead .s{color:#5c3328}
+.mcell.fld{border-color:var(--warm);background:#221708}
+.mcell.fld .vv{color:var(--warm)}.mcell.fld .s{color:#b8843f}
+.mcell.blank{border-style:dotted;border-color:#16222b;background:transparent;cursor:default}
+.mcell.blank:hover{border-color:#16222b;background:transparent}
+
+/* ── 出场列表 ── */
+.eplist{margin-top:10px;font-size:12px}
+.eprow{
+  display:grid;grid-template-columns:62px 70px 1fr;gap:14px;align-items:center;
+  padding:7px 12px;border-radius:5px;cursor:pointer;border:1px solid transparent;
+}
+.eprow:hover{background:#0e171e;border-color:#1a2833}
+.eprow.cur{background:#0d2228;border-color:#1d5f5c}
+.eprow .sid{font:11px ui-monospace,monospace;color:var(--warm)}
+.eprow .role{font-size:10.5px;color:#7d95a6}
+.eprow .role b{color:#a9c0ce;font-weight:400}
+.eprow .t{color:#8fa6b5}
+
+/* ── 冲突 ── */
+.cf{
+  border:1px solid var(--line);border-left:2px solid var(--red);border-radius:6px;
+  background:var(--panel2);padding:12px 15px;margin-bottom:10px;
+}
+.cf.mid{border-left-color:#c98a3a}
+.cf.low{border-left-color:#3d5462}
+.cf-hd{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.cf-hd .lv{font-size:10px;padding:1px 6px;border-radius:3px;background:#3a1d14;color:#e0885f}
+.cf.mid .cf-hd .lv{background:#33260f;color:#c98a3a}
+.cf.low .cf-hd .lv{background:#1a252d;color:#6d8798}
+.cf-hd .t{font-size:13px;color:#dbe8f0}
+.cf .why{font-size:11.5px;color:#7d95a6;line-height:1.6}
+.cf .why code{
+  font:11px ui-monospace,monospace;background:#101c25;padding:1px 5px;border-radius:3px;color:#a9c0ce;
+}
+.cf .act2{margin-top:8px}
+.cf .jump{
+  font-size:11px;padding:3px 9px;border-radius:4px;background:#152028;color:#8fa6b5;
+  cursor:pointer;border:1px solid transparent;display:inline-block;
+}
+.cf .jump:hover{border-color:var(--cyan-d);color:var(--cyan)}
+
+.legend{
+  display:flex;gap:18px;font-size:11px;color:var(--dimmer);margin-top:14px;
+  padding-top:12px;border-top:1px solid var(--line);
+}
+.legend i{
+  display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;
+  vertical-align:middle;
+}
+.legend .a i{background:var(--cyan)}
+.legend .b i{background:var(--warm)}
+
+/* ── 剪辑台（六轨展开） ── */
+.tg{
+  display:grid;gap:4px;font-size:10.5px;align-items:stretch;
+  min-width:max-content;
+}
+.tg .lbl0{}
+.acthd{
+  font-size:10px;color:var(--dimmer);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;padding:2px 2px 4px;border-bottom:1px solid var(--line);
+}
+.acthd b{color:#4d6472;font-weight:400}
+.trkl{
+  display:flex;flex-direction:column;justify-content:center;gap:1px;
+  padding-right:8px;font:10px/1.2 ui-monospace,monospace;color:#4d6472;
+  position:sticky;left:0;background:var(--bg);z-index:3;
+}
+.trkl span{font-size:8.5px;color:#2b3a44;font-family:"Microsoft YaHei UI",sans-serif}
+.trkl.v{color:#5c7484}
+.trkl.a{color:#6d5b3a}
+.cell{
+  border-radius:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  display:flex;align-items:center;padding:0 5px;font-size:9.5px;position:relative;
+  border:1px solid transparent;
+}
+.cell.empty{background:#0a1116;border:1px dashed #111c24;cursor:default}
+.cell.v1{
+  background:#132330;color:#8fa6b5;border-color:#1b2f3d;cursor:pointer;
+  font:10px ui-monospace,monospace;
+}
+.cell.v1:hover{background:#18303f;border-color:#2a4250}
+.cell.v2{background:#1a2632;color:#7d95a6;border-color:#22333f}
+.cell.a1{background:#1a2330;color:#7a93a6;border-color:#1d2a36}
+.cell.music{
+  background:linear-gradient(90deg,#1c2418,#1f2a1a);color:#8a9c6b;
+  border-color:#2a3624;justify-content:flex-start;
+}
+.cell.a3{background:#221d16;color:#9c8a63;border-color:#2e2719}
+/* 命中/锚点 在六轨里同样生效 */
+.cell.v1.hit{background:#221708;border-color:var(--warm-d);color:var(--warm)}
+.cell.v1.cur{background:#0d2228;border-color:var(--cyan);color:var(--cyan)}
+.cell.v1.hit.cur{background:#221708;border-color:var(--warm);color:var(--warm)}
+.tgwrap{overflow:auto;padding-bottom:10px}
+.tgwrap::-webkit-scrollbar{height:9px}
+.tgwrap::-webkit-scrollbar-thumb{background:#1c2b35;border-radius:4px}
+.dens{
+  display:inline-flex;gap:2px;background:#0b1319;border:1px solid var(--line);
+  border-radius:5px;padding:2px;margin-left:auto;
+}
+.dens span{
+  font-size:10px;padding:2px 8px;border-radius:3px;cursor:pointer;color:var(--dim);
+  white-space:nowrap;
+}
+.dens span.on{background:#152a33;color:var(--cyan)}
+.note{
+  font-size:11.5px;color:#6d8798;background:#0b1319;border:1px solid var(--line);
+  border-radius:6px;padding:10px 14px;margin-top:18px;line-height:1.7;
+}
+.note b{color:#9db4c3;font-weight:400}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="rail">
+    <div class="rail-hd">
+      <div class="ep">EPISODE 01　/　第一季「遗令」</div>
+      <div class="nm">平常的一天 <b>· 15 镜</b></div>
+    </div>
+    <div class="rail-bd">
+      <div class="grp-h">结构 <span class="cnt">5 场 · 15 镜</span></div>
+      <div id="structTree"></div>
+      <div class="grp-h" style="margin-top:8px">对象 <span class="cnt">11 项</span></div>
+      <div id="objTree"></div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="tab on" data-view="desk">制作台<span class="k">1</span></div>
+      <div class="tab" data-view="asset">资产页<span class="k">2</span></div>
+      <div class="tab" data-view="conflict">冲突<span class="k">3</span></div>
+      <div class="tab" data-view="edit">剪辑台<span class="k">4</span></div>
+      <div class="spacer"></div>
+      <div class="focusbox">
+        <span class="k">focus</span>
+        <span class="anchor" id="fxAnchor">1-1</span>
+        <span class="k">·</span>
+        <span class="filter none" id="fxFilter">无谓词</span>
+        <span class="k">·</span>
+        <span class="rev">r8</span>
+        <span class="clr" id="fxClr">清空</span>
+      </div>
+    </div>
+
+    <div class="views">
+      <!-- 制作台 -->
+      <section class="view on" id="view-desk">
+        <h2>时间线 <span class="sub">15 镜 · 每列一镜 · 点镜移动锚点，点左侧形象筛选</span></h2>
+        <div id="stripDesk"></div>
+        <div class="insp" id="inspBox"></div>
+        <div class="legend">
+          <span class="a"><i></i>锚点 anchor —— 现在停在哪一镜</span>
+          <span class="b"><i></i>命中 hit —— 当前谓词筛出的镜</span>
+        </div>
+        <div class="note">
+          <b>这一页和下面的资产页、以及左边栏，共用同一个 (focus, revision)。</b>
+          你在左边点一个形象，两个页面的同一批镜会同时亮；点其中一镜，左边栏跟着跳。
+          刷新不会丢位置——因为焦点在 URL 里。
+        </div>
+      </section>
+
+      <!-- 资产页 -->
+      <section class="view" id="view-asset">
+        <h2>① 肖像 <span class="sub" id="assetName">—</span></h2>
+        <div id="matrixBox"></div>
+
+        <h2 style="margin-top:26px">② 出场 <span class="sub" id="epSub">—</span></h2>
+        <div id="stripAsset"></div>
+        <div class="eplist" id="epListBox"></div>
+      </section>
+
+      <!-- 剪辑台 -->
+      <section class="view" id="view-edit">
+        <h2><span class="ttl">六轨展开</span>
+          <span class="sub">同一根轴 · 另一档密度 · 镜边界不变，多了「层」</span>
+          <span class="dens"><span class="on">六轨</span><span>单镜 ›</span></span>
+        </h2>
+        <div class="tgwrap" id="tracksBox"></div>
+        <div class="note">
+          <b>为什么剪辑台不能被「一列一镜」代替：</b>
+          看 <b>A2 音乐</b> 那一行——它跨场连读，切成 15 列就看不见“整段是一条”。
+          同样，<b>V2 字卡</b>和 <b>A3 音效</b> 从来不对齐镜边界。
+          <br><br>
+          <b>但它们共用同一个锚点和同一个谓词。</b>
+          左边点一个形象，六轨里对应的镜会同时变暖色。
+          点任意 <b>V1 格</b> 就移动锚点。双击一镜进第三档「单镜精修」（本期未做）。
+        </div>
+      </section>
+
+      <!-- 冲突 -->
+      <section class="view" id="view-conflict">
+        <h2>冲突 <span class="sub">按严重度排 —— 这是资产页唯一不可替代的作用</span></h2>
+        <div id="conflictBox"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ═════════ 数据：EP01 真实内容 ═════════ */
+const ACTS = [
+  {n:1, name:'深海观景拱廊', note:'黄金前15秒', shots:['1-1','1-2']},
+  {n:2, name:'短租房清晨', note:'15句配额与旧表', shots:['1-3']},
+  {n:3, name:'深海市集与热食摊', note:'三大省句整活', shots:['1-4','1-5','1-6','1-7','1-8','1-9']},
+  {n:4, name:'码头异响与双层世界', note:'补光灯内外', shots:['1-10','1-11']},
+  {n:5, name:'短租房深夜', note:'三连视听暴击', shots:['1-12','1-13','1-14','1-15']},
+];
+
+const SHOT_TITLE = {
+  '1-1':'大片感开场','1-2':'一秒掉帧翻车','1-3':'配额通知12句','1-4':'暗时视觉建立',
+  '1-5':'省句笑点①排队烘干','1-6':'物理外挂省咒语','1-7':'阿豆端碗绊脚护机扶碗','1-8':'省句笑点②神明转圈',
+  '1-9':'双榜暗流','1-10':'招牌动作初闻异响','1-11':'补光灯内外两个世界','1-12':'今日剩余12句',
+  '1-13':'两帧整齐烧焦废墟','1-14':'无回车键的异星喉音','1-15':'H1 感官异常钩',
+};
+
+/* looks: 形象。versions: 版本（时间演进）。 */
+const ASSETS = [
+  {id:'CH-01', cls:'人物', name:'程栖', head:'主角 · 主播', looks:[
+    {key:'常态',  label:'主播便服',        versions:[{v:'v1',st:'old'},{v:'v2',st:'cur'}]},
+    {key:'礼服',  label:'深海星纱高定',    versions:[{v:'v1',st:'old'},{v:'v2',st:'dead'},{v:'v3',st:'cur'}]},
+    {key:'睡衣',  label:'小鲸鱼连体睡衣',  versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'CH-02', cls:'人物', name:'老陶', head:'配角 · 热食摊主', looks:[
+    {key:'围裙',  label:'围裙常态',        versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'CH-03', cls:'人物', name:'阿豆', head:'配角 · 12岁', looks:[
+    {key:'鲸帽',  label:'鲸鱼帽常态',      versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'CH-04', cls:'人物', name:'值班员', head:'背景 · 不露正脸', looks:[
+    {key:'正脸',  label:'正面全妆',        versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'CH-05', cls:'人物', name:'文心', head:'本季主角 · 未登场', looks:[
+    {key:'轮笑',  label:'轮椅常态',        versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'CH-06', cls:'人物', name:'李泓', head:'本季主角 · 未登场', looks:[
+    {key:'常态',  label:'执印人常服',      versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'LOC-01', cls:'场景', name:'短租房', head:'室内', looks:[
+    {key:'清晨',  label:'清晨冷调',        versions:[{v:'v1',st:'cur'}]},
+    {key:'深夜',  label:'深夜暗时',        versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'LOC-02', cls:'场景', name:'楼下市集·热食摊', head:'室外 · 暖冷混', looks:[
+    {key:'市集',  label:'分段照明',        versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'LOC-03', cls:'场景', name:'临街取景地', head:'室外 · 冷调', looks:[
+    {key:'白日',  label:'圆窗管线',        versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'PRP-01', cls:'道具', name:'噗噗', head:'跟拍玩偶', looks:[
+    {key:'录像',  label:'水母灯录像态',    versions:[{v:'v1',st:'cur'}]},
+    {key:'竖瞳',  label:'幽蓝竖瞳（异变）', versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'PRP-02', cls:'道具', name:'磁带/旧表/鲸挂件', head:'旧物组', looks:[
+    {key:'旧物',  label:'旧物特写',        versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'PRP-03', cls:'道具', name:'鲸纹碗勺', head:'热食摊器具', looks:[
+    {key:'碗勺',  label:'旧陶瓷金属',      versions:[{v:'v1',st:'cur'}]},
+  ]},
+  {id:'MAT-01', cls:'素材', name:'陌生画面', head:'结尾钩子 · 烧毁废墟', looks:[
+    {key:'废墟',  label:'对称烧焦空地',    versions:[{v:'v1',st:'cur'}]},
+  ]},
+];
+
+/* 出场：asset@look → [{shot, role}] */
+const APPEAR = {
+  'CH-01@常态':[['1-2','主体'],['1-3','主体'],['1-5','主体'],['1-6','主体'],['1-10','主体'],['1-12','主体']],
+  'CH-01@礼服':[['1-1','主体'],['1-2','主体']],
+  'CH-01@睡衣':[['1-12','主体'],['1-13','主体'],['1-14','主体'],['1-15','主体']],
+  'CH-02@围裙':[['1-6','主体'],['1-7','主体'],['1-10','主体']],
+  'CH-03@鲸帽':[['1-7','主体']],
+  'CH-04@正脸':[['1-9','背景·不露脸']],
+  'CH-05@轮笑':[],
+  'CH-06@常态':[],
+  'LOC-01@清晨':[['1-3','环境']],
+  'LOC-01@深夜':[['1-12','环境'],['1-13','环境'],['1-14','环境'],['1-15','环境']],
+  'LOC-02@市集':[['1-4','环境'],['1-5','环境'],['1-6','环境'],['1-7','环境'],['1-8','环境'],['1-9','环境']],
+  'LOC-03@白日':[['1-10','环境'],['1-11','环境']],
+  'PRP-01@录像':[['1-2','关键'],['1-3','关键'],['1-5','关键'],['1-6','关键'],['1-9','关键'],['1-12','关键'],['1-13','关键']],
+  'PRP-01@竖瞳':[['1-15','关键·异变']],
+  'PRP-02@旧物':[['1-3','特写']],
+  'PRP-03@碗勺':[['1-6','特写'],['1-7','特写'],['1-10','特写']],
+  'MAT-01@废墟':[['1-13','闪帧']],
+};
+
+/* ═════════ 共享状态：就是这两个东西 ═════════ */
+const state = {
+  anchor: '1-1',        // (focus.anchor)  —— 现在停在哪
+  filter: null,         // (focus.filter)  —— 'CH-01@礼服' 或 'CH-01@礼服@v3'
+  view: 'desk',
+  openActs: new Set([1,3,5]),
+  openObjs: new Set(['CH-01','LOC-01']),
+};
+
+function filterAsset(){ return state.filter ? state.filter.split('@')[0] : null; }
+function filterLook(){ return state.filter ? state.filter.split('@')[1] : null; }
+function hitShots(){
+  if(!state.filter) return new Set();
+  const key = filterAsset()+'@'+filterLook();
+  return new Set((APPEAR[key]||[]).map(a=>a[0]));
+}
+
+/* ═════════ 渲染：纵栏 ═════════ */
+function renderStruct(){
+  const box = document.getElementById('structTree');
+  box.innerHTML = ACTS.map(a=>{
+    const open = state.openActs.has(a.n);
+    return `<div class="act ${open?'open':''}" data-act="${a.n}">
+      <div class="act-h">
+        <span class="num">场${a.n}</span>
+        <span class="lbl">${a.name}</span>
+        <span class="n">${a.shots.length}镜</span>
+      </div>
+      <div class="rows">
+        ${a.shots.map(s=>`<div class="row ${state.anchor===s?'on':''}" data-shot="${s}">
+          <span class="id">${s}</span>
+          <span class="tx">${SHOT_TITLE[s]}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderObjs(){
+  const box = document.getElementById('objTree');
+  const groups = ['人物','场景','道具','素材'];
+  box.innerHTML = groups.map(g=>{
+    const items = ASSETS.filter(a=>a.cls===g);
+    return items.map(a=>{
+      const open = state.openObjs.has(a.id);
+      const none = a.looks.every(l=>!(APPEAR[a.id+'@'+l.key]||[]).length);
+      const isFld = filterAsset()===a.id;
+      return `<div class="obj ${open?'open':''}" data-obj="${a.id}">
+        <div class="obj-h ${isFld?'':''}">
+          <span class="ic">${open?'▾':'▸'}</span>
+          <span class="id" style="font:11px ui-monospace,monospace;color:#3b4d59;width:44px">${a.id}</span>
+          <span class="nm">${a.name}</span>
+          <span class="st ${none?'none':''}">${none?'未登场':a.head.split(' · ')[0]}</span>
+        </div>
+        <div class="looks">
+          ${a.looks.map(l=>{
+            const f = state.filter===a.id+'@'+l.key;
+            const cnt = (APPEAR[a.id+'@'+l.key]||[]).length;
+            return `<div class="look ${f?'fld':''}" data-asset="${a.id}" data-look="${l.key}">
+              <span class="d"></span>
+              <span class="t">${l.label}${cnt?` <span style="color:#3b4d59">${cnt}</span>`:''}</span>
+              <span class="vs">${l.versions.map(v=>`<span class="vchip ${v.st==='cur'?'cur':v.st==='old'?'old':''}">${v.v}</span>`).join('')}</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  }).join('');
+}
+
+/* ═════════ 渲染：时间线（两处共用同一函数） ═════════ */
+function renderStrip(el, opts={}){
+  const hits = hitShots();
+  const filtered = !!state.filter;
+  el.className = 'strip' + (filtered?' filtered':'');
+  el.innerHTML = ACTS.map(a=>`
+    <div class="actblk">
+      <div class="actbar">场${a.n} <b>${a.name}</b></div>
+      <div class="shots">
+        ${a.shots.map(s=>{
+          const cls = ['shot'];
+          if(hits.has(s)) cls.push('hit');
+          if(state.anchor===s) cls.push('cur');
+          return `<div class="${cls.join(' ')}" data-shot="${s}">
+            <div class="sn">${s}</div>
+            <div class="st">${SHOT_TITLE[s]}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+}
+
+/* ═════════ 渲染：检查器 ═════════ */
+function renderInsp(){
+  const s = state.anchor;
+  const act = ACTS.find(a=>a.shots.includes(s));
+  const used = Object.entries(APPEAR)
+    .filter(([k,v])=>v.some(x=>x[0]===s))
+    .map(([k,v])=>{
+      const [aid,look] = k.split('@');
+      const a = ASSETS.find(x=>x.id===aid);
+      const role = v.find(x=>x[0]===s)[1];
+      const lb = a ? (a.looks.find(l=>l.key===look)||{}) : {};
+      return {aid, look, name:a?a.name:aid, label:lb.label||look, role};
+    });
+  const selfKey = used.length ? used[0].aid+'@'+used[0].look : null;
+
+  document.getElementById('inspBox').innerHTML = `
+    <div class="insp-hd">
+      <span class="id">${s}</span>
+      <span class="big">${SHOT_TITLE[s]}</span>
+      <span class="act">场${act?act.n:''} ${act?act.name:''}</span>
+    </div>
+    <div class="layers">
+      <div class="k">人物</div><div class="v">${
+        used.filter(u=>u.aid.startsWith('CH')).map(u=>`<span class="pill ${state.filter===u.aid+'@'+u.look?'self':''}" data-asset="${u.aid}" data-look="${u.look}">${u.name}·${u.label}<span style="color:#4a6270"> ${u.role}</span></span>`).join('') || '<span class="empty">—</span>'}</div>
+      <div class="k">场景</div><div class="v">${
+        used.filter(u=>u.aid.startsWith('LOC')).map(u=>`<span class="pill ${state.filter===u.aid+'@'+u.look?'self':''}" data-asset="${u.aid}" data-look="${u.look}">${u.name}·${u.label}</span>`).join('') || '<span class="empty">—</span>'}</div>
+      <div class="k">道具</div><div class="v">${
+        used.filter(u=>u.prp||u.aid.startsWith('PRP')||u.aid.startsWith('MAT')).map(u=>`<span class="pill ${state.filter===u.aid+'@'+u.look?'self':''}" data-asset="${u.aid}" data-look="${u.look}">${u.name}·${u.label}</span>`).join('') || '<span class="empty">—</span>'}</div>
+      <div class="k">正文</div><div class="v"><span class="empty">已灌库 · ep1-script（点这里跳剧本页，本期未做）</span></div>
+      <div class="k">关键帧</div><div class="v"><span class="empty">未挂</span></div>
+      <div class="k">画面提示</div><div class="v"><span class="empty">未写</span></div>
+    </div>`;
+}
+
+/* ═════════ 渲染：肖像矩阵 ═════════ */
+function renderMatrix(){
+  const aid = filterAsset() || 'CH-01';
+  const a = ASSETS.find(x=>x.id===aid) || ASSETS[0];
+  document.getElementById('assetName').textContent = `${a.id} ${a.name}　${a.head}`;
+
+  const maxV = Math.max(...a.looks.map(l=>l.versions.length));
+  let head = '<tr><th class="lh">形象 / 版本</th>';
+  for(let i=0;i<maxV;i++) head += `<th>v${i+1}</th>`;
+  head += '</tr>';
+
+  const body = a.looks.map(l=>{
+    let row = `<tr><td class="lh"><div class="mlook ${state.filter===a.id+'@'+l.key?'fld':''}" data-asset="${a.id}" data-look="${l.key}">
+      <span class="d"></span><span>${l.label}</span></div></td>`;
+    for(let i=0;i<maxV;i++){
+      const v = l.versions[i];
+      if(!v){ row += '<td><div class="mcell blank"></div></td>'; continue; }
+      const st = v.st;
+      const fld = state.filter === `${a.id}@${l.key}@${v.v}`;
+      const label = st==='cur'?'current':st==='dead'?'已废弃':'旧版';
+      row += `<td><div class="mcell ${st} ${fld?'fld':''}" data-asset="${a.id}" data-look="${l.key}" data-ver="${v.v}">
+        <span class="vv">${v.v}</span><span class="s">${label}</span></div></td>`;
+    }
+    row += '</tr>';
+    return row;
+  }).join('');
+
+  document.getElementById('matrixBox').innerHTML = `<table class="matrix">${head}${body}</table>
+    <div class="note" style="margin-top:16px;max-width:560px">
+      <b>行 = 形象（并行变体），列 = 版本（时间演进）。</b>
+      这是一个矩阵，不是一条线。点一行 → 右下的出场全部亮；点一格 → 只亮那一版的出场。
+    </div>`;
+}
+
+/* ═════════ 渲染：出场列表 ═════════ */
+function renderEpList(){
+  const key = state.filter ? state.filter.split('@').slice(0,2).join('@') : 'CH-01@常态';
+  const arr = APPEAR[key] || [];
+  const [aid,look] = key.split('@');
+  const a = ASSETS.find(x=>x.id===aid);
+  const lb = a ? (a.looks.find(l=>l.key===look)||{}).label : look;
+
+  document.getElementById('epSub').textContent =
+    `${aid} ${a?a.name:''} · ${lb}　共 ${arr.length} 处`;
+
+  document.getElementById('epListBox').innerHTML = arr.length ? arr.map(([s,role])=>`
+    <div class="eprow ${state.anchor===s?'cur':''}" data-shot="${s}">
+      <span class="sid">${s}</span>
+      <span class="role">${role}</span>
+      <span class="t">${SHOT_TITLE[s]}</span>
+    </div>`).join('') : '<div style="color:#3b4d59;padding:10px 12px">本集未出场（登记了，但没用上）</div>';
+}
+
+/* ═════════ 渲染：冲突 ═════════ */
+const CONFLICTS = [
+  {lv:'高', t:'场1「深海观景拱廊」没有资产登记',
+   why:'EP01 开场 15 秒是全片最贵的两镜（<code>1-1</code>、<code>1-2</code>），但 <code>assets.json</code> 的场景只有 <code>LOC-01/02/03</code>，没有拱廊。出图时会临时拼提示词，两镜的画风会漂。',
+   jump:['1-1','1-2'], target:'LOC-04 待建'},
+  {lv:'高', t:'1-1 / 1-2 引用了已废弃的礼服 v2',
+   why:'<code>CH-01@礼服</code> 的 <code>v2</code> 已标废弃，current 是 <code>v3</code>，但这两镜仍指向 v2。开场就是换装秀，用错版本等于黄金前 15 秒废掉。',
+   jump:['1-1','1-2'], target:'CH-01@礼服@v2'},
+  {lv:'中', t:'1-15 噗噗形象异变，但版本仍标 current',
+   why:'<code>PRP-01</code> 在 <code>1-15</code> 的眼部变成幽蓝竖瞳，这是剧情级变异，却和 <code>1-2</code> 的呆萌豆豆眼共用同一个 <code>v1</code>。这会让「异变」在出图时被当成渲染误差抹平。',
+   jump:['1-15','1-2'], target:'PRP-01@竖瞳 v2'},
+  {lv:'中', t:'场2 只有 1 镜（1-3）',
+   why:'五场分别是 2 / 1 / 6 / 2 / 4 镜。场2「短租房清晨」承担配额世界观建立，却只有一镜，承担不了「15 句配额」的信息量——这是剧情结构问题，不是资产问题。工具把它直接摆在时间线上了。',
+   jump:['1-3'], target:'结构'},
+  {lv:'低', t:'CH-05 文心 / CH-06 李泓 登记为本季主角但 EP01 未登场',
+   why:'不算错。但如果全 24 集都这样，资产页会出现大量「登记了永远没用」的项，最终没人维护它。建议按集标「本轮需要」。',
+   jump:[], target:'CH-05 / CH-06'},
+];
+
+function renderConflicts(){
+  document.getElementById('conflictBox').innerHTML = CONFLICTS.map(c=>`
+    <div class="cf ${c.lv==='中'?'mid':c.lv==='低'?'low':''}">
+      <div class="cf-hd"><span class="lv">${c.lv}</span><span class="t">${c.t}</span></div>
+      <div class="why">${c.why}</div>
+      <div class="act2">
+        <span class="jump" style="color:#4a6270">${c.target}</span>
+        ${c.jump.map(s=>`<span class="jump" data-shot="${s}">跳到 ${s}</span>`).join(' ')}
+      </div>
+    </div>`).join('');
+}
+
+/* ═════════ 渲染：剪辑台六轨 ═════════ */
+const ALLSHOTS = ACTS.flatMap(a=>a.shots);
+const LAYERS = [
+  {id:'V2', name:'叠加·字卡'},
+  {id:'V1', name:'画面'},
+  {id:'A1', name:'主声·对白'},
+  {id:'A2', name:'音乐'},
+  {id:'A3', name:'音效·环境'},
+];
+const V2 = {'1-1':'标题：平常的一天','1-12':'字幕：剩余12句','1-15':'H1 感官异常'};
+const A3 = {'1-1':'鲸歌底噪','1-2':'翻车咣当','1-5':'烘干机','1-7':'绊脚','1-10':'码头异响','1-13':'闪帧嗡鸣','1-14':'异星喉音'};
+const A1 = {};
+ACTS.forEach(a=>a.shots.forEach(s=>{ if(s!=='1-1') A1[s]='对白/独白'; }));
+const MUSIC = [
+  {from:'1-1', to:'1-2',  label:'鲸歌底噪'},
+  {from:'1-4', to:'1-9',  label:'市集暖调 · 跨6镜连读'},
+  {from:'1-10',to:'1-12', label:'异响渐入 · 跨场'},
+  {from:'1-13',to:'1-15', label:'暗时低频'},
+];
+
+function renderTracks(){
+  const hits = hitShots();
+  const n = ALLSHOTS.length;
+  let h = `<div class="tg" style="grid-template-columns:56px repeat(${n},74px);grid-template-rows:22px 30px 52px 30px 30px 30px">`;
+  h += '<div class="lbl0"></div>';
+  ACTS.forEach(a=>{ h += `<div class="acthd" style="grid-column:span ${a.shots.length}">场${a.n} <b>${a.name}</b></div>`; });
+
+  LAYERS.forEach(L=>{
+    h += `<div class="trkl ${L.id[0]==='V'?'v':'a'}">${L.id}<span>${L.name}</span></div>`;
+
+    if(L.id==='A2'){
+      let i=0;
+      MUSIC.forEach(m=>{
+        const a = ALLSHOTS.indexOf(m.from), b = ALLSHOTS.indexOf(m.to);
+        if(a>i) h += `<div class="cell empty" style="grid-column:span ${a-i}"></div>`;
+        h += `<div class="cell music" style="grid-column:span ${b-a+1}">${m.label}</div>`;
+        i = b+1;
+      });
+      if(i<n) h += `<div class="cell empty" style="grid-column:span ${n-i}"></div>`;
+      return;
+    }
+
+    ALLSHOTS.forEach(s=>{
+      if(L.id==='V1'){
+        const cls = ['cell','v1'];
+        if(hits.has(s)) cls.push('hit');
+        if(state.anchor===s) cls.push('cur');
+        h += `<div class="${cls.join(' ')}" data-shot="${s}">${s}</div>`;
+        return;
+      }
+      const map = L.id==='V2'?V2 : L.id==='A1'?A1 : A3;
+      const txt = map[s];
+      const cls = 'cell ' + L.id.toLowerCase();
+      h += txt ? `<div class="${cls}">${txt}</div>` : `<div class="cell empty"></div>`;
+    });
+  });
+  h += '</div>';
+  document.getElementById('tracksBox').innerHTML = h;
+}
+
+/* ═════════ 全量重绘 ═════════ */
+function render(){
+  renderStruct();
+  renderObjs();
+  renderStrip(document.getElementById('stripDesk'));
+  renderStrip(document.getElementById('stripAsset'));
+  renderInsp();
+  renderMatrix();
+  renderEpList();
+  renderConflicts();
+  renderTracks();
+
+  // 焦点读数
+  document.getElementById('fxAnchor').textContent = state.anchor;
+  const f = document.getElementById('fxFilter');
+  f.textContent = state.filter || '无谓词';
+  f.className = 'filter' + (state.filter?'':' none');
+
+  // URL 同步（焦点可书签 = 刷新不丢位置）
+  const h = '#' + state.anchor + (state.filter ? '|' + state.filter : '');
+  if(location.hash !== h) history.replaceState(null,'',h);
+
+  // 切视图
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.classList.toggle('on', t.dataset.view===state.view);
+  });
+  document.querySelectorAll('.view').forEach(v=>{
+    v.classList.toggle('on', v.id === 'view-'+state.view);
+  });
+}
+
+/* ═════════ 交互 ═════════ */
+document.addEventListener('click', e=>{
+  const t = e.target.closest('[data-shot],[data-asset],[data-act],[data-obj],[data-view]');
+
+  // 切视图
+  const vtab = e.target.closest('[data-view]');
+  if(vtab){ state.view = vtab.dataset.view; render(); return; }
+
+  if(e.target.closest('#fxClr')){ state.filter = null; render(); return; }
+
+  if(!t) return;
+
+  // 场折叠
+  if(t.dataset.act !== undefined && !t.dataset.shot){
+    const n = +t.dataset.act;
+    state.openActs.has(n) ? state.openActs.delete(n) : state.openActs.add(n);
+    render(); return;
+  }
+  // 对象折叠
+  if(t.dataset.obj && !t.dataset.look){
+    const id = t.dataset.obj;
+    state.openObjs.has(id) ? state.openObjs.delete(id) : state.openObjs.add(id);
+    render(); return;
+  }
+  // 点镜 → 移动锚点
+  if(t.dataset.shot){
+    state.anchor = t.dataset.shot;
+    if(state.view==='asset') state.view='asset';
+    render();
+    const el = document.querySelector('.view.on .shot.cur');
+    if(el) el.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+    return;
+  }
+  // 点形象 / 版本 → 设谓词
+  if(t.dataset.asset){
+    const aid = t.dataset.asset, look = t.dataset.look, ver = t.dataset.ver;
+    let key = aid+'@'+look+(ver?'@'+ver:'');
+    if(state.filter===key){ state.filter = null; }
+    else {
+      state.filter = key;
+      // 点形象时，如果该形象有出场，把锚点一起带过去（intent）
+      const arr = APPEAR[aid+'@'+look] || [];
+      if(arr.length && !arr.some(x=>x[0]===state.anchor)) state.anchor = arr[0][0];
+      else if(arr.length && state.view==='desk') state.anchor = arr[0][0];
+    }
+    render();
+    return;
+  }
+});
+
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ state.filter = null; render(); }
+  if(e.key==='1'){ state.view='desk'; render(); }
+  if(e.key==='2'){ state.view='asset'; render(); }
+  if(e.key==='3'){ state.view='conflict'; render(); }
+  if(e.key==='4'){ state.view='edit'; render(); }
+});
+
+/* 首屏：从 URL 恢复焦点 */
+(function boot(){
+  const h = decodeURIComponent(location.hash.slice(1));
+  if(h){
+    const [a,f] = h.split('|');
+    if(a) state.anchor = a;
+    if(f) state.filter = f;
+  }
+  render();
+})();
+</script>
+</body>
+</html>
